@@ -1,0 +1,133 @@
+snippet pu
+    public 
+
+
+snippet po
+    protected 
+
+
+snippet pr
+    private 
+
+
+snippet st
+    static 
+
+
+snippet fi
+    final 
+
+
+snippet ab
+    abstract 
+
+
+snippet cl
+	class ${1} {
+		${0}
+	}
+
+
+snippet in
+	interface ${1} ${2:extends} ${3:Parent} {
+		${0}
+	}
+
+
+snippet m
+	${1:void} ${2:method}(${3}) {
+		${0}
+	}
+    
+
+
+snippet co
+    static public final ${1:String} ${2:var} = ${3};${4}
+
+snippet as
+    assert ${1:test} ${2:Failure message};${3}
+
+
+snippet if
+	if (${1}) {
+		${2}
+	}
+
+snippet elif
+	else if (${1}) {
+		${2}
+	}
+    
+
+snippet wh
+	while (${1}) {
+		${2}
+	}
+    
+
+snippet for
+	for (${1}; ${2}; ${3}) {
+		${4}
+	}
+	    
+	    
+snippet fore
+	for (${1} : ${2}) {
+		${3}
+	}
+
+
+snippet sw
+	switch (${1}) {
+		${2}
+	}
+    
+    
+snippet case
+abbr ce
+	case ${1}:
+		${2}
+	break;
+	    
+
+snippet de
+	default:
+		${0}
+
+
+snippet ca
+	catch (${1:Exception} ${2:e}) {
+		${0}
+	}
+
+
+
+
+snippet im
+    import
+
+
+snippet pa
+    package
+
+
+snippet main
+	public static void main(String[] args) {
+		${0}
+	}
+    
+
+snippet pl
+	System.out.println(${1});${0}
+
+
+snippet p
+	System.out.print(${1});${0}
+
+
+#javadoc
+snippet c
+	/**
+	 * ${0}
+	 */
+    

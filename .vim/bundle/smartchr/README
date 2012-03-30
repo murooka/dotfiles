@@ -1,0 +1,20 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2290
+
+*smartchr* is a Vim plugin to support input several candidates with a single
+key, like ess-smart-underscore in Emacs Speaks Statistics -- when user types
+"_" key, it inserts " <- " for the first time or it replaces " <- " by "_" for
+the second time.  This plugin provides functions to support to define such
+key bindings easily.  For example:
+
+	inoremap <expr> _  smartchr#one_of(' <- ', '_')
+
+
+
+Requirements:
+- Vim 7.1 or later
+
+Latest version:
+http://github.com/kana/vim-smartchr
+
+Document in HTML format:
+http://kana.github.com/config/vim/smartchr.html
