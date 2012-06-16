@@ -1,7 +1,7 @@
 snippet     if
 abbr        if () {}
-    if (${1:/* condition */}) {
-        ${0:/* code */}
+    if (${1}) {
+        ${0}
     }
 
 snippet else
@@ -10,13 +10,14 @@ snippet else
     }
 
 snippet elseif
-    else if (${1:/* condition */}) {
+alias   elif
+    else if (${1}) {
         ${0}
     }
 
 snippet     ifelse
 abbr        if () {} else {}
-    if (${1:condition}) {
+    if (${1}) {
         ${2}
     } else {
         ${3}
@@ -24,7 +25,13 @@ abbr        if () {} else {}
 
 snippet     for
 abbr        for () {}
-    for (${1} = 0; $1 < ${2}; $1++) {
+    for (${1}; ${2}; ${3}) {
+        ${0}
+    }
+
+snippet     fori
+abbr        for (i) {}
+    for (int ${1}=0; $1<${2}; $1++) {
         ${0}
     }
 
@@ -75,8 +82,7 @@ abbr        enum {}
 
 # main function.
 snippet main
-    int main(int argc, char const* argv[])
-    {
+    int main(int argc, char **argv) {
         ${0}
         return 0;
     }
@@ -84,11 +90,11 @@ snippet main
 # #include <...>
 snippet inc
 alias   #inc, #include
-    #include <${1:stdio}.h>${0}
+    #include <${1}>${0}
 # #include "..."
 snippet inc2
 alias   #inc2, #include2
-    #include "${1:}.h"${0}
+    #include "${1}"${0}
 
 snippet ifndef
 alias   #ifndef

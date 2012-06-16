@@ -5,12 +5,11 @@ export LANG=ja_JP.UTF-8
 setopt prompt_subst
 
 setopt auto_cd
-setopt auto_pushd # $B<+F0$G%G%#%l%/%H%j%9%?%C%/$KDI2C(B
-setopt pushd_ignore_dups # $B%G%#%l%/%H%j%9%?%C%/$KF1$8%G%#%l%/%H%j$rDI2C$7$J$$(B
-setopt correct
-setopt nolistbeep # $B[#KfJd40$G%S!<%W$7$J$$(B
-setopt no_clobber # $B>e=q$-%j%@%$%l%/%H$N6X;_(B
-setopt list_types # $BJd40;~$K%U%!%$%k$N<oJL$rI=<((B
+setopt auto_pushd # 自動でディレクトリスタックに追加
+setopt pushd_ignore_dups # ディレクトリスタックに同じディレクトリを追加しない
+setopt nolistbeep # 曖昧補完でビープしない
+setopt no_clobber # 上書きリダイレクトの禁止
+setopt list_types # 補完時にファイルの種別を表示
 
 export EDITOR=vim
 export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
@@ -19,6 +18,9 @@ alias ls="ls -F"
 alias mv='mv -i'
 alias cp='cp -i'
 alias quit='exit'
+alias diff='diff --strip-trailing-cr'
+alias evim='vim ~/.vimrc'
+alias ezsh='vim ~/.zshrc'
 
 alias ~='cd ~'
 alias ..='cd ..'
@@ -28,18 +30,30 @@ alias -g ...='../../'
 alias -g ....='../../../'
 alias -g .....='../../../../'
 alias a='a.out'
-alias ls='ls -GF'
+alias ls='ls -F'
 alias la='ls -alF'
 alias ll='ls -l'
 alias -g G='| grep -i'
+alias ocaml='rlwrap command ocaml'
 
 
-function cd { 
-builtin cd $@
-if [ 21 -ge $(ls|wc|awk '{print $1}') ]; then
-  ls
-fi
+function cd {
+  builtin cd $@
+  if [ 21 -ge $(ls|wc|awk '{print $1}') ]; then
+    ls
+  fi
 }
+
+function _catcp {
+  cat $@ | pbcopy
+}
+
+function precmd {
+  # echo -ne  "\033]0;（・ω・）"
+  # echo -ne "\033]0;（・ω・）\007"
+  echo -ne "\033]0;Let's＼(・ω・)／にゃー！\007"
+}
+
 
 
 # keybinds
@@ -52,7 +66,6 @@ bindkey '^U' backward-kill-line
 bindkey '^[[3~' delete-char-or-list # Del
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
-bindkey '^B' backward-word
 
 # about prompt
 #----------------------------------------
@@ -68,9 +81,8 @@ local YELLOW=$'%{\e[1;33m%}'
 local BLUE=$'%{\e[1;34m%}'
 local DEFAULT=$'%{\e[1;m%}'
 PROMPT=$BLUE'${USER}@${HOSTNAME} '$GREEN'%~ '$'\n'$DEFAULT'%(!.#.$) '
-PROMPT="%{${fg[red]}%}%n@%{${fg[red]}%}%m:%{${fg[yellow]}%}%~"$'\n'"%{${fg[white]}%}%(!.#.$) "
+PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
 RPROMPT="%S%D{%Y/%m/%d} %*%s"
-
 
 # ls color
 #----------------------------------------
@@ -101,6 +113,7 @@ export PATH=/opt/bin:$PATH
 export PATH=/Users/CHARLIE/Library/lmntal/bin:$PATH
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/usr/local/bin:$PATH
+export PATH=/opt/d/osx/bin:$PATH
 export MANPATH=/opt/local/man:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 # java path
@@ -109,7 +122,7 @@ export SCALA_HOME=/usr/local/Cellar/scala/2.9.1
 export CLASSPATH=$JUNIT_HOME/junit.jar:$CLASSPATH
 export CLASSPATH=$SCALA_HOME/libexec/lib/scala-library.jar:$CLASSPATH
 export CLASSPATH=$SCALA_HOME/libexec/lib/scala-swing.jar:$CLASSPATH
-export CLASSPATH=/Users/CHARLIE/Dropbox/Programming/JavaPackage/bin/mrlib.jar:$CLASSPATH
+export CLASSPATH=~/Dropbox/programming/JavaPackage/bin/mrlib.jar:$CLASSPATH
 export LMNTAL_HOME=/Users/CHARLIE/LMNtal/devel
 export PKG_CONFIG_PATH=/Users/CHARLIE/OpenCV/lib/pkgconfig:$PKG_CONFIG_PATH
 
@@ -118,8 +131,10 @@ export PKG_CONFIG_PATH=/Users/CHARLIE/OpenCV/lib/pkgconfig:$PKG_CONFIG_PATH
 
 # rvm setting
 rvm 1.9.2
-rvm gemset use rails310
+rvm gemset use rails323
 
 
 
 
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

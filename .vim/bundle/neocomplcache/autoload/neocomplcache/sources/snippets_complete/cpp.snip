@@ -2,11 +2,11 @@ include c.snip
 
 snippet     template
 abbr        template <T>
-    template<typename ${1:T}> 
+    template<typename ${1}>
 
 snippet     class
 abbr        class {}
-    class ${1:name} {
+    class ${1} {
         ${2}
     };
 
@@ -21,7 +21,7 @@ abbr        try catch
 # range based for ( C++11 feature )
 snippet     for_CPP11
 abbr        for (:) {}
-    for (${1:var} : ${2:container}) {
+    for (${1} : ${2}) {
         ${0}
     }
 
