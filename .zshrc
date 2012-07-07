@@ -1,8 +1,8 @@
 # complement
 autoload -U compinit
+autoload -Uz add-zsh-hook
 compinit
 export LANG=ja_JP.UTF-8
-setopt prompt_subst
 
 setopt auto_cd
 setopt auto_pushd # 自動でディレクトリスタックに追加
@@ -21,6 +21,7 @@ alias quit='exit'
 alias diff='diff --strip-trailing-cr'
 alias evim='vim ~/.vimrc'
 alias ezsh='vim ~/.zshrc'
+alias nave='/usr/local/src/nave/nave.sh'
 
 alias ~='cd ~'
 alias ..='cd ..'
@@ -48,13 +49,10 @@ function _catcp {
   cat $@ | pbcopy
 }
 
-function precmd {
-  # echo -ne  "\033]0;（・ω・）"
-  # echo -ne "\033]0;（・ω・）\007"
+function _precmd_term_title () {
   echo -ne "\033]0;Let's＼(・ω・)／にゃー！\007"
 }
-
-
+add-zsh-hook precmd _precmd_term_title
 
 # keybinds
 # ----------------------------------------
@@ -69,20 +67,76 @@ bindkey '^N' history-beginning-search-forward
 
 # about prompt
 #----------------------------------------
+# colorful : PROMPT='%{'$'\e[''$[32+$RANDOM % 5]m%}%U%B%m{%n}%b%{'$'\e[''m%}%U%%%u '
+# PROMPT=$BLUE'${USER}@${HOSTNAME} '$GREEN'%~ '$'\n'$DEFAULT'%(!.#.$) '
+# PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
+
 TERM=xterm-256color
-# colorful
-# PROMPT='%{'$'\e[''$[32+$RANDOM % 5]m%}%U%B%m{%n}%b%{'$'\e[''m%}%U%%%u '
-autoload promptinit
-promptinit
+# autoload promptinit
+# promptinit
 autoload colors
 colors
-local GREEN=$'%{\e[1;32m%}'
-local YELLOW=$'%{\e[1;33m%}'
-local BLUE=$'%{\e[1;34m%}'
-local DEFAULT=$'%{\e[1;m%}'
-PROMPT=$BLUE'${USER}@${HOSTNAME} '$GREEN'%~ '$'\n'$DEFAULT'%(!.#.$) '
-PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
-RPROMPT="%S%D{%Y/%m/%d} %*%s"
+
+
+setopt prompt_subst
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' formats '%s' '%b' '%i' '%c' '%u'
+zstyle ':vcs_info:*' actionformats '%s' '%b' '%i' '%a' '%f'
+zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' max-exports 5
+
+
+function _git_info() {
+  # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_
+  LANG=en_US.UTF-8 vcs_info
+  if [[ $vcs_info_msg_0_ = 'git' ]]; then
+    STATUS=$(git status --porcelain 2> /dev/null)
+    info=''
+    if $(echo "$STATUS" | grep '^?? ' &> /dev/null); then
+      info=$info'+'
+    fi
+    if $(echo "$STATUS" | grep '^A  ' &> /dev/null); then
+      info=$info'A'
+    elif $(echo "$STATUS" | grep '^M  ' &> /dev/null); then
+      info=$info'A'
+    fi
+    if $(echo "$STATUS" | grep '^ M ' &> /dev/null); then
+      info=$info'C'
+    elif $(echo "$STATUS" | grep '^AM ' &> /dev/null); then
+      info=$info'C'
+    elif $(echo "$STATUS" | grep '^ T ' &> /dev/null); then
+      info=$info'C'
+    fi
+    if $(echo "$STATUS" | grep '^R  ' &> /dev/null); then
+      info=$info'R'
+    fi
+    if $(echo "$STATUS" | grep '^ D ' &> /dev/null); then
+      info=$info'D'
+    elif $(echo "$STATUS" | grep '^AD ' &> /dev/null); then
+      info=$info'D'
+    fi
+    if $(echo "$STATUS" | grep '^UU ' &> /dev/null); then
+      info=$info'%F{1}!'
+    fi
+
+    branch=''
+    if $(echo "$info" | grep '!' &> /dev/null); then
+      branch='%F{1}'
+    elif $(echo "$info" | grep '[+ACRD]' &> /dev/null); then
+      branch='%F{3}'
+    else
+      branch='%F{2}'
+    fi
+
+    echo -n $vcs_info_msg_0_':('$branch$vcs_info_msg_1_'%f):'$info'%f'
+  elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
+    echo -n $vcs_info_msg_0_':('$vcs_info_msg_1_')'
+  fi
+}
+
+RPROMP="%S%D{%Y/%m/%d} %*%s"
+PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~ %{$reset_color%}\$(_git_info) "$'\n'"%b%{$reset_color%}%(!.#.$) "
 
 # ls color
 #----------------------------------------
@@ -105,9 +159,9 @@ setopt hist_reduce_blanks
 #----------------------------------------
 alias javac='javac -J-Dfile.encoding=UTF-8'
 alias java='java -Dfile.encoding=UTF-8'
-export PATH=/Users/CHARLIE/scala-2.8.0.final/bin:$PATH
-export PATH=/Users/CHARLIE/CompArch/carch/bin:$PATH
-export PATH=/Users/CHARLIE/CompArch/work:$PATH
+export PATH=$HOME/scala-2.8.0.final/bin:$PATH
+export PATH=$HOME/CompArch/carch/bin:$PATH
+export PATH=$HOME/CompArch/work:$PATH
 export PATH=/opt/local/bin/:/opt/local/sbin:$PATH
 export PATH=/opt/bin:$PATH
 export PATH=/Users/CHARLIE/Library/lmntal/bin:$PATH
@@ -125,16 +179,43 @@ export CLASSPATH=$SCALA_HOME/libexec/lib/scala-swing.jar:$CLASSPATH
 export CLASSPATH=~/Dropbox/programming/JavaPackage/bin/mrlib.jar:$CLASSPATH
 export LMNTAL_HOME=/Users/CHARLIE/LMNtal/devel
 export PKG_CONFIG_PATH=/Users/CHARLIE/OpenCV/lib/pkgconfig:$PKG_CONFIG_PATH
-
-
-[[ -s "/Users/charlie/.rvm/scripts/rvm" ]] && source "/Users/charlie/.rvm/scripts/rvm"
-
-# rvm setting
-rvm 1.9.2
-rvm gemset use rails323
+# node.js path
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+nodebrew use latest
 
 
 
+# rbenv setting
+export PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init -)"
 
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+# color debug
+
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+for color in {000..255}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+
+# Show all 256 colors with color number
+function spectrum_ls() {
+  for code in {000..255}; do
+    print -P -- "$code: %F{$code}Test%f"
+  done
+}
+
+function spectrums() {
+  ruby -e '255.times {|i| print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
+}
+

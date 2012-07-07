@@ -1,36 +1,62 @@
+" TODO
+" yuroyoroさんの使っているpluginをひと通り見る
+" 補完をいじる
+" vim-indent-guidesをいじる
+
+
+
 "============================================================
 " plugin settings
 "============================================================
 
+set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+filetype plugin indent off
 
-Bundle 'gmarik/vundle'
-Bundle 'unite.vim'
-Bundle 'neocomplcache'
-Bundle 'tComment'
-Bundle 'taglist.vim'
-Bundle 'smartchr'
-Bundle 'ZenCoding.vim'
-Bundle 'VimClojure'
-Bundle 'vim-scala'
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  call neobundle#rc(expand('~/.vim/bundle/'))
+endif
+
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'unite.vim'
+NeoBundle 'neocomplcache'
+NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'taglist.vim'
+NeoBundle 'smartchr'
+NeoBundle 'ZenCoding.vim'
+NeoBundle 'VimClojure'
+NeoBundle 'vim-scala'
+NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'osyo-manga/unite-u-nya-'
+NeoBundle 'koron/u-nya-vim'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'cocoa.vim'
+
+
+filetype on
+filetype plugin indent on
 
 
 " vundle setting
 "----------------------------------------
-nnoremap <silent> <Space>bi :<C-u>BundleInstall<CR>
-nnoremap <silent> <Space>bc :<C-u>BundleClean<CR>
-nnoremap <silent> <Space>bs :<C-u>BundleSearch<CR>
+nnoremap <silent> <Space>bi :<C-u>NeoBundleInstall<CR>
+nnoremap <silent> <Space>bc :<C-u>NeoBundleClean<CR>
+nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
 
 
 " Unite.vim setting
 "----------------------------------------
 let g:unite_enable_start_insert=1
 nnoremap <silent> <Space>uf :<C-u>Unite file<CR>
+nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
+nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
 nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
 nnoremap <silent> <Space>ua :<C-u>Unite -buffer-name=files buffer file_mru bookmark file<CR>
-nnoremap <silent> <Space>us :<C-u>Unite snippets<CR>
+nnoremap <silent> <Space>us :<C-u>Unite snippet<CR>
+nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
 
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()
@@ -42,6 +68,11 @@ endfunction
 "----------------------------------------
 let g:neocomplcache_enable_at_startup=1
 let g:neocomplcache_enable_auto_select=1
+let g:neocomplcache_snippets_dir = $HOME.'/.vim/snippets'
+let g:neocomplcache_dictionary_filetype_lists = {
+            \ 'default'         : '',
+            \ 'java'            : $HOME.'/.vim/dict/java14.dict'
+            \ }
 imap <C-j> <Plug>(neocomplcache_snippets_expand)
 smap <C-j> <Plug>(neocomplcache_snippets_expand)
 nnoremap <silent> ns :NeoComplCacheEditSnippets<CR>
@@ -55,9 +86,12 @@ inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 nnoremap <silent> <Space>m :<C-u>Matrix<CR>
 
 
-" TComment setting
+" nerdcommenter setting
 "----------------------------------------
-nnoremap <silent> co :TComment<CR>
+let g:NERDCreateDefaultMappings = 0
+let NERDSpaceDelims = 1
+nmap co <Plug>NERDCommenterToggle
+vmap co <Plug>NERDCommenterToggle
 
 
 " taglist setting
@@ -117,7 +151,20 @@ let vimclojure#WantNailgun = 1
 let vimclojure#NailgunClient = "ng"
 
 
+" vim-indent-guides setting
+"----------------------------------------
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_auto_colors=0
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 ctermbg=235
+autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 ctermbg=233
 
+
+" quickrun setting
+"----------------------------------------
+let g:quickrun_no_default_key_mappings = 1
+silent! nmap <unique> <Space>r <Plug>(quickrun)
 
 
 set nocompatible
@@ -149,7 +196,6 @@ set browsedir=current           " Exploreの初期ディレクトリ
 set scrolloff=10                " スクロール時の余白
 set autoread                    " ファイルが書き換えられたら自動で読み直す
 set vb t_vb=                    " ビープ音を鳴らさない
-set autochdir                   " ファイルを開いた際そのディレクトリに移動
 
 
 " サーチオプション
@@ -190,7 +236,12 @@ cmap <C-E> <End>
 cmap <C-F> <Right>
 cmap <C-B> <Left>
 nnoremap <silent> <Space><Space> :<C-u>source ~/.vimrc<CR>
+nnoremap <silent> <Space>s i<Space><Right><Space><Left><Esc>
 smap <C-H> <BS>
+inoremap <C-D> <Del>
+inoremap <C-B> <Left>
+inoremap <C-F> <Right>
+
 
 
 " 英字配列キーボード用
@@ -213,7 +264,7 @@ set laststatus=2                        " ステータスラインを常時表�
 
 set listchars=tab:>\-,eol:$,trail:_     " 不可視文字の設定
 set titlestring=(」・ω・)」うー！(／・ω・)／にゃー！
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %{g:U_nya_()}
 
 set showmatch                           " カッコの対応をハイライト
 set list                                " 不可視文字をハイライト
@@ -256,6 +307,9 @@ augroup cch
     autocmd WinEnter,BufRead * set cursorcolumn cursorline
 augroup END
 
+" java highlight
+let java_highlight_all=1
+
 
 
 
@@ -268,11 +322,14 @@ set cindent             " Cライクな文法に従いインデント
 set expandtab
 set ts=4 sw=4 sts=4
 
-autocmd BufNew,BufRead,WinEnter *.zshrc setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.rb    setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.erb   setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.html  setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.java  setlocal ts=4 sw=4 sts=4
+autocmd BufNew,BufRead,WinEnter *.zshrc  setlocal ts=2 sw=2 sts=2
+autocmd BufNew,BufRead,WinEnter *.rb     setlocal ts=2 sw=2 sts=2
+autocmd BufNew,BufRead,WinEnter *.erb    setlocal ts=2 sw=2 sts=2
+autocmd BufNew,BufRead,WinEnter *.html   setlocal ts=2 sw=2 sts=2
+autocmd BufNew,BufRead,WinEnter *.java   setlocal ts=4 sw=4 sts=4
+autocmd BufNew,BufRead,WinEnter *.js     setlocal ts=4 sw=4 sts=4 filetype=javascript
+autocmd BufNew,BufRead,WinEnter *.ejs    setlocal ts=2 sw=2 sts=2 filetype=html
+autocmd BufNew,BufRead,WinEnter *.coffee setlocal ts=2 sw=2 sts=2 filetype=coffee
 
 function! SetMyTab(sz)
   if a:sz==1

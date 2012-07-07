@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: openable.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2011.
+" Last Modified: 27 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,6 +29,8 @@ set cpo&vim
 
 " Variables  "{{{
 call unite#util#set_default('g:unite_kind_openable_persist_open_blink_time', '250m')
+call unite#util#set_default('g:unite_kind_openable_cd_command', 'cd')
+call unite#util#set_default('g:unite_kind_openable_lcd_command', 'lcd')
 "}}}
 function! unite#kinds#openable#define()"{{{
   return s:kind
@@ -45,9 +47,9 @@ let s:kind.action_table.tabopen = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.tabopen.func(candidates)"{{{
-  for l:candidate in a:candidates
+  for candidate in a:candidates
     tabnew
-    call unite#take_action('open', l:candidate)
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -56,9 +58,9 @@ let s:kind.action_table.split = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.split.func(candidates)"{{{
-  for l:candidate in a:candidates
-    split
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('split')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -67,9 +69,9 @@ let s:kind.action_table.vsplit = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.vsplit.func(candidates)"{{{
-  for l:candidate in a:candidates
-    vsplit
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('vsplit')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -78,9 +80,9 @@ let s:kind.action_table.left = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.left.func(candidates)"{{{
-  for l:candidate in a:candidates
-    leftabove vsplit
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('leftabove vsplit')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -89,9 +91,9 @@ let s:kind.action_table.right = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.right.func(candidates)"{{{
-  for l:candidate in a:candidates
-    rightbelow vsplit
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('rightbelow vsplit')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -100,9 +102,9 @@ let s:kind.action_table.above = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.above.func(candidates)"{{{
-  for l:candidate in a:candidates
-    leftabove split
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('leftabove split')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -111,9 +113,9 @@ let s:kind.action_table.below = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.below.func(candidates)"{{{
-  for l:candidate in a:candidates
-    rightbelow split
-    call unite#take_action('open', l:candidate)
+  for candidate in a:candidates
+    call unite#util#command_with_restore_cursor('rightbelow split')
+    call unite#take_action('open', candidate)
   endfor
 endfunction"}}}
 
@@ -122,20 +124,38 @@ let s:kind.action_table.persist_open = {
       \ 'is_quit'     : 0,
       \ }
 function! s:kind.action_table.persist_open.func(candidate)"{{{
-  if winnr('#') <= 0
-    new
-    wincmd p
-  endif
+  let unite = unite#get_current_unite()
 
-  wincmd p
+  let current_winnr = winnr()
+
+  let winnr = bufwinnr(unite.prev_bufnr)
+  if winnr < 0
+    let winnr = unite.prev_winnr
+  endif
+  if winnr == winnr() || winnr < 0
+    call unite#util#command_with_restore_cursor('new')
+  else
+    execute winnr 'wincmd w'
+  endif
+  let unite.prev_winnr = winnr()
+
   call unite#take_action('open', a:candidate)
+  let unite.prev_bufnr = bufnr('%')
+
   if g:unite_kind_openable_persist_open_blink_time != ''
     normal! V
     redraw!
     execute 'sleep ' . g:unite_kind_openable_persist_open_blink_time
     execute "normal! \<ESC>"
   endif
-  wincmd p
+
+  let unite_winnr = bufwinnr(unite.bufnr)
+  if unite_winnr < 0
+    let unite_winnr = current_winnr
+  endif
+  if unite_winnr > 0
+    execute unite_winnr 'wincmd w'
+  endif
 endfunction"}}}
 
 "}}}

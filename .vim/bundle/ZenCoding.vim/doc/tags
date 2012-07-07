@@ -4,6 +4,7 @@
 <C-Y>D	zencoding.txt	/*<C-Y>D*
 <C-Y>N	zencoding.txt	/*<C-Y>N*
 <C-Y>a	zencoding.txt	/*<C-Y>a*
+<C-Y>c	zencoding.txt	/*<C-Y>c*
 <C-Y>d	zencoding.txt	/*<C-Y>d*
 <C-Y>i	zencoding.txt	/*<C-Y>i*
 <C-Y>j	zencoding.txt	/*<C-Y>j*
@@ -13,6 +14,7 @@ v_<C-Y>,	zencoding.txt	/*v_<C-Y>,*
 zencoding	zencoding.txt	/*zencoding*
 zencoding-balance-tag-inward	zencoding.txt	/*zencoding-balance-tag-inward*
 zencoding-balance-tag-outward	zencoding.txt	/*zencoding-balance-tag-outward*
+zencoding-code-pretty	zencoding.txt	/*zencoding-code-pretty*
 zencoding-complete-tag	zencoding.txt	/*zencoding-complete-tag*
 zencoding-contents	zencoding.txt	/*zencoding-contents*
 zencoding-customize	zencoding.txt	/*zencoding-customize*
@@ -24,6 +26,7 @@ zencoding-goto-previous-point	zencoding.txt	/*zencoding-goto-previous-point*
 zencoding-indent-size	zencoding.txt	/*zencoding-indent-size*
 zencoding-install	zencoding.txt	/*zencoding-install*
 zencoding-introduction	zencoding.txt	/*zencoding-introduction*
+zencoding-links	zencoding.txt	/*zencoding-links*
 zencoding-make-anchor-url	zencoding.txt	/*zencoding-make-anchor-url*
 zencoding-merge-lines	zencoding.txt	/*zencoding-merge-lines*
 zencoding-quoted-text-url	zencoding.txt	/*zencoding-quoted-text-url*

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: uri.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2011.
+" Last Modified: 03 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ function! unite#kinds#uri#define()"{{{
   return s:kind
 endfunction"}}}
 
-let s:System = vital#of('unite').import('System.File')
+let s:System = vital#of('unite.vim').import('System.File')
 
 let s:kind = {
       \ 'name' : 'uri',
@@ -45,8 +45,15 @@ let s:kind.action_table.start = {
       \ 'is_selectable' : 1,
       \ }
 function! s:kind.action_table.start.func(candidates)"{{{
-  for l:candidate in a:candidates
-    call s:System.open(l:candidate.action__path)
+  for candidate in a:candidates
+    let path = get(candidate, 'action__uri',
+          \ candidate.action__path)
+    if unite#util#is_windows() && path =~ '^//'
+      " substitute separator for UNC.
+      let path = substitute(path, '/', '\\', 'g')
+    endif
+
+    call s:System.open(path)
   endfor
 endfunction"}}}
 "}}}
