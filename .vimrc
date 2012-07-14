@@ -1,5 +1,4 @@
 " TODO
-" yuroyoroさんの使っているpluginをひと通り見る
 " 補完をいじる
 " vim-indent-guidesをいじる
 
@@ -20,6 +19,7 @@ endif
 
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'ujihisa/neco-ruby'
 NeoBundle 'unite.vim'
 NeoBundle 'neocomplcache'
 NeoBundle 'scrooloose/nerdcommenter'
@@ -34,7 +34,10 @@ NeoBundle 'osyo-manga/unite-u-nya-'
 NeoBundle 'koron/u-nya-vim'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'cocoa.vim'
-
+NeoBundle 'YankRing.vim'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'tyru/operator-camelize.vim'
 
 filetype on
 filetype plugin indent on
@@ -75,10 +78,11 @@ let g:neocomplcache_dictionary_filetype_lists = {
             \ }
 imap <C-j> <Plug>(neocomplcache_snippets_expand)
 smap <C-j> <Plug>(neocomplcache_snippets_expand)
-nnoremap <silent> ns :NeoComplCacheEditSnippets<CR>
+nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
 inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 inoremap <expr><C-l> neocomplcache#complete_common_string()
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
 
 
 " matrix setting
@@ -167,6 +171,18 @@ let g:quickrun_no_default_key_mappings = 1
 silent! nmap <unique> <Space>r <Plug>(quickrun)
 
 
+" operator-camelize setting
+"----------------------------------------
+nmap cm <Plug>(operator-camelize-toggle)iw
+
+
+
+" Smooth-Scroll setting
+"----------------------------------------
+" map <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
+" map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
+
+
 set nocompatible
 filetype on
 filetype plugin on
@@ -208,6 +224,13 @@ nnoremap <Esc><Esc> :nohlsearch<CR>
 
 let Grep_Skip_Dirs = '.svn .git'
 let Grep_Skip_Files = '*.bak *~ *.swp'
+
+
+" folding settings
+"----------------------------------------
+set foldmethod=marker
+nnoremap zzc ggVGzc
+nnoremap zzo ggVGzo
 
 
 " エンコーディング
@@ -362,3 +385,5 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
+
+
