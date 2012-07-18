@@ -19,6 +19,7 @@ endif
 
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'osyo-manga/neocomplcache-clang_complete'
 NeoBundle 'ujihisa/neco-ruby'
 NeoBundle 'unite.vim'
 NeoBundle 'neocomplcache'
@@ -38,6 +39,8 @@ NeoBundle 'YankRing.vim'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'tyru/operator-camelize.vim'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'ujihisa/unite-colorscheme'
 
 filetype on
 filetype plugin indent on
@@ -83,6 +86,8 @@ inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 inoremap <expr><C-l> neocomplcache#complete_common_string()
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
+" let g:neocomplcache_force_overwrite_completefunc=1
+" let g:clang_complete_auto=1
 
 
 " matrix setting
@@ -385,5 +390,4 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
-
 
