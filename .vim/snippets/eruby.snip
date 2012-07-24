@@ -6,6 +6,12 @@ snippet     rc
 abbr        <% %>
     <% ${1} %>${2}
 
+snippet     for
+abbr        <% for in %>
+    <% for ${1} in ${2} %>
+        ${3}
+    <% end %>
+
 snippet     ruby_print_nonl
 abbr        <%= -%>
     <%= ${1:Ruby print code} -%>${2}
