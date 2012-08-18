@@ -19,6 +19,10 @@ endif
 
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/vimproc'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vimfiler'
+NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'osyo-manga/neocomplcache-clang_complete'
 NeoBundle 'ujihisa/neco-ruby'
 NeoBundle 'unite.vim'
@@ -41,6 +45,7 @@ NeoBundle 'kana/vim-operator-user'
 NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'scrooloose/syntastic'
 
 filetype on
 filetype plugin indent on
@@ -86,8 +91,14 @@ inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 inoremap <expr><C-l> neocomplcache#complete_common_string()
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
-" let g:neocomplcache_force_overwrite_completefunc=1
-" let g:clang_complete_auto=1
+let g:neocomplcache_force_overwrite_completefunc=1
+let g:clang_complete_auto=1
+
+
+" vimproc setting
+"----------------------------------------
+nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
+nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
 
 
 " matrix setting
@@ -166,14 +177,20 @@ let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_auto_colors=0
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
-autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 ctermbg=235
-autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 ctermbg=233
+autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 guifg=#242424 ctermbg=235 ctermfg=238
+autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 guifg=#525252 ctermbg=233 ctermfg=236
 
 
 " quickrun setting
 "----------------------------------------
 let g:quickrun_no_default_key_mappings = 1
+let g:quickrun_config = {}
+" let g:quickrun_config.javascript = {
+            " \ 'command': 'jshint',
+            " \ 'outputter': 'buffer'
+            " \ }
 silent! nmap <unique> <Space>r <Plug>(quickrun)
+nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=vertical<CR>
 
 
 " operator-camelize setting
@@ -181,11 +198,34 @@ silent! nmap <unique> <Space>r <Plug>(quickrun)
 nmap cm <Plug>(operator-camelize-toggle)iw
 
 
-
 " Smooth-Scroll setting
 "----------------------------------------
 " map <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
 " map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
+
+
+" Syntastic setting
+"----------------------------------------
+let g:syntastic_mode_map = {
+      \  'mode': 'active',
+      \ 'active_filetypes': ['ruby', 'javascript'],
+      \ 'passive_filetypes': []
+      \ }
+
+
+" Project.vim setting
+" ----------------------------------------
+let g:proj_window_width=30
+silent! nmap <unique> <Space>p <Plug>ToggleProject
+function! LoadDefaultProject()
+    if getcwd() != $HOME
+        if filereadable(getcwd() . '/.vimprojects')
+            Project .vimprojects
+            call feedkeys(" p")
+        endif
+    endif
+endfunction
+autocmd VimEnter * call LoadDefaultProject()
 
 
 set nocompatible
@@ -301,7 +341,6 @@ set lazyredraw                          " スクリプト実行中に画面を�
 set ttyfast                             " 再描画を高速にする
 
 syntax on
-colorscheme yuroyoro256
 set background=dark
 
 " 特殊な空白のハイライト
@@ -345,6 +384,7 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
+colorscheme yuroyoro256
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab
@@ -390,4 +430,3 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
-

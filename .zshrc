@@ -31,11 +31,12 @@ alias -g ...='../../'
 alias -g ....='../../../'
 alias -g .....='../../../../'
 alias a='a.out'
-alias ls='ls -F'
+alias ls='ls -FG'
 alias la='ls -alF'
 alias ll='ls -l'
 alias -g G='| grep -i'
 alias ocaml='rlwrap command ocaml'
+alias ぎっと='git'
 
 
 function cd {
@@ -45,12 +46,26 @@ function cd {
   fi
 }
 
-function _catcp {
+function pb {
   cat $@ | pbcopy
 }
 
+function precmd() {
+}
+
+counter=0
+export counter
 function _precmd_term_title () {
-  echo -ne "\033]0;Let's＼(・ω・)／にゃー！\007"
+  if [[ 0 -eq `expr $counter % 7` ]]; then
+      echo -n "\033]0;Let's＼(・ω・)／にゃー！\07"
+  else
+    if [[ 0 -eq `expr $counter % 7 % 2` ]]; then
+      echo -n "\033]0;(／・ω・)／にゃー！    \07"
+    else
+      echo -n "\033]0;(」・ω・)」うー！      \07"
+    fi
+  fi
+  counter=`expr $counter + 1`
 }
 add-zsh-hook precmd _precmd_term_title
 
@@ -91,6 +106,7 @@ function _git_info() {
   # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_
   LANG=en_US.UTF-8 vcs_info
   if [[ $vcs_info_msg_0_ = 'git' ]]; then
+    echo -n ' '
     STATUS=$(git status --porcelain 2> /dev/null)
     info=''
     if $(echo "$STATUS" | grep '^?? ' &> /dev/null); then
@@ -131,12 +147,16 @@ function _git_info() {
 
     echo -n $vcs_info_msg_0_':('$branch$vcs_info_msg_1_'%f):'$info'%f'
   elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
+    echo -n ' '
     echo -n $vcs_info_msg_0_':('$vcs_info_msg_1_')'
   fi
 }
 
-RPROMP="%S%D{%Y/%m/%d} %*%s"
-PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~ %{$reset_color%}\$(_git_info) "$'\n'"%b%{$reset_color%}%(!.#.$) "
+function _opt_info() {
+}
+
+# RPROMPT="%S%D{%Y/%m/%d} %*%s"
+PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_git_info)"$'\n'"%b%{$reset_color%}%(!.#.$) "
 
 # ls color
 #----------------------------------------
@@ -162,9 +182,9 @@ alias java='java -Dfile.encoding=UTF-8'
 export PATH=$HOME/scala-2.8.0.final/bin:$PATH
 export PATH=$HOME/CompArch/carch/bin:$PATH
 export PATH=$HOME/CompArch/work:$PATH
-export PATH=/opt/local/bin/:/opt/local/sbin:$PATH
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/opt/bin:$PATH
-export PATH=/Users/CHARLIE/Library/lmntal/bin:$PATH
+export PATH=/Users/charlie/Library/lmntal/bin:$PATH
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=/opt/d/osx/bin:$PATH
@@ -215,7 +235,14 @@ function spectrum_ls() {
   done
 }
 
+function spectrumlist() {
+  ruby -e '255.times {|i| print i.to_s.rjust(5)+" " if i>=16;print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
+}
+
 function spectrums() {
   ruby -e '255.times {|i| print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
 }
 
+if [[ -f ~/.zshrc_local ]]; then
+  source ~/.zshrc_local
+fi
