@@ -429,3 +429,4 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
+
