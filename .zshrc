@@ -37,6 +37,7 @@ alias ll='ls -l'
 alias -g G='| grep -i'
 alias ocaml='rlwrap command ocaml'
 alias ぎっと='git'
+alias v='vim'
 
 
 function cd {
