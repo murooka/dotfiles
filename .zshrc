@@ -14,6 +14,10 @@ setopt list_types # 補完時にファイルの種別を表示
 export EDITOR=vim
 export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
+function exists() {
+  which $1 > /dev/null
+}
+
 alias ls="ls -F"
 alias mv='mv -i'
 alias cp='cp -i'
@@ -21,7 +25,6 @@ alias quit='exit'
 alias diff='diff --strip-trailing-cr'
 alias evim='vim ~/.vimrc'
 alias ezsh='vim ~/.zshrc'
-alias nave='/usr/local/src/nave/nave.sh'
 
 alias ~='cd ~'
 alias ..='cd ..'
@@ -35,27 +38,19 @@ alias ls='ls -FG'
 alias la='ls -alF'
 alias ll='ls -l'
 alias -g G='| grep -i'
-alias ocaml='rlwrap command ocaml'
-alias closure='java -jar /usr/local/closure-compiler/compiler.jar'
 alias server='python -m SimpleHTTPServer'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
-alias gitx='open -a /Applications/GitX.app ./'
 
-
-function cd {
-  builtin cd $@
-  if [ 21 -ge $(ls|wc|awk '{print $1}') ]; then
-    ls
-  fi
-}
 
 function pb {
   cat $@ | pbcopy
 }
 
 function precmd() {
-  _z --add "$(pwd -P)"
+  if exists _z; then
+    _z --add "$(pwd -P)"
+  fi
 }
 
 counter=0
@@ -92,8 +87,6 @@ bindkey '^N' history-beginning-search-forward
 # PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
 
 TERM=xterm-256color
-# autoload promptinit
-# promptinit
 autoload colors
 colors
 
@@ -184,30 +177,35 @@ setopt hist_reduce_blanks
 #----------------------------------------
 alias javac='javac -J-Dfile.encoding=UTF-8'
 alias java='java -Dfile.encoding=UTF-8'
-export PATH=$HOME/scala-2.8.0.final/bin:$PATH
-export PATH=/Users/charlie/Library/lmntal/bin:$PATH
 export PATH=/usr/local/bin:$PATH
-export PATH=$HOME/.jsx/bin:$PATH
 export PATH=/Applications/android-sdk/platform-tools:$PATH
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-# java path
-export JUNIT_HOME=/usr/local/java
-export SCALA_HOME=/usr/local/Cellar/scala/2.9.1
-export CLASSPATH=$JUNIT_HOME/junit.jar:$CLASSPATH
-export CLASSPATH=$SCALA_HOME/libexec/lib/scala-library.jar:$CLASSPATH
-export CLASSPATH=$SCALA_HOME/libexec/lib/scala-swing.jar:$CLASSPATH
-export CLASSPATH=~/Dropbox/programming/JavaPackage/bin/mrlib.jar:$CLASSPATH
-export LMNTAL_HOME=/Users/CHARLIE/LMNtal/devel
-export PKG_CONFIG_PATH=/Users/CHARLIE/OpenCV/lib/pkgconfig:$PKG_CONFIG_PATH
-# node.js path
 export PATH=$HOME/.nodebrew/current/bin:$PATH
-nodebrew use v0.8.8
-
-
-
-# rbenv setting
 export PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init -)"
+
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
+
+if exists nodebrew; then
+  nodebrew use v0.8.8
+else
+  echo "nodebrew is not installed"
+fi
+
+
+if exists rbenv; then
+  eval "$(rbenv init -)"
+else
+  echo "rbenv in not installed"
+fi
+
+if exists brew; then
+  zpath=`brew --prefix`/etc/profile.d/z.sh
+  if [[ -f $zpath ]]; then
+    _Z_CMD=j
+    . $zpath
+  fi
+fi
+
 
 
 # color debug
@@ -250,10 +248,6 @@ function g() {
 function gg() {
   grep -rl "$1" .
 }
-
-# use z
-_Z_CMD=j
-. `brew --prefix`/etc/profile.d/z.sh
 
 export RSENSE_HOME=$HOME/.vim/bundle/rsense
 
