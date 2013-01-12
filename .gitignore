@@ -1,5 +1,6 @@
 /.vim/bundle/*
 /.vim/memolist
-**/.netrwhist
+/.vim/.netrwhist
 
 !/.vim/bundle/neobundle.vim
+!/.vim/bundle/neobundle.vim/**
