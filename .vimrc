@@ -1,9 +1,3 @@
-" TODO
-" 補完をいじる
-" vim-indent-guidesをいじる
-
-
-
 "============================================================
 " plugin settings
 "============================================================
@@ -18,25 +12,23 @@ if has('vim_starting')
 endif
 
 NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mack.mak', 'unix' : 'make -f make_unix.mak'} }
+NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'osyo-manga/neocomplcache-clang_complete'
 NeoBundle 'ujihisa/neco-ruby'
 NeoBundle 'unite.vim'
 NeoBundle 'neocomplcache'
-NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'taglist.vim'
 NeoBundle 'smartchr'
 NeoBundle 'ZenCoding.vim'
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
-NeoBundle 'nathanaelkane/vim-indent-guides'
+" NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'osyo-manga/unite-u-nya-'
-NeoBundle 'koron/u-nya-vim'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'cocoa.vim'
 NeoBundle 'tpope/vim-surround'
@@ -45,9 +37,27 @@ NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'jsx/jsx.vim'
+NeoBundle 'tyru/caw.vim'
+NeoBundle 'vim-scripts/nginx.vim'
+NeoBundle 'leafgarland/typescript-vim'
+NeoBundle 'Shougo/vinarise'
+NeoBundle 'ujihisa/neco-ghc'
+NeoBundle 'haskell.vim'
+NeoBundle 'indenthaskell.vim'
+NeoBundle 'glidenote/memolist.vim'
+NeoBundle 'ruby-matchit'
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'ujihisa/neco-look.git'
+NeoBundle 'Lokaltog/vim-powerline'
 
 filetype on
 filetype plugin indent on
+
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles' . string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Execute ":NeoBundleInstall" command.'
+endif
 
 
 " vundle setting
@@ -60,7 +70,7 @@ nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
 " Unite.vim setting
 "----------------------------------------
 let g:unite_enable_start_insert=1
-nnoremap <silent> <Space>uf :<C-u>Unite file<CR>
+nnoremap <silent> <Space>uf :<C-u>Unite -buffer-name=files file file/new<CR>
 nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
 nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
 nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
@@ -76,9 +86,14 @@ endfunction
 
 " neocomplcache setting
 "----------------------------------------
-let g:neocomplcache_enable_at_startup=1
-let g:neocomplcache_enable_auto_select=1
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_auto_completion_start_length = 3
+let g:neocomplcache_min_keyword_length = 4
+let g:neocomplcache_enable_ignore_case = 0
+let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
 let g:neocomplcache_snippets_dir = $HOME.'/.vim/snippets'
+
 let g:neocomplcache_dictionary_filetype_lists = {
             \ 'default'         : '',
             \ 'java'            : $HOME.'/.vim/dict/java14.dict'
@@ -88,10 +103,25 @@ smap <C-j> <Plug>(neocomplcache_snippets_expand)
 nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
 inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 inoremap <expr><C-l> neocomplcache#complete_common_string()
+inoremap <expr><TAB> pumvisible() ? neocomplcache#complete_common_string() : "\<TAB>"
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
+inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
 let g:neocomplcache_force_overwrite_completefunc=1
-let g:clang_complete_auto=1
+" let g:clang_complete_auto=1
+
+" omni complement
+autocmd FileType *
+      \   if &l:omnifunc == ''
+      \ |   setlocal omnifunc=syntaxcomplete#Complete
+      \ | endif
+if !exists('g:neocomplcache_omni_patterns')
+  let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.default = '\h\w*'
+" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.php  = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.java = '[^. \t]\.\h\w*\'
 
 
 " vimproc setting
@@ -111,6 +141,10 @@ let g:NERDCreateDefaultMappings = 0
 let NERDSpaceDelims = 1
 nmap co <Plug>NERDCommenterToggle
 vmap co <Plug>NERDCommenterToggle
+
+" caw.vim setting
+"----------------------------------------
+
 
 
 " taglist setting
@@ -172,18 +206,21 @@ let vimclojure#NailgunClient = "ng"
 
 " vim-indent-guides setting
 "----------------------------------------
-let g:indent_guides_enable_on_vim_startup=1
-let g:indent_guides_auto_colors=0
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
-autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 guifg=#242424 ctermbg=235 ctermfg=238
-autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 guifg=#525252 ctermbg=233 ctermfg=236
+" let g:indent_guides_enable_on_vim_startup=0
+" let g:indent_guides_auto_colors=0
+" let g:indent_guides_start_level=2
+" let g:indent_guides_guide_size=1
+" autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 guifg=#242424 ctermbg=235 ctermfg=238
+" autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 guifg=#525252 ctermbg=233 ctermfg=236
 
 
 " quickrun setting
 "----------------------------------------
 let g:quickrun_no_default_key_mappings = 1
 let g:quickrun_config = {}
+let g:quickrun_config.c = {
+            \ 'command': 'clang'
+            \ }
 " let g:quickrun_config.javascript = {
             " \ 'command': 'jshint',
             " \ 'outputter': 'buffer'
@@ -207,8 +244,8 @@ nmap cm <Plug>(operator-camelize-toggle)iw
 "----------------------------------------
 let g:syntastic_mode_map = {
       \  'mode': 'active',
-      \ 'active_filetypes': ['ruby', 'javascript'],
-      \ 'passive_filetypes': []
+      \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
+      \ 'passive_filetypes': ['html', 'java']
       \ }
 
 
@@ -225,6 +262,29 @@ function! LoadDefaultProject()
     endif
 endfunction
 autocmd VimEnter * call LoadDefaultProject()
+
+
+" memolist setting
+" ----------------------------------------
+nnoremap <Space>mn :MemoNew<CR>
+nnoremap <Space>ml :MemoList<CR>
+nnoremap <Space>mg :MemoGrep<CR>
+let g:memolist_path = $HOME.'/.vim/memolist'
+
+" tcomment_vim setting
+" ----------------------------------------
+let g:tcommentMapLeaderOp1 = 'co'
+if !exists('g:tcomment_types')
+	let g:tcomment_types = {}
+endif
+let g:tcomment_types.jsx = '// %s'
+
+let g:highind_enable_at_startup = 0
+
+" vim-powerline setting
+" ----------------------------------------
+let g:Powerline_symbols = 'fancy'
+
 
 
 set nocompatible
@@ -283,7 +343,7 @@ set termencoding=utf-8
 set encoding=utf-8
 set fenc=utf-8
 set fileencodings=iso-2022-jp-3,iso-2022-jp,enc-jisx0213,euc-jp,utf-8,ucs-bom,eucjp-ms,cp932
-autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG set enc=utf-8 fenc=utf-8
+autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG setlocal enc=utf-8 fenc=utf-8
 
 " 指定したエンコーディングでファイルを開き直す
 command! Cp932 edit ++enc=cp932
@@ -329,9 +389,9 @@ set ambiwidth=double                    " 一部のマルチバイト文字をas
 set display=uhex                        " 印字不可能文字を16進数で表示
 set laststatus=2                        " ステータスラインを常時表示
 
-set listchars=tab:>\-,eol:$,trail:_     " 不可視文字の設定
+set listchars=tab:>\-,eol:$             " 不可視文字の設定
 set titlestring=(」・ω・)」うー！(／・ω・)／にゃー！
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ %{g:U_nya_()}
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 
 set showmatch                           " カッコの対応をハイライト
 set list                                " 不可視文字をハイライト
@@ -429,4 +489,3 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
-

@@ -5,8 +5,8 @@ snippet :f
 
 snippet func
 alias   function
-	function ${1:function_name}(${2:argument}) {
-		${0:// body...}
+	function (${1}) {
+		${0}
 	}
 
 snippet proto
@@ -19,7 +19,9 @@ snippet f
     function (${1}) {${0:$TM_SELECTED_TEXT}}
 
 snippet if
-    if (${1:true}) {${0:$TM_SELECTED_TEXT}}
+    if (${1:true}) {
+        ${0}
+    }
 
 
 snippet ife
@@ -51,3 +53,37 @@ snippet us
 
 snippet lg
     console.log(${1});${0}
+
+snippet describe
+    describe("${1}", function () {
+        ${2}
+
+        beforeEach(function () {
+            ${3}
+        });
+
+        ${4}
+
+    });
+
+snippet it
+    it("${1}", function () {
+        ${2}
+    });
+
+snippet doc
+    /**
+     * ${1}
+     *
+     */
+
+snippet param
+    @param {${1}} ${2}
+
+snippet returns
+    @returns {${1}} ${2}
+
+snippet prop
+alias   property
+    @property {${1}} ${2}
+

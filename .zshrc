@@ -36,8 +36,11 @@ alias la='ls -alF'
 alias ll='ls -l'
 alias -g G='| grep -i'
 alias ocaml='rlwrap command ocaml'
-alias ぎっと='git'
-alias v='vim'
+alias closure='java -jar /usr/local/closure-compiler/compiler.jar'
+alias server='python -m SimpleHTTPServer'
+alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
+alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
+alias gitx='open -a /Applications/GitX.app ./'
 
 
 function cd {
@@ -52,6 +55,7 @@ function pb {
 }
 
 function precmd() {
+  _z --add "$(pwd -P)"
 }
 
 counter=0
@@ -68,7 +72,7 @@ function _precmd_term_title () {
   fi
   counter=`expr $counter + 1`
 }
-add-zsh-hook precmd _precmd_term_title
+# add-zsh-hook precmd _precmd_term_title
 
 # keybinds
 # ----------------------------------------
@@ -181,15 +185,10 @@ setopt hist_reduce_blanks
 alias javac='javac -J-Dfile.encoding=UTF-8'
 alias java='java -Dfile.encoding=UTF-8'
 export PATH=$HOME/scala-2.8.0.final/bin:$PATH
-export PATH=$HOME/CompArch/carch/bin:$PATH
-export PATH=$HOME/CompArch/work:$PATH
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-export PATH=/opt/bin:$PATH
 export PATH=/Users/charlie/Library/lmntal/bin:$PATH
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/usr/local/bin:$PATH
-export PATH=/opt/d/osx/bin:$PATH
-export MANPATH=/opt/local/man:$MANPATH
+export PATH=$HOME/.jsx/bin:$PATH
+export PATH=/Applications/android-sdk/platform-tools:$PATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 # java path
 export JUNIT_HOME=/usr/local/java
@@ -202,7 +201,7 @@ export LMNTAL_HOME=/Users/CHARLIE/LMNtal/devel
 export PKG_CONFIG_PATH=/Users/CHARLIE/OpenCV/lib/pkgconfig:$PKG_CONFIG_PATH
 # node.js path
 export PATH=$HOME/.nodebrew/current/bin:$PATH
-nodebrew use latest
+nodebrew use v0.8.8
 
 
 
@@ -243,6 +242,20 @@ function spectrumlist() {
 function spectrums() {
   ruby -e '255.times {|i| print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
 }
+
+function g() {
+  grep -r "$1" .
+}
+
+function gg() {
+  grep -rl "$1" .
+}
+
+# use z
+_Z_CMD=j
+. `brew --prefix`/etc/profile.d/z.sh
+
+export RSENSE_HOME=$HOME/.vim/bundle/rsense
 
 if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local
