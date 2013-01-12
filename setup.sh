@@ -7,3 +7,5 @@ do
     ln -s $HOME/dotfiles/$file $HOME/$file
 done
 
+git submodule init
+git submodule update
