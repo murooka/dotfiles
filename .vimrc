@@ -316,6 +316,9 @@ set browsedir=current           " Exploreの初期ディレクトリ
 set scrolloff=10                " スクロール時の余白
 set autoread                    " ファイルが書き換えられたら自動で読み直す
 set vb t_vb=                    " ビープ音を鳴らさない
+set clipboard+=unnamed,autoselect
+set mouse=a
+set ttymouse=xterm2
 
 
 " サーチオプション

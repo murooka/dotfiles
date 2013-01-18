@@ -18,6 +18,10 @@ function exists() {
   which $1 > /dev/null
 }
 
+if [[ -f /Applications/MacVim.app/Contents/MacOS/Vim ]]; then
+  alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+fi
+
 alias ls="ls -F"
 alias mv='mv -i'
 alias cp='cp -i'
@@ -179,6 +183,7 @@ alias javac='javac -J-Dfile.encoding=UTF-8'
 alias java='java -Dfile.encoding=UTF-8'
 export PATH=/usr/local/bin:$PATH
 export PATH=/Applications/android-sdk/platform-tools:$PATH
+export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
 
@@ -254,3 +259,4 @@ export RSENSE_HOME=$HOME/.vim/bundle/rsense
 if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local
 fi
+
