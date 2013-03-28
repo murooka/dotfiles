@@ -28,7 +28,7 @@ snippet ife
     if (${1:true}) {${0:$TM_SELECTED_TEXT}} else{}
 
 snippet for
-	for (var ${1}=0; $1<${2}; $1++) {
+	for (${1}=0; $1<${2}; $1++) {
 		${0}
 	}
 
@@ -87,3 +87,16 @@ snippet prop
 alias   property
     @property {${1}} ${2}
 
+snippet module
+    (function(define) {
+    define([], function() {
+    
+        ${0}
+    
+    });
+    })(typeof define !== 'undefined' ?
+        define :
+        typeof module !== 'undefined' ?
+        function(deps, factory) { module.exports = factory(); } :
+        function(deps, factory) { this['${1}'] = factory(); }
+    );

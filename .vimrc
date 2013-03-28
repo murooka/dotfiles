@@ -1,3 +1,7 @@
+scriptencoding utf-8
+
+let $VIM_ROOT=$HOME.'/.vim'
+
 "============================================================
 " plugin settings
 "============================================================
@@ -7,49 +11,46 @@ filetype off
 filetype plugin indent off
 
 if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-  call neobundle#rc(expand('~/.vim/bundle/'))
+  set runtimepath+=$VIM_ROOT/bundle/neobundle.vim/
+  call neobundle#rc(expand($VIM_ROOT.'/bundle'))
 endif
 
 NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/neosnippet'
+  NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mack.mak', 'unix' : 'make -f make_unix.mak'} }
-NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Rip-Rip/clang_complete'
-NeoBundle 'osyo-manga/neocomplcache-clang_complete'
-NeoBundle 'ujihisa/neco-ruby'
-NeoBundle 'unite.vim'
+  NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
+  NeoBundle 'Shougo/vimfiler'
 NeoBundle 'neocomplcache'
+  NeoBundle 'ujihisa/neco-ghc'
+  NeoBundle 'Rip-Rip/clang_complete'
+NeoBundle 'unite.vim'
+  NeoBundle 'h1mesuke/unite-outline'
+  NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'taglist.vim'
 NeoBundle 'smartchr'
 NeoBundle 'ZenCoding.vim'
-NeoBundle 'VimClojure'
-NeoBundle 'vim-scala'
-" NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'osyo-manga/unite-u-nya-'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'cocoa.vim'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'tyru/operator-camelize.vim'
-NeoBundle 'h1mesuke/unite-outline'
-NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'jsx/jsx.vim'
 NeoBundle 'tyru/caw.vim'
-NeoBundle 'vim-scripts/nginx.vim'
-NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'Shougo/vinarise'
-NeoBundle 'ujihisa/neco-ghc'
-NeoBundle 'haskell.vim'
-NeoBundle 'indenthaskell.vim'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'ruby-matchit'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'ujihisa/neco-look.git'
 NeoBundle 'Lokaltog/vim-powerline'
+NeoBundle 'mariocesar/vimrc_local.vim'
+
+NeoBundle 'VimClojure'
+NeoBundle 'vim-scala'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'indenthaskell.vim'
+NeoBundle 'haskell.vim'
+NeoBundle 'cocoa.vim'
+NeoBundle 'jsx/jsx.vim'
+NeoBundle 'vim-scripts/nginx.vim'
 
 filetype on
 filetype plugin indent on
@@ -92,11 +93,11 @@ let g:neocomplcache_min_keyword_length = 4
 let g:neocomplcache_enable_ignore_case = 0
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
-let g:neocomplcache_snippets_dir = $HOME.'/.vim/snippets'
+let g:neocomplcache_snippets_dir = $VIM_ROOT.'/snippets'
 
 let g:neocomplcache_dictionary_filetype_lists = {
             \ 'default'         : '',
-            \ 'java'            : $HOME.'/.vim/dict/java14.dict'
+            \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
             \ }
 imap <C-j> <Plug>(neocomplcache_snippets_expand)
 smap <C-j> <Plug>(neocomplcache_snippets_expand)
@@ -107,10 +108,15 @@ inoremap <expr><TAB> pumvisible() ? neocomplcache#complete_common_string() : "\<
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
 inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
-let g:neocomplcache_force_overwrite_completefunc=1
-" let g:clang_complete_auto=1
 
-" omni complement
+" for clang_complete
+let g:neocomplcache_force_overwrite_completefunc=1
+let g:neocomplcache_force_overwrite_completefunc=1
+if !exists("g:neocomplcache_force_omni_patterns")
+  let g:neocomplcache_force_omni_patterns = {}
+endif
+
+" for omni complement
 autocmd FileType *
       \   if &l:omnifunc == ''
       \ |   setlocal omnifunc=syntaxcomplete#Complete
@@ -150,7 +156,7 @@ vmap co <Plug>NERDCommenterToggle
 " taglist setting
 "----------------------------------------
 " タグリストを開いた時にフォーカスを移す
-let Tlist_GainFocus_On_ToggleOpen = 1 
+let Tlist_GainFocus_On_ToggleOpen = 1
 " 余分な情報や空白を表示しない
 let Tlist_Compact_Format = 1
 " タグリストをハイライトする
@@ -245,7 +251,7 @@ nmap cm <Plug>(operator-camelize-toggle)iw
 let g:syntastic_mode_map = {
       \  'mode': 'active',
       \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
-      \ 'passive_filetypes': ['html', 'java']
+      \ 'passive_filetypes': ['html', 'java', 'typescript', 'scala']
       \ }
 
 
@@ -269,7 +275,7 @@ autocmd VimEnter * call LoadDefaultProject()
 nnoremap <Space>mn :MemoNew<CR>
 nnoremap <Space>ml :MemoList<CR>
 nnoremap <Space>mg :MemoGrep<CR>
-let g:memolist_path = $HOME.'/.vim/memolist'
+let g:memolist_path = $VIM_ROOT.'/memolist'
 
 " tcomment_vim setting
 " ----------------------------------------
@@ -285,6 +291,8 @@ let g:highind_enable_at_startup = 0
 " ----------------------------------------
 let g:Powerline_symbols = 'fancy'
 
+" vimrc_local setting
+let g:local_vimrc = '.vimrc_local'
 
 
 set nocompatible
@@ -299,9 +307,6 @@ filetype plugin on
 "============================================================
 set helplang=ja                 " helpを日本語化
 set iminsert=0 imsearch=0       " ?
-
-" scalaファイルを認識させる
-autocmd BufNew,BufRead,WinEnter *.scala setlocal filetype=scala
 
 " 前回の編集位置にカーソルを移動させる
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
@@ -461,26 +466,9 @@ autocmd BufNew,BufRead,WinEnter *.js     setlocal ts=4 sw=4 sts=4 filetype=javas
 autocmd BufNew,BufRead,WinEnter *.ejs    setlocal ts=2 sw=2 sts=2 filetype=html
 autocmd BufNew,BufRead,WinEnter *.coffee setlocal ts=2 sw=2 sts=2 filetype=coffee
 
+
 function! SetMyTab(sz)
-  if a:sz==1
-    set sw=1 ts=1 sts=1
-  elseif a:sz==2
-    set sw=2 ts=2 sts=2
-  elseif a:sz==3
-    set sw=3 ts=3 sts=3
-  elseif a:sz==4
-    set sw=4 ts=4 sts=4
-  elseif a:sz==5
-    set sw=5 ts=5 sts=5
-  elseif a:sz==6
-    set sw=6 ts=6 sts=6
-  elseif a:sz==7
-    set sw=7 ts=7 sts=7
-  elseif a:sz==8
-    set sw=8 ts=8 sts=8
-  elseif a:sz==9
-    set sw=9 ts=9 sts=9
-  endif
+  exec 'set sw='.a:sz.' ts='.a:sz.' sts='.a:sz
 endfunction
 
 command! -nargs=1 Tb call SetMyTab(<args>)
@@ -492,3 +480,19 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
+
+set autoread
+set updatetime=50
+
+let s:system = exists('g:loaded_vimproc') ? 'vimproc#system_bg' : 'system'
+
+augroup vim-auto-typescript
+    autocmd!
+    " 適当なタイミングで再読み込み
+    autocmd CursorHold   *.ts :checktime
+    autocmd CursorMoved  *.ts :checktime
+
+    " 書き込み時に js に出力する
+    autocmd BufWritePost *.ts :call {s:system}("tsc game.ts")
+augroup END
+
