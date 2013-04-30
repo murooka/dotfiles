@@ -18,9 +18,9 @@ function exists() {
   which $1 > /dev/null
 }
 
-if [[ -f /Applications/MacVim.app/Contents/MacOS/Vim ]]; then
-  alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
-fi
+# if [[ -f /Applications/MacVim.app/Contents/MacOS/Vim ]]; then
+#   alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
+# fi
 
 alias ls="ls -F"
 alias mv='mv -i'
@@ -46,6 +46,7 @@ alias -g V='| grep -v'
 alias server='python -m SimpleHTTPServer'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
+alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
 
 
 function pb {
@@ -255,7 +256,14 @@ function gg() {
   grep -rl "$1" .
 }
 
-export RSENSE_HOME=$HOME/.vim/bundle/rsense
+function graphvizall() {
+  for cmd in dot neato fdp sfdp twopi circo; do
+    file=`echo $1 | sed -e 's/\.dot$//g'`
+    $cmd -Tpng -o $file.$cmd.png $1
+  done
+}
+
+export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
 
 if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local

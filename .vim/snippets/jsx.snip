@@ -1,5 +1,15 @@
 snippet     func
-    function ${1}(${2}) : ${3} {
+alias       function
+abbr        function () {}
+    function ${1}(${2}): ${3} {
+        ${0}
+    }
+
+snippet     cons
+alias       constructor
+abbr        function constructor() {}
+prev_word   '^'
+    function constructor(${1}) {
         ${0}
     }
 

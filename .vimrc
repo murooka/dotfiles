@@ -22,12 +22,12 @@ NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mack.mak', 'unix' 
   NeoBundle 'Shougo/vimfiler'
 NeoBundle 'neocomplcache'
   NeoBundle 'ujihisa/neco-ghc'
-  NeoBundle 'Rip-Rip/clang_complete'
-NeoBundle 'unite.vim'
+  " NeoBundle 'Rip-Rip/clang_complete'
+  NeoBundle 'Shougo/neocomplcache-rsense', { 'autoload' : { 'filetypes' : ['ruby'], }, }
+NeoBundle 'unite.vim', '4140210a4d09aebae3312a6a12a3bab652647701'
   NeoBundle 'h1mesuke/unite-outline'
   NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'taglist.vim'
-NeoBundle 'smartchr'
 NeoBundle 'ZenCoding.vim'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'tpope/vim-surround'
@@ -38,7 +38,6 @@ NeoBundle 'tyru/caw.vim'
 NeoBundle 'Shougo/vinarise'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'ruby-matchit'
-NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'ujihisa/neco-look.git'
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'mariocesar/vimrc_local.vim'
@@ -70,7 +69,9 @@ nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
 
 " Unite.vim setting
 "----------------------------------------
+let g:unite_no_default_keyappings = 1
 let g:unite_enable_start_insert=1
+let g:unite_split_rule = 'topleft'
 nnoremap <silent> <Space>uf :<C-u>Unite -buffer-name=files file file/new<CR>
 nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
 nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
@@ -81,7 +82,7 @@ nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
 
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()
-    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
 endfunction
 
 
@@ -94,40 +95,55 @@ let g:neocomplcache_enable_ignore_case = 0
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
 let g:neocomplcache_snippets_dir = $VIM_ROOT.'/snippets'
-
+let g:neocomplcache_force_overwrite_completefunc = 1
+" let g:neocomplcache_skip_auto_completion_time = '0.3'
+"
 let g:neocomplcache_dictionary_filetype_lists = {
             \ 'default'         : '',
             \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
             \ }
-imap <C-j> <Plug>(neocomplcache_snippets_expand)
-smap <C-j> <Plug>(neocomplcache_snippets_expand)
-nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
-inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-inoremap <expr><C-l> neocomplcache#complete_common_string()
-inoremap <expr><TAB> pumvisible() ? neocomplcache#complete_common_string() : "\<TAB>"
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
-inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
+"
+if neobundle#is_sourced('neocomplcache')
+  imap <C-j> <Plug>(neocomplcache_snippets_expand)
+  smap <C-j> <Plug>(neocomplcache_snippets_expand)
+  nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
+  inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+  inoremap <expr><C-l> neocomplcache#complete_common_string()
+  inoremap <expr><TAB> pumvisible() ? neocomplcache#complete_common_string() : "\<TAB>"
+  inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+  imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
+  " inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
+endif
 
 " for clang_complete
-let g:neocomplcache_force_overwrite_completefunc=1
-let g:neocomplcache_force_overwrite_completefunc=1
-if !exists("g:neocomplcache_force_omni_patterns")
-  let g:neocomplcache_force_omni_patterns = {}
-endif
+let g:clang_exe = "/usr/bin/clang++"
+let g:clang_complete_auto = 0
+let g:clang_use_library = 0
+let g:clang_debug = 1
+let g:clang_library_path="/usr/local/clang/lib/"
+
+" for rsense
+let g:neocomplcache#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
 
 " for omni complement
-autocmd FileType *
-      \   if &l:omnifunc == ''
-      \ |   setlocal omnifunc=syntaxcomplete#Complete
-      \ | endif
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.default = '\h\w*'
-" let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.php  = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.java = '[^. \t]\.\h\w*\'
+" autocmd FileType *
+"       \   if &l:omnifunc == ''
+"       \ |   setlocal omnifunc=syntaxcomplete#Complete
+"       \ | endif
+" if !exists('g:neocomplcache_omni_patterns')
+"   let g:neocomplcache_omni_patterns = {}
+" endif
+" let g:neocomplcache_omni_patterns.default = '\h\w*'
+" let g:neocomplcache_omni_patterns.php  = '[^. \t]->\h\w*\|\h\w*::'
+" let g:neocomplcache_omni_patterns.java = '[^. \t]\.\h\w*\'
+" " let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+"
+" if !exists("g:neocomplcache_force_omni_patterns")
+"   let g:neocomplcache_force_omni_patterns = {}
+" endif
+" let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+" " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+
 
 
 " vimproc setting
@@ -136,21 +152,10 @@ nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
 nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
 
 
-" matrix setting
-"----------------------------------------
-nnoremap <silent> <Space>m :<C-u>Matrix<CR>
-
-
-" nerdcommenter setting
-"----------------------------------------
-let g:NERDCreateDefaultMappings = 0
-let NERDSpaceDelims = 1
-nmap co <Plug>NERDCommenterToggle
-vmap co <Plug>NERDCommenterToggle
-
 " caw.vim setting
 "----------------------------------------
-
+silent! nmap <unique> <Space>c <Plug>(caw:i:toggle)
+silent! vmap <unique> <Space>c <Plug>(caw:i:toggle)
 
 
 " taglist setting
@@ -227,6 +232,10 @@ let g:quickrun_config = {}
 let g:quickrun_config.c = {
             \ 'command': 'clang'
             \ }
+let g:quickrun_config.jsx = {
+            \ 'command': 'jsx',
+            \ 'args': '--run'
+            \ }
 " let g:quickrun_config.javascript = {
             " \ 'command': 'jshint',
             " \ 'outputter': 'buffer'
@@ -238,12 +247,6 @@ nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=verti
 " operator-camelize setting
 "----------------------------------------
 nmap cm <Plug>(operator-camelize-toggle)iw
-
-
-" Smooth-Scroll setting
-"----------------------------------------
-" map <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
-" map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
 
 
 " Syntastic setting
@@ -277,15 +280,6 @@ nnoremap <Space>ml :MemoList<CR>
 nnoremap <Space>mg :MemoGrep<CR>
 let g:memolist_path = $VIM_ROOT.'/memolist'
 
-" tcomment_vim setting
-" ----------------------------------------
-let g:tcommentMapLeaderOp1 = 'co'
-if !exists('g:tcomment_types')
-	let g:tcomment_types = {}
-endif
-let g:tcomment_types.jsx = '// %s'
-
-let g:highind_enable_at_startup = 0
 
 " vim-powerline setting
 " ----------------------------------------
