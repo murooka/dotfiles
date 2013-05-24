@@ -47,6 +47,20 @@ alias server='python -m SimpleHTTPServer'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
 alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
+case ${OSTYPE} in
+  darwin*) # Mac OS X
+    function macvim () {
+    if [ -d /Applications/MacVim.app ]
+    then
+      [ ! -f $1 ] && touch $1
+      open -a MacVim $1
+    else
+      vim $1
+    fi
+  }
+  alias vim='macvim'
+  ;;
+esac
 
 
 function pb {
@@ -188,6 +202,7 @@ export PATH=/Applications/android-sdk/platform-tools:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
+export PATH=$HOME/.cabal/bin:$PATH
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 

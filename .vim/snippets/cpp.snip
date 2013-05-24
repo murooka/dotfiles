@@ -7,7 +7,65 @@ abbr        template <T>
 snippet     class
 abbr        class {}
     class ${1} {
-        ${2}
+
+    // constructor, destructor
+    public:
+        $1() = default;
+        virtual ~$1() = default;
+
+    private:
+        $1(const $1&) = delete;
+        $1($1&&) = delete;
+
+    // operator
+    public:
+
+    private:
+        $1& operator=(const $1&) = delete;
+        $1& operator=($1&&) = delete;
+
+    // property
+    public:
+
+    private:
+
+    // manipulation
+    public:
+
+    private:
+
+    // member
+    public:
+
+    private:
+
+    };
+
+snippet     pod
+abbr        class {}
+    class ${1} {
+
+    // constructor, destructor
+    public:
+        $1() = default;
+        $1(const $1&) = default;
+        $1($1&&) = default;
+        virtual ~$1() = default;
+
+    // operator
+    public:
+        $1& operator=(const $1&) = default;
+        $1& operator=($1&&) = default;
+
+    // property
+    public:
+
+    // manipulation
+    public:
+
+    // member
+    public:
+
     };
 
 snippet     try

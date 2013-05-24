@@ -16,15 +16,15 @@ if has('vim_starting')
 endif
 
 NeoBundle 'Shougo/neobundle.vim'
-  NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mack.mak', 'unix' : 'make -f make_unix.mak'} }
+NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak'} }
   NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
   NeoBundle 'Shougo/vimfiler'
 NeoBundle 'neocomplcache'
+  NeoBundle 'Shougo/neosnippet'
   NeoBundle 'ujihisa/neco-ghc'
-  " NeoBundle 'Rip-Rip/clang_complete'
+  NeoBundle 'Rip-Rip/clang_complete'
   NeoBundle 'Shougo/neocomplcache-rsense', { 'autoload' : { 'filetypes' : ['ruby'], }, }
-NeoBundle 'unite.vim', '4140210a4d09aebae3312a6a12a3bab652647701'
+NeoBundle 'unite.vim'
   NeoBundle 'h1mesuke/unite-outline'
   NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'taglist.vim'
@@ -51,6 +51,19 @@ NeoBundle 'cocoa.vim'
 NeoBundle 'jsx/jsx.vim'
 NeoBundle 'vim-scripts/nginx.vim'
 
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'basyura/unite-rails', {
+      \ 'depends' : 'Shougo/unite.vim' }
+
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'vim-scripts/twilight'
+NeoBundle 'jonathanfilip/vim-lucius'
+NeoBundle 'jpo/vim-railscasts-theme'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'vim-scripts/Wombat'
+NeoBundle 'tomasr/molokai'
+
 filetype on
 filetype plugin indent on
 
@@ -71,7 +84,6 @@ nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
 "----------------------------------------
 let g:unite_no_default_keyappings = 1
 let g:unite_enable_start_insert=1
-let g:unite_split_rule = 'topleft'
 nnoremap <silent> <Space>uf :<C-u>Unite -buffer-name=files file file/new<CR>
 nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
 nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
@@ -79,8 +91,12 @@ nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
 nnoremap <silent> <Space>ua :<C-u>Unite -buffer-name=files buffer file_mru bookmark file<CR>
 nnoremap <silent> <Space>us :<C-u>Unite snippet<CR>
 nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
+nnoremap <silent> <Space>ur :<C-u>Unite rails<CR>
 
-autocmd FileType unite call s:unite_my_settings()
+augroup UniteCmd
+    autocmd! UniteCmd
+    autocmd FileType unite call s:unite_my_settings()
+augroup END
 function! s:unite_my_settings()
   imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
 endfunction
@@ -116,11 +132,11 @@ if neobundle#is_sourced('neocomplcache')
 endif
 
 " for clang_complete
-let g:clang_exe = "/usr/bin/clang++"
+let g:clang_exe = "/usr/local/clang_0522/bin/clang++"
 let g:clang_complete_auto = 0
-let g:clang_use_library = 0
 let g:clang_debug = 1
-let g:clang_library_path="/usr/local/clang/lib/"
+let g:clang_use_library = 1
+let g:clang_library_path="/usr/local/clang_0522/lib"
 
 " for rsense
 let g:neocomplcache#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
@@ -181,7 +197,7 @@ nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
 
 " ZenCoding setting
 "----------------------------------------
-let g:user_zen_leader_key = '<c-e>'
+let g:user_zen_leader_key = '<C-L>'
 let g:user_zen_settings = {
 \  'lang' : 'ja',
 \  'html' : {
@@ -215,16 +231,6 @@ let vimclojure#WantNailgun = 1
 let vimclojure#NailgunClient = "ng"
 
 
-" vim-indent-guides setting
-"----------------------------------------
-" let g:indent_guides_enable_on_vim_startup=0
-" let g:indent_guides_auto_colors=0
-" let g:indent_guides_start_level=2
-" let g:indent_guides_guide_size=1
-" autocmd VimEnter,ColorScheme * :hi IndentGuidesOdd  guibg=#121212 guifg=#242424 ctermbg=235 ctermfg=238
-" autocmd VimEnter,ColorScheme * :hi IndentGuidesEven guibg=#262626 guifg=#525252 ctermbg=233 ctermfg=236
-
-
 " quickrun setting
 "----------------------------------------
 let g:quickrun_no_default_key_mappings = 1
@@ -256,6 +262,16 @@ let g:syntastic_mode_map = {
       \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
       \ 'passive_filetypes': ['html', 'java', 'typescript', 'scala']
       \ }
+if executable("clang++")
+    let g:syntastic_cpp_compiler = 'clang++'
+    let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
+    let g:quickrun_config = {}
+    let g:quickrun_config['cpp/clang++11'] = {
+                \ 'cmdopt': '--std=c++11 --stdlib=libc++',
+                \ 'type': 'cpp/clang++'
+                \ }
+    let g:quickrun_config['cpp'] = {'type': 'cpp/clang++11'}
+endif
 
 
 " Project.vim setting
@@ -289,11 +305,6 @@ let g:Powerline_symbols = 'fancy'
 let g:local_vimrc = '.vimrc_local'
 
 
-set nocompatible
-filetype on
-filetype plugin on
-
-
 
 
 "============================================================
@@ -303,11 +314,17 @@ set helplang=ja                 " helpを日本語化
 set iminsert=0 imsearch=0       " ?
 
 " 前回の編集位置にカーソルを移動させる
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+augroup PrevCursor
+    autocmd! PrevCursor
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+augroup END
 
 " 改行時にコメントを引き継がない
 set formatoptions+=mM
-autocmd FileType * setlocal formatoptions-=ro
+augroup LineBreak
+    autocmd! LineBreak
+    autocmd FileType * setlocal formatoptions-=ro
+augroup END
 
 set shellslash                  " スラッシュを区切りにしてファイル名を展開する
 set textwidth=1000              " 右端で折り返さない
@@ -318,6 +335,8 @@ set vb t_vb=                    " ビープ音を鳴らさない
 set clipboard+=unnamed,autoselect
 set mouse=a
 set ttymouse=xterm2
+set backupdir=~/.vim_backup
+set path+=/usr/local/include
 
 
 " サーチオプション
@@ -344,8 +363,11 @@ nnoremap zzo ggVGzo
 set termencoding=utf-8
 set encoding=utf-8
 set fenc=utf-8
-set fileencodings=iso-2022-jp-3,iso-2022-jp,enc-jisx0213,euc-jp,utf-8,ucs-bom,eucjp-ms,cp932
-autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG setlocal enc=utf-8 fenc=utf-8
+set fileencodings=utf-8,iso-2022-jp-3,iso-2022-jp,enc-jisx0213,euc-jp,ucs-bom,eucjp-ms,cp932
+augroup Encoding
+    autocmd! Encoding
+    autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG setlocal enc=utf-8 fenc=utf-8
+augroup END
 
 " 指定したエンコーディングでファイルを開き直す
 command! Cp932 edit ++enc=cp932
@@ -360,10 +382,8 @@ set scrolloff=10
 
 " My keymap
 "----------------------------------------
-cmap <C-A> <Home>
-cmap <C-E> <End>
-cmap <C-F> <Right>
-cmap <C-B> <Left>
+inoremap <C-A> <Home>
+inoremap <C-E> <End>
 nnoremap <silent> <Space><Space> :<C-u>source ~/.vimrc<CR>
 nnoremap <silent> <Space>s i<Space><Right><Space><Left><Esc>
 smap <C-H> <BS>
@@ -411,13 +431,11 @@ if has("syntax")
         highlight InvisibleJISX0208Space term=underline ctermbg=darkgrey guibg=Blue
         syntax match InvisibleTrailedSpace "[ \t]\+$" display containedin=ALL
         highlight InvisibleTrailedSpace term=underline ctermbg=Red guibg=Red
-        syntax match InvisibleTab "$" display containedin=ALL
-        highlight InvisibleTab term=underline ctermbg=Red guibg=Red
     endf
 
     augroup invisible
-    autocmd! invisible
-    autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
     augroup END
 endif
 
@@ -445,20 +463,23 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
-colorscheme yuroyoro256
+colorscheme hybrid
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab
 set ts=4 sw=4 sts=4
 
-autocmd BufNew,BufRead,WinEnter *.zshrc  setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.rb     setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.erb    setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.html   setlocal ts=2 sw=2 sts=2
-autocmd BufNew,BufRead,WinEnter *.java   setlocal ts=4 sw=4 sts=4
-autocmd BufNew,BufRead,WinEnter *.js     setlocal ts=4 sw=4 sts=4 filetype=javascript
-autocmd BufNew,BufRead,WinEnter *.ejs    setlocal ts=2 sw=2 sts=2 filetype=html
-autocmd BufNew,BufRead,WinEnter *.coffee setlocal ts=2 sw=2 sts=2 filetype=coffee
+augroup TabSize
+    autocmd! TabSize
+    autocmd BufNew,BufRead,WinEnter *.zshrc  setlocal ts=2 sw=2 sts=2
+    autocmd BufNew,BufRead,WinEnter *.rb     setlocal ts=2 sw=2 sts=2
+    autocmd BufNew,BufRead,WinEnter *.erb    setlocal ts=2 sw=2 sts=2
+    autocmd BufNew,BufRead,WinEnter *.html   setlocal ts=2 sw=2 sts=2
+    autocmd BufNew,BufRead,WinEnter *.java   setlocal ts=4 sw=4 sts=4
+    autocmd BufNew,BufRead,WinEnter *.js     setlocal ts=4 sw=4 sts=4
+    autocmd BufNew,BufRead,WinEnter *.ejs    setlocal ts=2 sw=2 sts=2 filetype=html
+    autocmd BufNew,BufRead,WinEnter *.coffee setlocal ts=2 sw=2 sts=2
+augroup END
 
 
 function! SetMyTab(sz)
@@ -490,3 +511,32 @@ augroup vim-auto-typescript
     autocmd BufWritePost *.ts :call {s:system}("tsc game.ts")
 augroup END
 
+let s:unite_source = {
+\   "name" : "rails"
+\}
+
+function! s:unite_source.gather_candidates(args, context)
+    let cmds = {
+\       "Models"      : "Unite rails/model",
+\       "Views"       : "Unite rails/view",
+\       "Controllers" : "Unite rails/controller",
+\       "Specs"       : "Unite rails/spec",
+\       "Config"      : "Unite rails/config",
+\       "Javascript"  : "Unite rails/javascript",
+\       "StyleSheet"  : "Unite rails/stylesheet",
+\       "Generate"    : "Unite rails/generate",
+\       "Library"     : "Unite rails/lib",
+\       "Rake"        : "Unite rails/rake",
+\   }
+
+    return values(map(cmds, "{
+\       'word' : v:key,
+\       'source' : 'shortcut',
+\       'kind' : 'command',
+\       'action__command' : v:val
+\   }"))
+endfunction
+
+call unite#define_source(s:unite_source)
+
+unlet s:unite_source
