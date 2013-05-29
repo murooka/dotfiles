@@ -123,6 +123,8 @@ let g:neocomplcache_dictionary_filetype_lists = {
 if neobundle#is_sourced('neocomplcache')
   imap <C-j> <Plug>(neocomplcache_snippets_expand)
   smap <C-j> <Plug>(neocomplcache_snippets_expand)
+  inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
   nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
@@ -348,6 +350,7 @@ set ttymouse=xterm2
 set backupdir=~/.vim_backup
 set path+=/usr/local/include
 set path+=/usr/include/c++/4.2.1
+set backspace=indent,eol,start
 
 
 " サーチオプション
@@ -397,7 +400,7 @@ inoremap <C-A> <Home>
 inoremap <C-E> <End>
 nnoremap <silent> <Space><Space> :<C-u>source ~/.vimrc<CR>
 nnoremap <silent> <Space>s i<Space><Right><Space><Left><Esc>
-smap <C-H> <BS>
+smap <C-H> <BS>i
 inoremap <C-D> <Del>
 inoremap <C-B> <Left>
 inoremap <C-F> <Right>
