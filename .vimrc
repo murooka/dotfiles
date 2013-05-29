@@ -15,7 +15,7 @@ if has('vim_starting')
   call neobundle#rc(expand($VIM_ROOT.'/bundle'))
 endif
 
-NeoBundle 'Shougo/neobundle.vim'
+NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak'} }
   NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
   NeoBundle 'Shougo/vimfiler'
@@ -50,6 +50,7 @@ NeoBundle 'haskell.vim'
 NeoBundle 'cocoa.vim'
 NeoBundle 'jsx/jsx.vim'
 NeoBundle 'vim-scripts/nginx.vim'
+NeoBundle 'vim-scripts/javacomplete'
 
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'basyura/unite-rails', {
@@ -111,54 +112,63 @@ let g:neocomplcache_enable_ignore_case = 0
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
 let g:neocomplcache_snippets_dir = $VIM_ROOT.'/snippets'
-let g:neocomplcache_force_overwrite_completefunc = 1
-" let g:neocomplcache_skip_auto_completion_time = '0.3'
-"
+" let g:neocomplcache_force_overwrite_completefunc = 1
+let g:neocomplcache_skip_auto_completion_time = '0.3'
+
 let g:neocomplcache_dictionary_filetype_lists = {
             \ 'default'         : '',
             \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
             \ }
-"
+
 if neobundle#is_sourced('neocomplcache')
   imap <C-j> <Plug>(neocomplcache_snippets_expand)
   smap <C-j> <Plug>(neocomplcache_snippets_expand)
   nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
-  inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-  inoremap <expr><C-l> neocomplcache#complete_common_string()
-  inoremap <expr><TAB> pumvisible() ? neocomplcache#complete_common_string() : "\<TAB>"
-  inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-  imap <C-k>  <Plug>(neocomplcache_start_unite_complete)
-  " inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
+  inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
+  inoremap <expr><C-k> "\<C-x>\<C-o>"
+endif
+
+" omni complete
+if !exists('g:neocomplcache_omni_patterns')
+  let g:neocomplcache_omni_patterns = {}
+endif
+
+if !exists('g:neocomplcache_omni_functions')
+    let g:neocomplcache_omni_functions = {}
+endif
+if !exists('g:neocomplcache_force_omni_patterns')
+    let g:neocomplcache_force_omni_patterns = {}
 endif
 
 " for clang_complete
-let g:clang_exe = "/usr/local/clang_0522/bin/clang++"
+let $CLANG_ROOT = "/usr/local/clang_0522"
+
+let g:clang_exe = $CLANG_ROOT . "/bin/clang"
 let g:clang_complete_auto = 0
-let g:clang_debug = 1
+let g:clang_auto_select = 0
+let g:clang_conceal_snippets = 1
+let g:clang_debug = 0
 let g:clang_use_library = 1
-let g:clang_library_path="/usr/local/clang_0522/lib"
+let g:clang_library_path = $CLANG_ROOT . "/lib"
+let g:neocomplcache_force_omni_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_force_omni_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" for javacomplete
+augroup JavaComplete
+  autocmd! JavaComplete
+  autocmd FileType java :setlocal omnifunc=javacomplete#Complete
+  autocmd FileType java :setlocal completefunc=javacomplete#CompleteParamsInfo
+augroup END
+
+let g:neocomplcache_force_omni_patterns.java = 
+      \ '[^. *\t]\.\h\w*\'
 
 " for rsense
 let g:neocomplcache#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
-
-" for omni complement
-" autocmd FileType *
-"       \   if &l:omnifunc == ''
-"       \ |   setlocal omnifunc=syntaxcomplete#Complete
-"       \ | endif
-" if !exists('g:neocomplcache_omni_patterns')
-"   let g:neocomplcache_omni_patterns = {}
-" endif
-" let g:neocomplcache_omni_patterns.default = '\h\w*'
-" let g:neocomplcache_omni_patterns.php  = '[^. \t]->\h\w*\|\h\w*::'
-" let g:neocomplcache_omni_patterns.java = '[^. \t]\.\h\w*\'
-" " let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-"
-" if !exists("g:neocomplcache_force_omni_patterns")
-"   let g:neocomplcache_force_omni_patterns = {}
-" endif
-" let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-" " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.ruby =
+      \ '[^. *\t]\.\w*\|\h\w*::'
 
 
 
@@ -337,6 +347,7 @@ set mouse=a
 set ttymouse=xterm2
 set backupdir=~/.vim_backup
 set path+=/usr/local/include
+set path+=/usr/include/c++/4.2.1
 
 
 " サーチオプション
@@ -495,6 +506,8 @@ command! -nargs=1 Tb call SetMyTab(<args>)
 "============================================================
 set wildmenu        " 補完をwildmenu化
 set complete+=k     " 補完に辞書ファイルを追加
+set completeopt+=menuone
+set completeopt-=preview
 
 set autoread
 set updatetime=50

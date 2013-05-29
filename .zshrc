@@ -59,6 +59,7 @@ case ${OSTYPE} in
     fi
   }
   alias vim='macvim'
+  alias cvim='/usr/local/bin/vim'
   ;;
 esac
 
