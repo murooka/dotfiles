@@ -41,6 +41,9 @@ NeoBundle 'ruby-matchit'
 NeoBundle 'ujihisa/neco-look.git'
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'mariocesar/vimrc_local.vim'
+NeoBundle 'lilydjwg/colorizer.git'
+NeoBundle 'Lokaltog/vim-easymotion.git'
+NeoBundle 'goldfeld/vim-seek.git'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -51,6 +54,9 @@ NeoBundle 'cocoa.vim'
 NeoBundle 'jsx/jsx.vim'
 NeoBundle 'vim-scripts/nginx.vim'
 NeoBundle 'vim-scripts/javacomplete'
+NeoBundle 'jiangmiao/simple-javascript-indenter'
+NeoBundle 'vim-scripts/jQuery.git'
+NeoBundle 'jelera/vim-javascript-syntax'
 
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'basyura/unite-rails', {
@@ -64,6 +70,7 @@ NeoBundle 'jpo/vim-railscasts-theme'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'tomasr/molokai'
+NeoBundle 'mattn/habatobi-vim.git'
 
 filetype on
 filetype plugin indent on
@@ -121,8 +128,8 @@ let g:neocomplcache_dictionary_filetype_lists = {
             \ }
 
 if neobundle#is_sourced('neocomplcache')
-  imap <C-j> <Plug>(neocomplcache_snippets_expand)
-  smap <C-j> <Plug>(neocomplcache_snippets_expand)
+  imap <C-j> <Plug>(neosnippet_expand_or_jump)
+  smap <C-j> <Plug>(neosnippet_expand_or_jump)
   inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
   inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
   nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
@@ -272,8 +279,9 @@ nmap cm <Plug>(operator-camelize-toggle)iw
 let g:syntastic_mode_map = {
       \  'mode': 'active',
       \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
-      \ 'passive_filetypes': ['html', 'java', 'typescript', 'scala']
+      \ 'passive_filetypes': ['html', 'typescript', 'scala', 'java']
       \ }
+let g:syntastic_java_javac_options = '-Xlint -J-Dfile.encoding=UTF-8 -J-Duser.language=en'
 if executable("clang++")
     let g:syntastic_cpp_compiler = 'clang++'
     let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
@@ -315,6 +323,13 @@ let g:Powerline_symbols = 'fancy'
 
 " vimrc_local setting
 let g:local_vimrc = '.vimrc_local'
+
+" colorizer setting
+let g:colorizer_nomap = 1
+nnoremap <Space>a :ColorToggle<CR>
+
+" easymotion setting
+let g:EasyMotion_leader_key = '<Space><Space>'
 
 
 
@@ -477,7 +492,7 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
-colorscheme hybrid
+colorscheme yuroyoro256
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab

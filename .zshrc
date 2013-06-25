@@ -47,21 +47,22 @@ alias server='python -m SimpleHTTPServer'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
 alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
-case ${OSTYPE} in
-  darwin*) # Mac OS X
-    function macvim () {
-    if [ -d /Applications/MacVim.app ]
-    then
-      [ ! -f $1 ] && touch $1
-      open -a MacVim $1
-    else
-      vim $1
-    fi
-  }
-  alias vim='macvim'
-  alias cvim='/usr/local/bin/vim'
-  ;;
-esac
+
+# case ${OSTYPE} in
+#   darwin*) # Mac OS X
+#     function macvim () {
+#     if [ -d /Applications/MacVim.app ]
+#     then
+#       [ ! -f $1 ] && touch $1
+#       open -a MacVim $1
+#     else
+#       vim $1
+#     fi
+#   }
+#   alias vim='macvim'
+#   alias cvim='/usr/local/bin/vim'
+#   ;;
+# esac
 
 
 function pb {
@@ -285,3 +286,4 @@ if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local
 fi
 
+source ~/perl5/perlbrew/etc/bashrc
