@@ -10,6 +10,11 @@ set nocompatible
 filetype off
 filetype plugin indent off
 
+if $GOROOT != ''
+  set runtimepath+=$GOROOT/misc/vim/
+endif
+
+
 if has('vim_starting')
   set runtimepath+=$VIM_ROOT/bundle/neobundle.vim/
   call neobundle#rc(expand($VIM_ROOT.'/bundle'))
@@ -19,12 +24,11 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak'} }
   NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
   NeoBundle 'Shougo/vimfiler'
-NeoBundle 'neocomplcache'
+NeoBundle 'Shougo/neocomplete'
   NeoBundle 'Shougo/neosnippet'
   NeoBundle 'ujihisa/neco-ghc'
-  NeoBundle 'Rip-Rip/clang_complete'
-  NeoBundle 'Shougo/neocomplcache-rsense', { 'autoload' : { 'filetypes' : ['ruby'], }, }
-NeoBundle 'unite.vim'
+  " NeoBundle 'Rip-Rip/clang_complete'
+NeoBundleLazy 'unite.vim'
   NeoBundle 'h1mesuke/unite-outline'
   NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'taglist.vim'
@@ -37,13 +41,17 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'Shougo/vinarise'
 NeoBundle 'glidenote/memolist.vim'
+NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'ruby-matchit'
 NeoBundle 'ujihisa/neco-look.git'
 NeoBundle 'Lokaltog/vim-powerline'
-NeoBundle 'mariocesar/vimrc_local.vim'
 NeoBundle 'lilydjwg/colorizer.git'
-NeoBundle 'Lokaltog/vim-easymotion.git'
-NeoBundle 'goldfeld/vim-seek.git'
+NeoBundle 'thinca/vim-localrc'
+NeoBundle 'rking/ag.vim'
+NeoBundle 'vim-perl/vim-perl'
+NeoBundle 'motemen/xslate-vim'
+NeoBundle 'c9s/perlomni.vim'
+NeoBundle 'LeafCage/foldCC'                            " foldの見た目を良くする関数
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -57,10 +65,10 @@ NeoBundle 'vim-scripts/javacomplete'
 NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'vim-scripts/jQuery.git'
 NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle 'vim-scripts/brainfuck-syntax.git'
+" NeoBundle 'terryma/vim-multiple-cursors'
 
 NeoBundle 'tpope/vim-rails'
-NeoBundle 'basyura/unite-rails', {
-      \ 'depends' : 'Shougo/unite.vim' }
 
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'w0ng/vim-hybrid'
@@ -71,6 +79,7 @@ NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'mattn/habatobi-vim.git'
+NeoBundle 'itchyny/landscape.vim'
 
 filetype on
 filetype plugin indent on
@@ -81,72 +90,107 @@ if neobundle#exists_not_installed_bundles()
 endif
 
 
-" vundle setting
-"----------------------------------------
-nnoremap <silent> <Space>bi :<C-u>NeoBundleInstall<CR>
-nnoremap <silent> <Space>bc :<C-u>NeoBundleClean<CR>
-nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
+if !exists('s:neobundle_ext_loaded') "{{{
+  let s:neobundle_ext_loaded = 1
+
+  function! s:neobundle_tap(bundle) " {{{
+    let s:tapped_bundle = neobundle#get(a:bundle)
+    return neobundle#is_installed(a:bundle)
+  endfunction " }}}
+
+  function! s:neobundle_config(config) " {{{
+    if exists("s:tapped_bundle") && s:tapped_bundle != {}
+      call neobundle#config(s:tapped_bundle.name, a:config)
+    endif
+  endfunction " }}}
+
+  function! s:neobundle_untap() " {{{
+    let s:tapped_bundle = {}
+  endfunction " }}}
+
+endif "}}}
 
 
-" Unite.vim setting
-"----------------------------------------
-let g:unite_no_default_keyappings = 1
-let g:unite_enable_start_insert=1
-nnoremap <silent> <Space>uf :<C-u>Unite -buffer-name=files file file/new<CR>
-nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
-nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
-nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
-nnoremap <silent> <Space>ua :<C-u>Unite -buffer-name=files buffer file_mru bookmark file<CR>
-nnoremap <silent> <Space>us :<C-u>Unite snippet<CR>
-nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
-nnoremap <silent> <Space>ur :<C-u>Unite rails<CR>
 
-augroup UniteCmd
+if s:neobundle_tap('neobundle.vim') "{{{
+  call s:neobundle_config({
+        \   })
+
+  nnoremap <silent> <Space>bi :<C-u>NeoBundleInstall<CR>
+  nnoremap <silent> <Space>bc :<C-u>NeoBundleClean<CR>
+  nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
+
+  call s:neobundle_untap()
+endif "}}}
+
+if s:neobundle_tap('unite.vim') "{{{
+  call s:neobundle_config({
+        \   })
+
+  let g:unite_no_default_keyappings = 1
+  let g:unite_enable_start_insert = 1
+
+  nnoremap <silent> <Space>uf :<C-u>Unite -buffer-name=files file file/new<CR>
+  nnoremap <silent> <Space>un :<C-u>Unite file/new<CR>
+  nnoremap <silent> <Space>ud :<C-u>Unite directory_mru<CR>
+  nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
+  nnoremap <silent> <Space>ua :<C-u>Unite -buffer-name=history file_mru<CR>
+  nnoremap <silent> <Space>us :<C-u>Unite snippet<CR>
+  nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
+  nnoremap <silent> <Space>ur :<C-u>Unite rails<CR>
+
+  augroup UniteCmd
     autocmd! UniteCmd
     autocmd FileType unite call s:unite_my_settings()
-augroup END
-function! s:unite_my_settings()
-  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
-endfunction
+  augroup END
+
+  function! s:unite_my_settings()
+    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  endfunction
+
+  call s:neobundle_untap()
+endif "}}}
 
 
-" neocomplcache setting
+" neocomplete setting
 "----------------------------------------
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_auto_completion_start_length = 3
-let g:neocomplcache_min_keyword_length = 4
-let g:neocomplcache_enable_ignore_case = 0
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
-let g:neocomplcache_snippets_dir = $VIM_ROOT.'/snippets'
-" let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache_skip_auto_completion_time = '0.3'
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#auto_completion_start_length = 3
+let g:neocomplete#min_keyword_length = 4
+let g:neocomplete#enable_ignore_case = 0
+let g:neocomplete#enable_auto_select = 1
+let g:neocomplete#enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
+let g:neocomplete#skip_auto_completion_time = '0.3'
 
-let g:neocomplcache_dictionary_filetype_lists = {
-            \ 'default'         : '',
-            \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
-            \ }
+let g:neocomplete#sources#dictionary#dictionaries = {
+      \ 'default'         : '',
+      \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
+      \ }
 
-if neobundle#is_sourced('neocomplcache')
+if neobundle#is_sourced('neocomplete')
   imap <C-j> <Plug>(neosnippet_expand_or_jump)
   smap <C-j> <Plug>(neosnippet_expand_or_jump)
-  inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-  nnoremap <silent> <Space>ns :NeoComplCacheEditSnippets<CR>
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+  nnoremap <silent> <Space>ns :NeoSnippetEdit<CR>
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
 endif
 
+" neo snippet
+let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
+
 " omni complete
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
 endif
 
-if !exists('g:neocomplcache_omni_functions')
-    let g:neocomplcache_omni_functions = {}
+if !exists('g:neocomplete#sources#omni#functions')
+  let g:neocomplete#sources#omni#functions = {}
 endif
-if !exists('g:neocomplcache_force_omni_patterns')
-    let g:neocomplcache_force_omni_patterns = {}
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
 endif
 
 " for clang_complete
@@ -159,9 +203,9 @@ let g:clang_conceal_snippets = 1
 let g:clang_debug = 0
 let g:clang_use_library = 1
 let g:clang_library_path = $CLANG_ROOT . "/lib"
-let g:neocomplcache_force_omni_patterns.c =
+let g:neocomplete#force_omni_input_patterns.c =
       \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.cpp =
+let g:neocomplete#force_omni_input_patterns.cpp =
       \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 " for javacomplete
@@ -171,167 +215,206 @@ augroup JavaComplete
   autocmd FileType java :setlocal completefunc=javacomplete#CompleteParamsInfo
 augroup END
 
-let g:neocomplcache_force_omni_patterns.java = 
+let g:neocomplete#force_omni_input_patterns.java = 
       \ '[^. *\t]\.\h\w*\'
 
 " for rsense
-let g:neocomplcache#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
-let g:neocomplcache_omni_patterns.ruby =
-      \ '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplete#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
+" let g:neocomplete_omni_patterns.ruby = \ '[^. *\t]\.\w*\|\h\w*::'
 
 
 
-" vimproc setting
-"----------------------------------------
-nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
-nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
+if s:neobundle_tap('vimproc') "{{{
+  call s:neobundle_config({
+        \   })
 
+  nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
+  nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
 
-" caw.vim setting
-"----------------------------------------
-silent! nmap <unique> <Space>c <Plug>(caw:i:toggle)
-silent! vmap <unique> <Space>c <Plug>(caw:i:toggle)
+  call s:neobundle_untap()
+endif "}}}
 
+if s:neobundle_tap('caw.vim') "{{{
+  call s:neobundle_config({
+        \   })
 
-" taglist setting
-"----------------------------------------
-" タグリストを開いた時にフォーカスを移す
-let Tlist_GainFocus_On_ToggleOpen = 1
-" 余分な情報や空白を表示しない
-let Tlist_Compact_Format = 1
-" タグリストをハイライトする
-let Tlist_Auto_Highlight_Tag = 1
-" タグを選択した際にタグリストを閉じる
-let Tlist_Close_On_Select = 1
-" 現在のファイルのタグリストのみを開く
-let Tlist_Show_One_File = 1
-" タグリストウィンドウのみしか存在しない時、vimを終了する
-let Tlist_Exit_OnlyWindow = 1
-" 新しくファイルを開いた際にタグリストを更新する
-let Tlist_Auto_Update = 1
-" タグリストの幅
-let Tlist_WinWidth = 30
-nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
+  silent! nmap <unique> <Space>c <Plug>(caw:i:toggle)
+  silent! vmap <unique> <Space>c <Plug>(caw:i:toggle)
 
+  call s:neobundle_untap()
+endif "}}}
 
-" ZenCoding setting
-"----------------------------------------
-let g:user_zen_leader_key = '<C-L>'
-let g:user_zen_settings = {
-\  'lang' : 'ja',
-\  'html' : {
-\    'snippets' : {
-\      'rp' : '<%= | %>'
-\    },
-\    'filters' : 'html',
-\    'indentation' : ' '
-\  },
-\  'css' : {
-\    'filters' : 'fc',
-\  },
-\  'javascript' : {
-\    'snippets' : {
-\      'jq' : "$(function() {\n\t${cursor}${child}\n});",
-\      'jq:each' : "$.each(arr, function(index, item)\n\t${child}\n});",
-\      'fn' : "(function() {\n\t${cursor}\n})();",
-\      'tm' : "setTimeout(function() {\n\t${cursor}\n}, 100);",
-\    },
-\  },
-\}
+if s:neobundle_tap('taglist.vim') "{{{
+  call s:neobundle_config({
+        \   })
 
+  " タグリストを開いた時にフォーカスを移す
+  let Tlist_GainFocus_On_ToggleOpen = 1
+  " 余分な情報や空白を表示しない
+  let Tlist_Compact_Format = 1
+  " タグリストをハイライトする
+  let Tlist_Auto_Highlight_Tag = 1
+  " タグを選択した際にタグリストを閉じる
+  let Tlist_Close_On_Select = 1
+  " 現在のファイルのタグリストのみを開く
+  let Tlist_Show_One_File = 1
+  " タグリストウィンドウのみしか存在しない時、vimを終了する
+  let Tlist_Exit_OnlyWindow = 1
+  " 新しくファイルを開いた際にタグリストを更新する
+  let Tlist_Auto_Update = 1
+  " タグリストの幅
+  let Tlist_WinWidth = 30
 
-" VimClojure setting
-"----------------------------------------
-let vimclojure#HighlightBuiltins=1
-let vimclojure#HighlightContrib=1
-let vimclojure#DynamicHighlighting=1
-let vimclojure#ParenRainbow=1
-let vimclojure#WantNailgun = 1
-let vimclojure#NailgunClient = "ng"
+  nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
 
+  call s:neobundle_untap()
+endif "}}}
 
-" quickrun setting
-"----------------------------------------
-let g:quickrun_no_default_key_mappings = 1
-let g:quickrun_config = {}
-let g:quickrun_config.c = {
-            \ 'command': 'clang'
-            \ }
-let g:quickrun_config.jsx = {
-            \ 'command': 'jsx',
-            \ 'args': '--run'
-            \ }
-" let g:quickrun_config.javascript = {
-            " \ 'command': 'jshint',
-            " \ 'outputter': 'buffer'
-            " \ }
-silent! nmap <unique> <Space>r <Plug>(quickrun)
-nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=vertical<CR>
+if s:neobundle_tap('ZenCoding.vim') "{{{
+  call s:neobundle_config({
+        \   })
 
+  let g:user_zen_leader_key = '<C-L>'
+  let g:user_zen_settings = {
+        \  'lang' : 'ja',
+        \  'html' : {
+        \    'snippets' : {
+        \      'rp' : '<%= | %>'
+        \    },
+        \    'filters' : 'html',
+        \    'indentation' : ' '
+        \  },
+        \  'css' : {
+        \    'filters' : 'fc',
+        \  },
+        \  'javascript' : {
+        \    'snippets' : {
+        \      'jq' : "$(function() {\n\t${cursor}${child}\n});",
+        \      'jq:each' : "$.each(arr, function(index, item)\n\t${child}\n});",
+        \      'fn' : "(function() {\n\t${cursor}\n})();",
+        \      'tm' : "setTimeout(function() {\n\t${cursor}\n}, 100);",
+        \    },
+        \  },
+        \}
 
-" operator-camelize setting
-"----------------------------------------
-nmap cm <Plug>(operator-camelize-toggle)iw
+  call s:neobundle_untap()
+endif "}}}
 
+if s:neobundle_tap('VimClojure') "{{{
+  call s:neobundle_config({
+        \   })
 
-" Syntastic setting
-"----------------------------------------
-let g:syntastic_mode_map = {
-      \  'mode': 'active',
-      \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
-      \ 'passive_filetypes': ['html', 'typescript', 'scala', 'java']
-      \ }
-let g:syntastic_java_javac_options = '-Xlint -J-Dfile.encoding=UTF-8 -J-Duser.language=en'
-if executable("clang++")
+  let vimclojure#HighlightBuiltins=1
+  let vimclojure#HighlightContrib=1
+  let vimclojure#DynamicHighlighting=1
+  let vimclojure#ParenRainbow=1
+  let vimclojure#WantNailgun = 1
+  let vimclojure#NailgunClient = "ng"
+
+  call s:neobundle_untap()
+endif "}}}
+
+if s:neobundle_tap('vim-quickrun') "{{{
+  call s:neobundle_config({
+        \   })
+
+  let g:quickrun_no_default_key_mappings = 1
+  let g:quickrun_config = {}
+  let g:quickrun_config.c = {
+        \ 'command': 'clang'
+        \ }
+  let g:quickrun_config.cpp = {
+        \ 'command': 'clang++',
+        \ 'cmdopt'    : '-std=c++11 '
+        \ }
+  let g:quickrun_config.jsx = {
+        \ 'command': 'jsx',
+        \ 'args': '--run'
+        \ }
+
+  silent! nmap <unique> <Space>r <Plug>(quickrun)
+
+  nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=vertical<CR>
+
+  call s:neobundle_untap()
+endif "}}}
+
+if s:neobundle_tap('operator-camelize.vim') "{{{
+  call s:neobundle_config({
+        \   })
+
+  nmap cm <Plug>(operator-camelize-toggle)iw
+
+  call s:neobundle_untap()
+endif "}}}
+
+if s:neobundle_tap('Syntastic') "{{{
+  call s:neobundle_config({
+        \   })
+
+  let g:syntastic_mode_map = {
+        \  'mode': 'active',
+        \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
+        \ 'passive_filetypes': ['html', 'typescript', 'java', 'scala']
+        \ }
+
+  let g:syntastic_java_javac_options = '-Xlint -J-Dfile.encoding=UTF-8 -J-Duser.language=en'
+
+  if executable("clang++")
     let g:syntastic_cpp_compiler = 'clang++'
     let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
     let g:quickrun_config = {}
     let g:quickrun_config['cpp/clang++11'] = {
-                \ 'cmdopt': '--std=c++11 --stdlib=libc++',
-                \ 'type': 'cpp/clang++'
-                \ }
+          \ 'cmdopt': '--std=c++11 --stdlib=libc++',
+          \ 'type': 'cpp/clang++'
+          \ }
     let g:quickrun_config['cpp'] = {'type': 'cpp/clang++11'}
-endif
+  endif
 
+  call s:neobundle_untap()
+endif "}}}
 
-" Project.vim setting
-" ----------------------------------------
-let g:proj_window_width=30
-silent! nmap <unique> <Space>p <Plug>ToggleProject
-function! LoadDefaultProject()
-    if getcwd() != $HOME
-        if filereadable(getcwd() . '/.vimprojects')
-            Project .vimprojects
-            call feedkeys(" p")
-        endif
-    endif
-endfunction
-autocmd VimEnter * call LoadDefaultProject()
+if s:neobundle_tap('vim-powerline') "{{{
+  call s:neobundle_config({
+        \   })
 
+  let g:Powerline_symbols = 'fancy'
 
-" memolist setting
-" ----------------------------------------
-nnoremap <Space>mn :MemoNew<CR>
-nnoremap <Space>ml :MemoList<CR>
-nnoremap <Space>mg :MemoGrep<CR>
-let g:memolist_path = $VIM_ROOT.'/memolist'
+  call s:neobundle_untap()
+endif "}}}
 
+if s:neobundle_tap('colorizer.git') "{{{
+  call s:neobundle_config({
+        \   })
 
-" vim-powerline setting
-" ----------------------------------------
-let g:Powerline_symbols = 'fancy'
+  let g:colorizer_nomap = 1
+  nnoremap <Space>a :ColorToggle<CR>
 
-" vimrc_local setting
-let g:local_vimrc = '.vimrc_local'
+  call s:neobundle_untap()
+endif "}}}
 
-" colorizer setting
-let g:colorizer_nomap = 1
-nnoremap <Space>a :ColorToggle<CR>
+if s:neobundle_tap('ag.vim') "{{{
+  call s:neobundle_config({
+        \   })
+  nnoremap <Space>f :Ag <cword><CR>
 
-" easymotion setting
-let g:EasyMotion_leader_key = '<Space><Space>'
+  call s:neobundle_untap()
+endif "}}}
 
-
+" if s:neobundle_tap('vim-multiple-cursors') "{{{
+"   call s:neobundle_config({
+"         \   })
+"
+"   " nmap <C-J> <NOP>
+"   let g:multi_cursor_use_default_mapping = 0
+"   let g:multi_cursor_next_key = '<C-n>'
+"   let g:multi_cursor_prev_key = '<C-p>'
+"   let g:multi_cursor_skip_key = '<C-x>'
+"   let g:multi_cursor_quit_key = '<Esc>'
+"   let g:multi_cursor_start_key='<C-J>'
+"
+"   call s:neobundle_untap()
+" endif "}}}
 
 
 "============================================================
@@ -342,15 +425,15 @@ set iminsert=0 imsearch=0       " ?
 
 " 前回の編集位置にカーソルを移動させる
 augroup PrevCursor
-    autocmd! PrevCursor
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+  autocmd! PrevCursor
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
 " 改行時にコメントを引き継がない
 set formatoptions+=mM
 augroup LineBreak
-    autocmd! LineBreak
-    autocmd FileType * setlocal formatoptions-=ro
+  autocmd! LineBreak
+  autocmd FileType * setlocal formatoptions-=ro
 augroup END
 
 set shellslash                  " スラッシュを区切りにしてファイル名を展開する
@@ -366,6 +449,10 @@ set backupdir=~/.vim_backup
 set path+=/usr/local/include
 set path+=/usr/include/c++/4.2.1
 set backspace=indent,eol,start
+set virtualedit+=block
+set foldtext=FoldCCtext()
+set foldcolumn=4
+set fillchars=vert:\|
 
 
 " サーチオプション
@@ -394,8 +481,8 @@ set encoding=utf-8
 set fenc=utf-8
 set fileencodings=utf-8,iso-2022-jp-3,iso-2022-jp,enc-jisx0213,euc-jp,ucs-bom,eucjp-ms,cp932
 augroup Encoding
-    autocmd! Encoding
-    autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG setlocal enc=utf-8 fenc=utf-8
+  autocmd! Encoding
+  autocmd BufNew,BufRead,WinEnter COMMIT_EDITMSG setlocal enc=utf-8 fenc=utf-8
 augroup END
 
 " 指定したエンコーディングでファイルを開き直す
@@ -413,12 +500,19 @@ set scrolloff=10
 "----------------------------------------
 inoremap <C-A> <Home>
 inoremap <C-E> <End>
-nnoremap <silent> <Space><Space> :<C-u>source ~/.vimrc<CR>
+nnoremap <silent> <Space><Space> :<C-u>source $HOME/.vimrc<CR>
 nnoremap <silent> <Space>s i<Space><Right><Space><Left><Esc>
 smap <C-H> <BS>i
 inoremap <C-D> <Del>
 inoremap <C-B> <Left>
 inoremap <C-F> <Right>
+nnoremap j g<Down>
+nnoremap k g<Up>
+nnoremap gj <Down>
+nnoremap gk <Up>
+
+
+
 
 
 
@@ -455,31 +549,31 @@ set background=dark
 
 " 特殊な空白のハイライト
 if has("syntax")
-    function! ActivateInvisibleIndicator()
-        syntax match InvisibleJISX0208Space "　" display containedin=ALL
-        highlight InvisibleJISX0208Space term=underline ctermbg=darkgrey guibg=Blue
-        syntax match InvisibleTrailedSpace "[ \t]\+$" display containedin=ALL
-        highlight InvisibleTrailedSpace term=underline ctermbg=Red guibg=Red
-    endf
+  function! ActivateInvisibleIndicator()
+    syntax match InvisibleJISX0208Space "　" display containedin=ALL
+    highlight InvisibleJISX0208Space term=underline ctermbg=darkgrey guibg=Blue
+    syntax match InvisibleTrailedSpace "[ \t]\+$" display containedin=ALL
+    highlight InvisibleTrailedSpace term=underline ctermbg=Red guibg=Red
+  endf
 
-    augroup invisible
-        autocmd! invisible
-        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
-    augroup END
+  augroup invisible
+    autocmd! invisible
+    autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+  augroup END
 endif
 
 "入力モード時、ステータスラインのカラーを変更
 augroup InsertHook
-    autocmd!
-    autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
-    autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+  autocmd!
+  autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+  autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 augroup END
 
 " カーソルの行と列をハイライト
 augroup cch
-    autocmd! cch
-    autocmd WinLeave * set nocursorcolumn nocursorline
-    autocmd WinEnter,BufRead * set cursorcolumn cursorline
+  autocmd! cch
+  autocmd WinLeave * set nocursorcolumn nocursorline
+  autocmd WinEnter,BufRead * set cursorcolumn cursorline
 augroup END
 
 " java highlight
@@ -492,27 +586,25 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
-colorscheme yuroyoro256
+colorscheme hybrid
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab
-set ts=4 sw=4 sts=4
+set ts=2 sw=2 sts=2
 
 augroup TabSize
-    autocmd! TabSize
-    autocmd BufNew,BufRead,WinEnter *.zshrc  setlocal ts=2 sw=2 sts=2
-    autocmd BufNew,BufRead,WinEnter *.rb     setlocal ts=2 sw=2 sts=2
-    autocmd BufNew,BufRead,WinEnter *.erb    setlocal ts=2 sw=2 sts=2
-    autocmd BufNew,BufRead,WinEnter *.html   setlocal ts=2 sw=2 sts=2
-    autocmd BufNew,BufRead,WinEnter *.java   setlocal ts=4 sw=4 sts=4
-    autocmd BufNew,BufRead,WinEnter *.js     setlocal ts=4 sw=4 sts=4
-    autocmd BufNew,BufRead,WinEnter *.ejs    setlocal ts=2 sw=2 sts=2 filetype=html
-    autocmd BufNew,BufRead,WinEnter *.coffee setlocal ts=2 sw=2 sts=2
+  autocmd! TabSize
+  autocmd FileType java       setlocal ts=4 sw=4 sts=4
+  autocmd FileType javascript setlocal ts=4 sw=4 sts=4
+  autocmd FileType perl       setlocal ts=4 sw=4 sts=4
+  autocmd FileType *.ejs      setf html
+  autocmd FileType *.psgi     setf perl
+  autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
 augroup END
 
 
 function! SetMyTab(sz)
-  exec 'set sw='.a:sz.' ts='.a:sz.' sts='.a:sz
+  exec 'setlocal sw='.a:sz.' ts='.a:sz.' sts='.a:sz
 endfunction
 
 command! -nargs=1 Tb call SetMyTab(<args>)
@@ -530,42 +622,30 @@ set completeopt-=preview
 set autoread
 set updatetime=50
 
-let s:system = exists('g:loaded_vimproc') ? 'vimproc#system_bg' : 'system'
-
-augroup vim-auto-typescript
-    autocmd!
-    " 適当なタイミングで再読み込み
-    autocmd CursorHold   *.ts :checktime
-    autocmd CursorMoved  *.ts :checktime
-
-    " 書き込み時に js に出力する
-    autocmd BufWritePost *.ts :call {s:system}("tsc game.ts")
-augroup END
-
 let s:unite_source = {
-\   "name" : "rails"
-\}
+      \   "name" : "rails"
+      \}
 
 function! s:unite_source.gather_candidates(args, context)
-    let cmds = {
-\       "Models"      : "Unite rails/model",
-\       "Views"       : "Unite rails/view",
-\       "Controllers" : "Unite rails/controller",
-\       "Specs"       : "Unite rails/spec",
-\       "Config"      : "Unite rails/config",
-\       "Javascript"  : "Unite rails/javascript",
-\       "StyleSheet"  : "Unite rails/stylesheet",
-\       "Generate"    : "Unite rails/generate",
-\       "Library"     : "Unite rails/lib",
-\       "Rake"        : "Unite rails/rake",
-\   }
+  let cmds = {
+        \       "Models"      : "Unite rails/model",
+        \       "Views"       : "Unite rails/view",
+        \       "Controllers" : "Unite rails/controller",
+        \       "Specs"       : "Unite rails/spec",
+        \       "Config"      : "Unite rails/config",
+        \       "Javascript"  : "Unite rails/javascript",
+        \       "StyleSheet"  : "Unite rails/stylesheet",
+        \       "Generate"    : "Unite rails/generate",
+        \       "Library"     : "Unite rails/lib",
+        \       "Rake"        : "Unite rails/rake",
+        \   }
 
-    return values(map(cmds, "{
-\       'word' : v:key,
-\       'source' : 'shortcut',
-\       'kind' : 'command',
-\       'action__command' : v:val
-\   }"))
+  return values(map(cmds, "{
+        \       'word' : v:key,
+        \       'source' : 'shortcut',
+        \       'kind' : 'command',
+        \       'action__command' : v:val
+        \   }"))
 endfunction
 
 call unite#define_source(s:unite_source)

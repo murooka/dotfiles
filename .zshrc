@@ -1,69 +1,119 @@
-# complement
-autoload -U compinit
+# Autoloads {{{
+
+autoload -Uz compinit
 autoload -Uz add-zsh-hook
 compinit
+autoload -Uz colors
+colors
+autoload -Uz vcs_info
+
+# }}}
+
+
+fpath=(/usr/local/share/zsh-completions $fpath)
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+# Options {{{
+
+setopt auto_cd           # コマンドがディレクトリ名だった場合cdする
+setopt auto_pushd        # 自動でディレクトリスタックに追加
+setopt pushd_ignore_dups # ディレクトリスタックに同じディレクトリを追加しない
+setopt nolistbeep        # 曖昧補完でビープしない
+setopt no_clobber        # 上書きリダイレクトの禁止
+setopt list_types        # 補完時にファイルの種別を表示
+setopt prompt_subst      # prompt文字列でのコマンドとか算術を有効化する
+
+zstyle ':completion:*' ignore-parents parent pwd ..  # 今いるディレクトリを cd ../ の補完候補から外す
+
+REPORTTIME=3
+
+disable r
+
+# }}}
+
+
+# History {{{
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt hist_ignore_dups
+setopt share_history
+setopt hist_reduce_blanks
+
+# }}}
+
+
+# Exports {{{
+
 export LANG=ja_JP.UTF-8
 
-setopt auto_cd
-setopt auto_pushd # 自動でディレクトリスタックに追加
-setopt pushd_ignore_dups # ディレクトリスタックに同じディレクトリを追加しない
-setopt nolistbeep # 曖昧補完でビープしない
-setopt no_clobber # 上書きリダイレクトの禁止
-setopt list_types # 補完時にファイルの種別を表示
+# PATH {{{
+export PATH=/usr/local/bin:$PATH
+export PATH=/Applications/android-sdk/platform-tools:$PATH
+export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$HOME/.rbenv/bin:$PATH
+export PATH=$HOME/.cabal/bin:$PATH
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
+export GOROOT=/usr/local/Cellar/go/1.1.2/libexec
+export GOPATH=~/.go
+# }}}
 
 export EDITOR=vim
 export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+# export LS_COLORS='so=33:bd=44;37:cd=44;37:ex=35:or=41'     # GNU ls color
+export LSCOLORS=gxfxcxdxbxegedabagacad                       # BSD ls color
+export SBT_OPTS=-XX:MaxPermSize=4g
+export PERL_RL=EditLine
 
-function exists() {
-  which $1 > /dev/null
-}
+# }}}
 
-# if [[ -f /Applications/MacVim.app/Contents/MacOS/Vim ]]; then
-#   alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
-# fi
 
-alias ls="ls -F"
-alias mv='mv -i'
-alias cp='cp -i'
-alias quit='exit'
+# Useful aliases {{{
+
+# Override default command {{{
+alias ls='ls -FG'                                            # Show [/*@], Enable color
+alias mv='mv -i'                                             # Comfirm overwrite
+alias cp='cp -i'                                             # Comfirm overwrite
 alias diff='diff --strip-trailing-cr'
-alias evim='vim ~/.vimrc'
-alias ezsh='vim ~/.zshrc'
+alias less='less -R'                                         # Color escape sequences will displayed
 
-alias ~='cd ~'
-alias ..='cd ..'
-alias ...='cd ...'
-alias ....='cd ....'
+alias perldoc='perldoc -M Pod::Text::Color::Delight'
+alias javac='javac -J-Dfile.encoding=UTF-8'
+alias java='java -Dfile.encoding=UTF-8'
+# }}}
+
+
 alias -g ...='../../'
 alias -g ....='../../../'
 alias -g .....='../../../../'
-alias a='a.out'
-alias ls='ls -FG'
-alias la='ls -alF'
-alias ll='ls -l'
+alias -g ......='../../../../../'
 alias -g G='| grep -i'
 alias -g V='| grep -v'
+alias -g L='| less'
+
+
+alias quit='exit'
+alias evim='vim ~/.vimrc'
+alias ezsh='vim ~/.zshrc'
+alias la='ls -alF'
+alias ll='ls -l'
+
 alias server='python -m SimpleHTTPServer'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
 alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
+alias res='echo $?'
+alias git-rank="history -E 1 | grep '  git' | awk '{print \$4,\$5,\$6}' | sort | uniq -c | sort -nr | less"
+# }}}
 
-# case ${OSTYPE} in
-#   darwin*) # Mac OS X
-#     function macvim () {
-#     if [ -d /Applications/MacVim.app ]
-#     then
-#       [ ! -f $1 ] && touch $1
-#       open -a MacVim $1
-#     else
-#       vim $1
-#     fi
-#   }
-#   alias vim='macvim'
-#   alias cvim='/usr/local/bin/vim'
-#   ;;
-# esac
 
+function exists() {
+  which $1 > /dev/null
+}
 
 function pb {
   cat $@ | pbcopy
@@ -75,21 +125,19 @@ function precmd() {
   fi
 }
 
-counter=0
+counter=1
 export counter
 function _precmd_term_title () {
-  if [[ 0 -eq `expr $counter % 7` ]]; then
+  if [[ 0 -eq $(( $counter % 7 )) ]]; then
       echo -n "\033]0;Let's＼(・ω・)／にゃー！\07"
+  elif [[ 0 -eq `expr $counter % 7 % 2` ]]; then
+    echo -n "\033]0;(／・ω・)／にゃー！    \07"
   else
-    if [[ 0 -eq `expr $counter % 7 % 2` ]]; then
-      echo -n "\033]0;(／・ω・)／にゃー！    \07"
-    else
-      echo -n "\033]0;(」・ω・)」うー！      \07"
-    fi
+    echo -n "\033]0;(」・ω・)」うー！      \07"
   fi
-  counter=`expr $counter + 1`
+  counter=$(($counter + 1))
 }
-# add-zsh-hook precmd _precmd_term_title
+add-zsh-hook precmd _precmd_term_title
 
 # keybinds
 # ----------------------------------------
@@ -108,13 +156,8 @@ bindkey '^N' history-beginning-search-forward
 # PROMPT=$BLUE'${USER}@${HOSTNAME} '$GREEN'%~ '$'\n'$DEFAULT'%(!.#.$) '
 # PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
 
-TERM=xterm-256color
-autoload colors
-colors
 
-
-setopt prompt_subst
-autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git cvs svn hg                            # Enable only these VCSs
 zstyle ':vcs_info:*' formats '%s' '%b' '%i' '%c' '%u'
 zstyle ':vcs_info:*' actionformats '%s' '%b' '%i' '%a' '%f'
 zstyle ':vcs_info:*' get-revision true
@@ -132,16 +175,10 @@ function _git_info() {
     if $(echo "$STATUS" | grep '^?? ' &> /dev/null); then
       info=$info'+'
     fi
-    if $(echo "$STATUS" | grep '^A  ' &> /dev/null); then
-      info=$info'A'
-    elif $(echo "$STATUS" | grep '^M  ' &> /dev/null); then
+    if $(echo "$STATUS" | grep '^\(A\|M\)  ' &> /dev/null); then
       info=$info'A'
     fi
-    if $(echo "$STATUS" | grep '^ M ' &> /dev/null); then
-      info=$info'C'
-    elif $(echo "$STATUS" | grep '^AM ' &> /dev/null); then
-      info=$info'C'
-    elif $(echo "$STATUS" | grep '^ T ' &> /dev/null); then
+    if $(echo "$STATUS" | grep '^\( M\|AM\| T\) ' &> /dev/null); then
       info=$info'C'
     fi
     if $(echo "$STATUS" | grep '^R  ' &> /dev/null); then
@@ -164,6 +201,7 @@ function _git_info() {
     else
       branch='%F{2}'
     fi
+    # branch=${hook_com[branch]}
 
     echo -n $vcs_info_msg_0_':('$branch$vcs_info_msg_1_'%f):'$info'%f'
   elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
@@ -172,54 +210,43 @@ function _git_info() {
   fi
 }
 
-function _opt_info() {
-}
-
-# RPROMPT="%S%D{%Y/%m/%d} %*%s"
 PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_git_info)"$'\n'"%b%{$reset_color%}%(!.#.$) "
 
-# ls color
-#----------------------------------------
-export LS_COLORS='so=33:bd=44;37:cd=44;37:ex=35:or=41'
-# export LSCOLORS=hxdxgxcxbxegedabagacad
-export LSCOLORS=hxfxcxdxbxegedabagacad
+
+
+() {
+  # vimから:shellでzshを開いた時、promptに表示する
+
+  local pp cmd
+  pp=`ps -o "pid ppid" | awk '{print $1, $2}' | grep "^$$" | cut -d ' ' -f 2`
+  cmd=`ps -o "pid command" | awk '{print $1, $2}' | grep "^$pp" | cut -d ' ' -f 2`
+  # echo $cmd
+  if [[ $cmd = 'vim' ]]; then
+    PROMPT="%{${fg[blue]}${bg[white]}%}%B[vim]%b%{${reset_color}%} $PROMPT"
+  fi
+}
 
 
 
-# history settings
-#----------------------------------------
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-setopt hist_ignore_dups
-setopt share_history
-setopt hist_reduce_blanks
 
-# personal
-#----------------------------------------
-alias javac='javac -J-Dfile.encoding=UTF-8'
-alias java='java -Dfile.encoding=UTF-8'
-export PATH=/usr/local/bin:$PATH
-export PATH=/Applications/android-sdk/platform-tools:$PATH
-export PATH=$HOME/bin:$PATH
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-export PATH=$HOME/.rbenv/bin:$PATH
-export PATH=$HOME/.cabal/bin:$PATH
 
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-
+# Environment managers {{{
 
 if exists nodebrew; then
-  nodebrew use v0.8.8
-else
-  echo "nodebrew is not installed"
+  nodebrew use latest > /dev/null
+  echo -n 'node '
+  node -v
 fi
-
 
 if exists rbenv; then
   eval "$(rbenv init -)"
-else
-  echo "rbenv in not installed"
+  echo -n 'ruby '
+  rbenv version
+fi
+
+if exists perlbrew; then
+  source ~/perl5/perlbrew/etc/bashrc
+  echo "$PERLBREW_PERL"
 fi
 
 if exists brew; then
@@ -230,40 +257,7 @@ if exists brew; then
   fi
 fi
 
-
-
-# color debug
-
-typeset -Ag FX FG BG
-
-FX=(
-    reset     "%{[00m%}"
-    bold      "%{[01m%}" no-bold      "%{[22m%}"
-    italic    "%{[03m%}" no-italic    "%{[23m%}"
-    underline "%{[04m%}" no-underline "%{[24m%}"
-    blink     "%{[05m%}" no-blink     "%{[25m%}"
-    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
-)
-
-for color in {000..255}; do
-    FG[$color]="%{[38;5;${color}m%}"
-    BG[$color]="%{[48;5;${color}m%}"
-done
-
-# Show all 256 colors with color number
-function spectrum_ls() {
-  for code in {000..255}; do
-    print -P -- "$code: %F{$code}Test%f"
-  done
-}
-
-function spectrumlist() {
-  ruby -e '255.times {|i| print i.to_s.rjust(5)+" " if i>=16;print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
-}
-
-function spectrums() {
-  ruby -e '255.times {|i| print "\033[48;5;#{i}m \033[0m"; puts if i>=10 && i<232 && (i-10)%6==5 }'
-}
+# }}}
 
 function g() {
   grep -r "$1" .
@@ -280,10 +274,8 @@ function graphvizall() {
   done
 }
 
-export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-
 if [[ -f ~/.zshrc_local ]]; then
   source ~/.zshrc_local
 fi
 
-source ~/perl5/perlbrew/etc/bashrc
+

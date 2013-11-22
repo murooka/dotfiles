@@ -6,3 +6,4 @@ tags
 .gitconfig
 .vimrc_local
 .mongo
+.local.vimrc

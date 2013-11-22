@@ -1,0 +1,14 @@
+snippet   CREATE
+alias     create
+  CREATE TABLE ${1:IF NOT EXISTS} ${2} (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${0}
+  );
+
+snippet   INSERT
+alias     insert
+  INSERT INTO ${1}${2: ()} VALUES (${3});
+
+snippet   SELECT
+alias     select
+  SELECT ${1} FROM ${2};

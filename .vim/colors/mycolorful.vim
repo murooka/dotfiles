@@ -68,6 +68,9 @@ let g:colors_name = "colorful256"
  highlight User4        cterm=none    ctermbg=20  ctermfg=50  gui=none    guibg=#0000df guifg=#00ffdf
  highlight User5        cterm=none    ctermbg=20  ctermfg=46  gui=none    guibg=#0000df guifg=#00ff00
 
+ highlight CursorLine   cterm=underline
+ highlight CursorColumn cterm=reverse
+
 " for groups introduced in version 7
 if v:version >= 700
    highlight Pmenu       cterm=none ctermfg=16 ctermbg=165 gui=none guifg=#000000 guibg=#df00ff
