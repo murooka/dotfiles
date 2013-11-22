@@ -496,8 +496,8 @@ command! Sjis Cp932
 set scrolloff=10
 
 
-" My keymap
-"----------------------------------------
+" My keymap {{{
+
 inoremap <C-A> <Home>
 inoremap <C-E> <End>
 nnoremap <silent> <Space><Space> :<C-u>source $HOME/.vimrc<CR>
@@ -511,7 +511,38 @@ nnoremap k g<Up>
 nnoremap gj <Down>
 nnoremap gk <Up>
 
+" Fold {{{
 
+" デフォルトのは使いにくいんで無効化する
+nmap zd <NOP>
+nmap zD <NOP>
+nmap zE <NOP>
+nmap zo <NOP>
+nmap zO <NOP>
+nmap zc <NOP>
+nmap zC <NOP>
+nmap za <NOP>
+nmap zA <NOP>
+nmap zv <NOP>
+nmap zx <NOP>
+nmap zX <NOP>
+nmap zm <NOP>
+nmap zM <NOP>
+nmap zr <NOP>
+nmap zR <NOP>
+nmap zn <NOP>
+nmap zN <NOP>
+nmap zi <NOP>
+
+nnoremap zn zM
+nnoremap zp zR
+nnoremap zh zc
+nnoremap zl zo
+nnoremap zo zMzv
+
+"}}}
+
+" }}}
 
 
 
@@ -586,7 +617,7 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
-colorscheme hybrid
+colorscheme murooka
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab
