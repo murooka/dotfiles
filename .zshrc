@@ -50,12 +50,16 @@ setopt hist_reduce_blanks
 export LANG=ja_JP.UTF-8
 
 # PATH {{{
+# TODO: homebrewが入ってない環境に対応する
+export HOMEBREW_ROOT=`brew --prefix`
 export PATH=/usr/local/bin:$PATH
 export PATH=/Applications/android-sdk/platform-tools:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 export PATH=$HOME/.rbenv/bin:$PATH
 export PATH=$HOME/.cabal/bin:$PATH
+export PATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin:$PATH
+export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
 export GOROOT=/usr/local/Cellar/go/1.1.2/libexec
@@ -115,6 +119,10 @@ function exists() {
   which $1 > /dev/null
 }
 
+function match() {
+  echo $1 | grep $2 &> /dev/null
+}
+
 function pb {
   cat $@ | pbcopy
 }
@@ -139,8 +147,8 @@ function _precmd_term_title () {
 }
 add-zsh-hook precmd _precmd_term_title
 
-# keybinds
-# ----------------------------------------
+# Keybinds {{{
+
 bindkey -e
 bindkey '^[[1~' beginning-of-line # Home
 bindkey '^[[4~' end-of-line # End
@@ -150,84 +158,76 @@ bindkey '^[[3~' delete-char-or-list # Del
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
 
-# about prompt
-#----------------------------------------
-# colorful : PROMPT='%{'$'\e[''$[32+$RANDOM % 5]m%}%U%B%m{%n}%b%{'$'\e[''m%}%U%%%u '
-# PROMPT=$BLUE'${USER}@${HOSTNAME} '$GREEN'%~ '$'\n'$DEFAULT'%(!.#.$) '
-# PROMPT="%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~"$'\n'"%b%{${fg[white]}%}%(!.#.$) "
+# }}}
 
+# Prompt {{{
 
 zstyle ':vcs_info:*' enable git cvs svn hg                            # Enable only these VCSs
-zstyle ':vcs_info:*' formats '%s' '%b' '%i' '%c' '%u'
-zstyle ':vcs_info:*' actionformats '%s' '%b' '%i' '%a' '%f'
+zstyle ':vcs_info:*' formats '%s' '%b' '%i'                           # Formats are "VCS" "Branch" "Revision"
+zstyle ':vcs_info:*' actionformats '%s' '%b' '%i' '%a'                # Action formats are "VCS" "Branch" "Revision" "Action" ""
 zstyle ':vcs_info:*' get-revision true
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' max-exports 5
+zstyle ':vcs_info:*' max-exports 4
 
+function _git_info() { # {{{
+  local vcs branch action STATUS
 
-function _git_info() {
-  # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_
+  vcs=$vcs_info_msg_0_
+  branch=$vcs_info_msg_1_
+  action=$vcs_info_msg_3_
+  STATUS=`git status --porcelain 2> /dev/null`
+
+  info=''
+  if match $STATUS '^?? '            ; then info=$info'+' fi
+  if match $STATUS '^\(A\|M\)  '     ; then info=$info'A' fi
+  if match $STATUS '^\( M\|AM\| T\) '; then info=$info'C' fi
+  if match $STATUS '^R  '            ; then info=$info'R' fi
+  if match $STATUS '^\( D\|AD\) '    ; then info=$info'D' fi
+  if match $STATUS '^UU '            ; then info=$info'!' fi
+
+  if [[ $action = 'rebase' ]]; then
+    branch="rebasing $branch"
+  elif [[ $action = 'merge' ]]; then
+    ## Merge相手のブランチ名を取得
+    their=$(cat `git rev-parse --show-toplevel`/.git/MERGE_MSG | head -1 | sed -e "s/Merge branch '\(.*\)'/\1/")
+    branch="merging $branch and $their"
+  fi
+
+  if match $info '!'; then
+    branch="%F{1}$branch%f"
+    info="%F{1}$info%f"
+  elif match $info '[+ACRD]'; then
+    branch="%F{3}$branch%f"
+  else
+    branch="%F{2}$branch%f"
+  fi
+
+  echo -n " $vcs:($branch):$info"
+} # }}}
+
+function _vcs_info() {
   LANG=en_US.UTF-8 vcs_info
+  # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_ # debug
   if [[ $vcs_info_msg_0_ = 'git' ]]; then
-    echo -n ' '
-    STATUS=$(git status --porcelain 2> /dev/null)
-    info=''
-    if $(echo "$STATUS" | grep '^?? ' &> /dev/null); then
-      info=$info'+'
-    fi
-    if $(echo "$STATUS" | grep '^\(A\|M\)  ' &> /dev/null); then
-      info=$info'A'
-    fi
-    if $(echo "$STATUS" | grep '^\( M\|AM\| T\) ' &> /dev/null); then
-      info=$info'C'
-    fi
-    if $(echo "$STATUS" | grep '^R  ' &> /dev/null); then
-      info=$info'R'
-    fi
-    if $(echo "$STATUS" | grep '^ D ' &> /dev/null); then
-      info=$info'D'
-    elif $(echo "$STATUS" | grep '^AD ' &> /dev/null); then
-      info=$info'D'
-    fi
-    if $(echo "$STATUS" | grep '^UU ' &> /dev/null); then
-      info=$info'%F{1}!'
-    fi
-
-    branch=''
-    if $(echo "$info" | grep '!' &> /dev/null); then
-      branch='%F{1}'
-    elif $(echo "$info" | grep '[+ACRD]' &> /dev/null); then
-      branch='%F{3}'
-    else
-      branch='%F{2}'
-    fi
-    # branch=${hook_com[branch]}
-
-    echo -n $vcs_info_msg_0_':('$branch$vcs_info_msg_1_'%f):'$info'%f'
+    _git_info
   elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
-    echo -n ' '
-    echo -n $vcs_info_msg_0_':('$vcs_info_msg_1_')'
+    echo -n ' '$vcs_info_msg_0_':('$vcs_info_msg_1_')'
   fi
 }
 
-PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_git_info)"$'\n'"%b%{$reset_color%}%(!.#.$) "
-
-
+PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_vcs_info)"$'\n'"%b%{$reset_color%}%(!.#.$) "
 
 () {
-  # vimから:shellでzshを開いた時、promptに表示する
+  # vimから:shellでzshを開いた時にわかりやすくする
 
   local pp cmd
-  pp=`ps -o "pid ppid" | awk '{print $1, $2}' | grep "^$$" | cut -d ' ' -f 2`
-  cmd=`ps -o "pid command" | awk '{print $1, $2}' | grep "^$pp" | cut -d ' ' -f 2`
-  # echo $cmd
+  pp=`ps -o "pid ppid" | awk '{print $1, $2}' | grep "^$$" | cut -d ' ' -f 2`       # 自分の親プロセスのpid
+  cmd=`ps -o "pid command" | awk '{print $1, $2}' | grep "^$pp" | cut -d ' ' -f 2`  # 自分の親プロセスのcommand
   if [[ $cmd = 'vim' ]]; then
     PROMPT="%{${fg[blue]}${bg[white]}%}%B[vim]%b%{${reset_color}%} $PROMPT"
   fi
 }
 
-
-
+# }}}
 
 
 # Environment managers {{{
@@ -258,6 +258,7 @@ if exists brew; then
 fi
 
 # }}}
+
 
 function g() {
   grep -r "$1" .
