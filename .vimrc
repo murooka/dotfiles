@@ -32,7 +32,7 @@ NeoBundleLazy 'unite.vim'
   NeoBundle 'h1mesuke/unite-outline'
   NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'taglist.vim'
-NeoBundle 'ZenCoding.vim'
+NeoBundle 'mattn/emmet-vim'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-operator-user'
@@ -52,6 +52,8 @@ NeoBundle 'vim-perl/vim-perl'
 NeoBundle 'motemen/xslate-vim'
 NeoBundle 'c9s/perlomni.vim'
 NeoBundle 'LeafCage/foldCC'                            " foldの見た目を良くする関数
+NeoBundle "osyo-manga/vim-over"
+NeoBundle 'tpope/vim-fugitive'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -89,42 +91,19 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Execute ":NeoBundleInstall" command.'
 endif
 
-
-if !exists('s:neobundle_ext_loaded') "{{{
-  let s:neobundle_ext_loaded = 1
-
-  function! s:neobundle_tap(bundle) " {{{
-    let s:tapped_bundle = neobundle#get(a:bundle)
-    return neobundle#is_installed(a:bundle)
-  endfunction " }}}
-
-  function! s:neobundle_config(config) " {{{
-    if exists("s:tapped_bundle") && s:tapped_bundle != {}
-      call neobundle#config(s:tapped_bundle.name, a:config)
-    endif
-  endfunction " }}}
-
-  function! s:neobundle_untap() " {{{
-    let s:tapped_bundle = {}
-  endfunction " }}}
-
-endif "}}}
-
-
-
-if s:neobundle_tap('neobundle.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('neobundle.vim') "{{{
+  call neobundle#config({
         \   })
 
   nnoremap <silent> <Space>bi :<C-u>NeoBundleInstall<CR>
   nnoremap <silent> <Space>bc :<C-u>NeoBundleClean<CR>
   nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('unite.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('unite.vim') "{{{
+  call neobundle#config({
         \   })
 
   let g:unite_no_default_keyappings = 1
@@ -138,6 +117,7 @@ if s:neobundle_tap('unite.vim') "{{{
   nnoremap <silent> <Space>us :<C-u>Unite snippet<CR>
   nnoremap <silent> <Space>um :<C-u>Unite mapping<CR>
   nnoremap <silent> <Space>ur :<C-u>Unite rails<CR>
+  nnoremap <silent> <Space>uh :<C-u>Unite outline<CR>
 
   augroup UniteCmd
     autocmd! UniteCmd
@@ -148,27 +128,28 @@ if s:neobundle_tap('unite.vim') "{{{
     imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
   endfunction
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('neocomplete') "{{{
+  call neobundle#config({
+        \   })
 
-" neocomplete setting
-"----------------------------------------
-let g:acp_enableAtStartup = 0
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#auto_completion_start_length = 3
-let g:neocomplete#min_keyword_length = 4
-let g:neocomplete#enable_ignore_case = 0
-let g:neocomplete#enable_auto_select = 1
-let g:neocomplete#enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
-let g:neocomplete#skip_auto_completion_time = '0.3'
+  let g:acp_enableAtStartup = 0
+  let g:neocomplete#enable_at_startup = 1
+  let g:neocomplete#auto_completion_start_length = 3
+  let g:neocomplete#min_keyword_length = 4
+  let g:neocomplete#enable_ignore_case = 0
+  let g:neocomplete#enable_auto_select = 1
+  let g:neocomplete#enable_camel_case_completion = 0 " input AE -> suggest ArgumentsException
+  let g:neocomplete#skip_auto_completion_time = '0.3'
+  let g:neocomplete#sources#dictionary#dictionaries = {
+        \ 'default'         : '',
+        \ 'java'            : $VIM_ROOT.'/dict/java14.dict',
+        \ 'scala'           : $VIM_ROOT.'/dict/scala.dict'
+        \ }
+  let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
 
-let g:neocomplete#sources#dictionary#dictionaries = {
-      \ 'default'         : '',
-      \ 'java'            : $VIM_ROOT.'/dict/java14.dict'
-      \ }
-
-if neobundle#is_sourced('neocomplete')
   imap <C-j> <Plug>(neosnippet_expand_or_jump)
   smap <C-j> <Plug>(neosnippet_expand_or_jump)
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
@@ -176,76 +157,83 @@ if neobundle#is_sourced('neocomplete')
   nnoremap <silent> <Space>ns :NeoSnippetEdit<CR>
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
-endif
 
-" neo snippet
-let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
-
-" omni complete
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-
-if !exists('g:neocomplete#sources#omni#functions')
-  let g:neocomplete#sources#omni#functions = {}
-endif
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-
-" for clang_complete
-let $CLANG_ROOT = "/usr/local/clang_0522"
-
-let g:clang_exe = $CLANG_ROOT . "/bin/clang"
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
-let g:clang_conceal_snippets = 1
-let g:clang_debug = 0
-let g:clang_use_library = 1
-let g:clang_library_path = $CLANG_ROOT . "/lib"
-let g:neocomplete#force_omni_input_patterns.c =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplete#force_omni_input_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" for javacomplete
-augroup JavaComplete
-  autocmd! JavaComplete
-  autocmd FileType java :setlocal omnifunc=javacomplete#Complete
-  autocmd FileType java :setlocal completefunc=javacomplete#CompleteParamsInfo
-augroup END
-
-let g:neocomplete#force_omni_input_patterns.java = 
-      \ '[^. *\t]\.\h\w*\'
-
-" for rsense
-let g:neocomplete#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
-" let g:neocomplete_omni_patterns.ruby = \ '[^. *\t]\.\w*\|\h\w*::'
+  " if !exists('g:neocomplete#sources#omni#input_patterns')
+  "   let g:neocomplete#sources#omni#input_patterns = {}
+  " endif
+  "
+  " if !exists('g:neocomplete#sources#omni#functions')
+  "   let g:neocomplete#sources#omni#functions = {}
+  " endif
+  "
+  " if !exists('g:neocomplete#force_omni_input_patterns')
+  "   let g:neocomplete#force_omni_input_patterns = {}
+  " endif
 
 
+  " Clang complete {{{
 
-if s:neobundle_tap('vimproc') "{{{
-  call s:neobundle_config({
+  let $CLANG_ROOT = "/usr/local/clang_0522"
+
+  let g:clang_exe = $CLANG_ROOT . "/bin/clang"
+  let g:clang_complete_auto = 0
+  let g:clang_auto_select = 0
+  let g:clang_conceal_snippets = 1
+  let g:clang_debug = 0
+  let g:clang_use_library = 1
+  let g:clang_library_path = $CLANG_ROOT . "/lib"
+  " let g:neocomplete#force_omni_input_patterns.c =
+  "       \ '[^.[:digit:] *\t]\%(\.\|->\)'
+  " let g:neocomplete#force_omni_input_patterns.cpp =
+  "       \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+  " }}}
+
+  " Java complete {{{
+
+  augroup JavaComplete
+    autocmd! JavaComplete
+    autocmd FileType java :setlocal omnifunc=javacomplete#Complete
+    autocmd FileType java :setlocal completefunc=javacomplete#CompleteParamsInfo
+  augroup END
+
+  " let g:neocomplete#force_omni_input_patterns.java = 
+  "       \ '[^. *\t]\.\h\w*\'
+
+  " }}}
+
+  " Rsense {{{
+
+  " let g:neocomplete#sources#rsense#home_directory = '/usr/local/Cellar/rsense/0.3/libexec'
+  " let g:neocomplete_omni_patterns.ruby = \ '[^. *\t]\.\w*\|\h\w*::'
+
+  " }}}
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vimproc') "{{{
+  call neobundle#config({
         \   })
 
   nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
   nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('caw.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('caw.vim') "{{{
+  call neobundle#config({
         \   })
 
   silent! nmap <unique> <Space>c <Plug>(caw:i:toggle)
   silent! vmap <unique> <Space>c <Plug>(caw:i:toggle)
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('taglist.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('taglist.vim') "{{{
+  call neobundle#config({
         \   })
 
   " タグリストを開いた時にフォーカスを移す
@@ -267,15 +255,15 @@ if s:neobundle_tap('taglist.vim') "{{{
 
   nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('ZenCoding.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('emmet-vim') "{{{
+  call neobundle#config({
         \   })
 
-  let g:user_zen_leader_key = '<C-L>'
-  let g:user_zen_settings = {
+  let g:user_emmet_leader_key = '<C-l>'
+  let g:user_emmet_settings = {
         \  'lang' : 'ja',
         \  'html' : {
         \    'snippets' : {
@@ -297,11 +285,11 @@ if s:neobundle_tap('ZenCoding.vim') "{{{
         \  },
         \}
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('VimClojure') "{{{
-  call s:neobundle_config({
+if neobundle#tap('VimClojure') "{{{
+  call neobundle#config({
         \   })
 
   let vimclojure#HighlightBuiltins=1
@@ -311,11 +299,11 @@ if s:neobundle_tap('VimClojure') "{{{
   let vimclojure#WantNailgun = 1
   let vimclojure#NailgunClient = "ng"
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('vim-quickrun') "{{{
-  call s:neobundle_config({
+if neobundle#tap('vim-quickrun') "{{{
+  call neobundle#config({
         \   })
 
   let g:quickrun_no_default_key_mappings = 1
@@ -336,20 +324,20 @@ if s:neobundle_tap('vim-quickrun') "{{{
 
   nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=vertical<CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('operator-camelize.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('operator-camelize.vim') "{{{
+  call neobundle#config({
         \   })
 
   nmap cm <Plug>(operator-camelize-toggle)iw
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('Syntastic') "{{{
-  call s:neobundle_config({
+if neobundle#tap('Syntastic') "{{{
+  call neobundle#config({
         \   })
 
   let g:syntastic_mode_map = {
@@ -371,38 +359,38 @@ if s:neobundle_tap('Syntastic') "{{{
     let g:quickrun_config['cpp'] = {'type': 'cpp/clang++11'}
   endif
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('vim-powerline') "{{{
-  call s:neobundle_config({
+if neobundle#tap('vim-powerline') "{{{
+  call neobundle#config({
         \   })
 
   let g:Powerline_symbols = 'fancy'
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('colorizer.git') "{{{
-  call s:neobundle_config({
+if neobundle#tap('colorizer.git') "{{{
+  call neobundle#config({
         \   })
 
   let g:colorizer_nomap = 1
   nnoremap <Space>a :ColorToggle<CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-if s:neobundle_tap('ag.vim') "{{{
-  call s:neobundle_config({
+if neobundle#tap('ag.vim') "{{{
+  call neobundle#config({
         \   })
   nnoremap <Space>f :Ag <cword><CR>
 
-  call s:neobundle_untap()
+  call neobundle#untap()
 endif "}}}
 
-" if s:neobundle_tap('vim-multiple-cursors') "{{{
-"   call s:neobundle_config({
+" if neobundle#tap('vim-multiple-cursors') "{{{
+"   call neobundle#config({
 "         \   })
 "
 "   " nmap <C-J> <NOP>
@@ -413,8 +401,17 @@ endif "}}}
 "   let g:multi_cursor_quit_key = '<Esc>'
 "   let g:multi_cursor_start_key='<C-J>'
 "
-"   call s:neobundle_untap()
+"   call neobundle#untap()
 " endif "}}}
+
+if neobundle#tap('vim-over') "{{{
+  call neobundle#config({
+        \   })
+
+  nnoremap <Space>o :OverCommandLine<CR>%s/
+
+  call neobundle#untap()
+endif "}}}
 
 
 "============================================================
@@ -453,6 +450,7 @@ set virtualedit+=block
 set foldtext=FoldCCtext()
 set foldcolumn=4
 set fillchars=vert:\|
+set t_Co=256
 
 
 " サーチオプション

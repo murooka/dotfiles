@@ -209,12 +209,11 @@ alias   \begin{document}
 
 snippet figure
 alias   \begin{figure}
-	\begin{figure}
-		\begin{center}
-			\includegraphics[${1:width=}]{${2}}
-			\caption{${3}}
-			\label{${4}}
-		\end{center}
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[${1:width=}]{${2:foo.pdf}}
+		\caption{${3}}
+		\label{${4:fig}}
 	\end{figure}
 	${0}
 

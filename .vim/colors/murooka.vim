@@ -125,6 +125,7 @@ exe "let s:bg_addbg      = ' ".s:vmode."bg=".s:addbg     ."'"
 exe "let s:bg_addfg      = ' ".s:vmode."bg=".s:addfg     ."'"
 exe "let s:bg_changebg   = ' ".s:vmode."bg=".s:changebg  ."'"
 exe "let s:bg_changefg   = ' ".s:vmode."bg=".s:changefg  ."'"
+exe "let s:bg_folded     = ' ".s:vmode."bg="."236"       ."'"
 
 exe "let s:fg_none       = ' ".s:vmode."fg=".s:none      ."'"
 exe "let s:fg_foreground = ' ".s:vmode."fg=".s:foreground."'"
@@ -145,6 +146,7 @@ exe "let s:fg_addbg      = ' ".s:vmode."fg=".s:addbg     ."'"
 exe "let s:fg_addfg      = ' ".s:vmode."fg=".s:addfg     ."'"
 exe "let s:fg_changebg   = ' ".s:vmode."fg=".s:changebg  ."'"
 exe "let s:fg_changefg   = ' ".s:vmode."fg=".s:changefg  ."'"
+exe "let s:fg_folded     = ' ".s:vmode."fg="."186"       ."'"
 
 exe "let s:fmt_none      = ' ".s:vmode."=NONE".          " term=NONE"        ."'"
 exe "let s:fmt_bold      = ' ".s:vmode."=NONE".s:b.      " term=NONE".s:b    ."'"
@@ -215,7 +217,7 @@ exe "hi! DiffDelete"    .s:fg_background  .s:bg_red         .s:fmt_none
 exe "hi! DiffText"      .s:fg_background  .s:bg_blue        .s:fmt_none
 exe "hi! ErrorMsg"      .s:fg_background  .s:bg_red         .s:fmt_stnd
 exe "hi! VertSplit"     .s:fg_window      .s:bg_none        .s:fmt_none
-exe "hi! Folded"        .s:fg_comment     .s:bg_darkcolumn  .s:fmt_none
+exe "hi! Folded"        .s:fg_folded      .s:bg_folded      .s:fmt_none
 exe "hi! FoldColumn"    .s:fg_none        .s:bg_darkcolumn  .s:fmt_none
 exe "hi! SignColumn"    .s:fg_none        .s:bg_darkcolumn  .s:fmt_none
 "		Incsearch"
