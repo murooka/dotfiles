@@ -1,0 +1,6 @@
+[alias]
+	s = status
+	d = diff
+[user]
+	name = Naoki Yaguchi
+	email = murooka.1129.x50@gmail.com
