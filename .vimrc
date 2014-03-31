@@ -41,7 +41,7 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'Shougo/vinarise'
 NeoBundle 'glidenote/memolist.vim'
-NeoBundle 'tsaleh/vim-matchit'
+" NeoBundle 'tsaleh/vim-matchit'
 NeoBundle 'ruby-matchit'
 NeoBundle 'ujihisa/neco-look.git'
 NeoBundle 'Lokaltog/vim-powerline'
@@ -69,6 +69,7 @@ NeoBundle 'vim-scripts/jQuery.git'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'vim-scripts/brainfuck-syntax.git'
 " NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'vim-scripts/a.vim'
 
 NeoBundle 'tpope/vim-rails'
 
@@ -311,6 +312,10 @@ if neobundle#tap('vim-quickrun') "{{{
   let g:quickrun_config.c = {
         \ 'command': 'clang'
         \ }
+  let g:quickrun_config['cpp/clang++11'] = {
+        \ 'cmdopt': '--std=c++11 --stdlib=libc++',
+        \ 'type': 'cpp/clang++11'
+        \ }
   let g:quickrun_config.cpp = {
         \ 'command': 'clang++',
         \ 'cmdopt'    : '-std=c++11 '
@@ -336,28 +341,23 @@ if neobundle#tap('operator-camelize.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('Syntastic') "{{{
+if neobundle#tap('syntastic') "{{{
   call neobundle#config({
         \   })
 
   let g:syntastic_mode_map = {
-        \  'mode': 'active',
-        \ 'active_filetypes': ['ruby', 'javascript', 'coffee'],
+        \  'mode': 'passive',
+        \ 'active_filetypes': ['c', 'cpp', 'ruby', 'javascript', 'coffee'],
         \ 'passive_filetypes': ['html', 'typescript', 'java', 'scala']
         \ }
 
+  let g:syntastic_error_symbol = '✗'
+  let g:syntastic_warning_symbol = '⚠'
+
   let g:syntastic_java_javac_options = '-Xlint -J-Dfile.encoding=UTF-8 -J-Duser.language=en'
 
-  if executable("clang++")
-    let g:syntastic_cpp_compiler = 'clang++'
-    let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
-    let g:quickrun_config = {}
-    let g:quickrun_config['cpp/clang++11'] = {
-          \ 'cmdopt': '--std=c++11 --stdlib=libc++',
-          \ 'type': 'cpp/clang++'
-          \ }
-    let g:quickrun_config['cpp'] = {'type': 'cpp/clang++11'}
-  endif
+  let g:syntastic_cpp_compiler_exec = 'clang'
+  let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
 
   call neobundle#untap()
 endif "}}}
@@ -409,6 +409,15 @@ if neobundle#tap('vim-over') "{{{
         \   })
 
   nnoremap <Space>o :OverCommandLine<CR>%s/
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('a.vim') "{{{
+  call neobundle#config({
+        \   })
+
+  nnoremap <Space>a :A<CR>
 
   call neobundle#untap()
 endif "}}}
@@ -628,6 +637,7 @@ augroup TabSize
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
   autocmd FileType *.ejs      setf html
   autocmd FileType *.psgi     setf perl
+  autocmd FileType cpp        setlocal noexpandtab
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
 augroup END
 

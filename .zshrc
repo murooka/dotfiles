@@ -52,13 +52,13 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 # TODO: homebrewが入ってない環境に対応する
 export HOMEBREW_ROOT=`brew --prefix`
-export PATH=/usr/local/bin:$PATH
-export PATH=/Applications/android-sdk/platform-tools:$PATH
-export PATH=$HOME/bin:$PATH
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-export PATH=$HOME/.rbenv/bin:$PATH
-export PATH=$HOME/.cabal/bin:$PATH
-export PATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin:$PATH
+path=(/usr/local/bin(N-/) $path)
+path=(/Applications/android-sdk/platform-tools(N-/) $path)
+path=($HOME/bin(N-/) $path)
+path=($HOME/.nodebrew/current/bin(N-/) $path)
+path=($HOME/.rbenv/bin(N-/) $path)
+path=($HOME/.cabal/bin(N-/) $path)
+path=($HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/) $path)
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
@@ -244,7 +244,7 @@ if exists rbenv; then
   rbenv version
 fi
 
-if exists perlbrew; then
+if [ -e ~/perl5 ]; then
   source ~/perl5/perlbrew/etc/bashrc
   echo "$PERLBREW_PERL"
 fi

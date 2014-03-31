@@ -1,6 +1,12 @@
 [alias]
+	b = branch
 	s = status
 	d = diff
+	co = checkout
 [user]
 	name = Naoki Yaguchi
 	email = murooka.1129.x50@gmail.com
+[core]
+	excludesfile = /Users/charlie/.gitignore_global
+[pull]
+	rebase = true
