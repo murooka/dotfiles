@@ -79,7 +79,7 @@ export PERL_RL=EditLine
 # Useful aliases {{{
 
 # Override default command {{{
-alias ls='ls -FG'                                            # Show [/*@], Enable color
+alias ls='ls -G'                                             # Show [/*@], Enable color
 alias mv='mv -i'                                             # Comfirm overwrite
 alias cp='cp -i'                                             # Comfirm overwrite
 alias diff='diff --strip-trailing-cr'

@@ -77,3 +77,14 @@ snippet eval
 
 snippet arg
   my ($self, ${1}) = @_;
+
+snippet p
+  say(Dumper(${1}));
+
+snippet new
+  sub new {
+    my ($class${1}) = @_;
+
+    bless +{
+    }, $class;
+  }

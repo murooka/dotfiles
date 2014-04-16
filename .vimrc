@@ -347,7 +347,7 @@ if neobundle#tap('syntastic') "{{{
 
   let g:syntastic_mode_map = {
         \  'mode': 'passive',
-        \ 'active_filetypes': ['c', 'cpp', 'ruby', 'javascript', 'coffee'],
+        \ 'active_filetypes': ['c', 'cpp', 'ruby', 'javascript', 'coffee', 'perl'],
         \ 'passive_filetypes': ['html', 'typescript', 'java', 'scala']
         \ }
 
@@ -358,6 +358,9 @@ if neobundle#tap('syntastic') "{{{
 
   let g:syntastic_cpp_compiler_exec = 'clang'
   let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
+
+  let g:syntastic_enable_perl_checker = 1
+  let g:syntastic_perl_checkers = ['perl', 'podchecker']
 
   call neobundle#untap()
 endif "}}}
