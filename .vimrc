@@ -54,6 +54,8 @@ NeoBundle 'c9s/perlomni.vim'
 NeoBundle 'LeafCage/foldCC'                            " foldの見た目を良くする関数
 NeoBundle "osyo-manga/vim-over"
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'thinca/vim-ref'
+NeoBundle 'mattn/perlvalidate-vim.git'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -638,8 +640,6 @@ augroup TabSize
   autocmd FileType java       setlocal ts=4 sw=4 sts=4
   autocmd FileType javascript setlocal ts=4 sw=4 sts=4
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
-  autocmd FileType *.ejs      setf html
-  autocmd FileType *.psgi     setf perl
   autocmd FileType cpp        setlocal noexpandtab
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
 augroup END
