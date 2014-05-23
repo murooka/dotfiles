@@ -112,6 +112,8 @@ alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold
 alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
 alias res='echo $?'
 alias git-rank="history -E 1 | grep '  git' | awk '{print \$4,\$5,\$6}' | sort | uniq -c | sort -nr | less"
+alias reply="rlwrap reply"
+alias tmux="tmux -2"
 # }}}
 
 
@@ -233,7 +235,7 @@ PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~
 # Environment managers {{{
 
 if exists nodebrew; then
-  nodebrew use latest > /dev/null
+  nodebrew use latest > /dev/null 2>&1
   echo -n 'node '
   node -v
 fi
@@ -244,7 +246,7 @@ if exists rbenv; then
   rbenv version
 fi
 
-if [ -e ~/perl5 ]; then
+if [ -e ~/perl5/perlbrew/etc/bashrc ]; then
   source ~/perl5/perlbrew/etc/bashrc
   echo "$PERLBREW_PERL"
 fi
