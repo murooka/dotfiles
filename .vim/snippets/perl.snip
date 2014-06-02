@@ -7,7 +7,7 @@ snippet perl
 
 snippet sub
 	sub ${1:function_name} {
-		${2:# body...}
+		my (${2:# body...}) = @_;
 	}
 
 snippet if
@@ -79,7 +79,7 @@ snippet arg
   my ($self, ${1}) = @_;
 
 snippet p
-  say(Dumper(${1}));
+  print(Dumper(${1}));
 
 snippet new
   sub new {
