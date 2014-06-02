@@ -10,3 +10,7 @@
 	excludesfile = /Users/charlie/.gitignore_global
 [pull]
 	rebase = true
+[color]
+	ui = true
+[merge]
+	ff = false
