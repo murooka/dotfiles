@@ -7,7 +7,7 @@
 	name = Naoki Yaguchi
 	email = murooka.1129.x50@gmail.com
 [core]
-	excludesfile = /Users/charlie/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [pull]
 	rebase = true
 [color]

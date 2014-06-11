@@ -1,4 +1,4 @@
-snippet perl 
+snippet perl
 	use 5.014;
 	use utf8;
 	use strict;
@@ -6,8 +6,9 @@ snippet perl
 	${1}
 
 snippet sub
-	sub ${1:function_name} {
-		my (${2:# body...}) = @_;
+	sub ${1} {
+		my (${2}) = @_;
+		${3:# body...}
 	}
 
 snippet if
@@ -39,7 +40,7 @@ abbr wh
 	while (${1}) {
 		${2:# body...}
 	}
-    
+
 snippet xwhile
 abbr xwh
 	${1:expression} while ${2:condition};
@@ -48,7 +49,7 @@ snippet for
 	for (my $${1:var} = 0; $$1 < ${2:expression}; $$1++) {
 		${3:# body...}
 	}
-    
+
 snippet fore
 	for ${1} (${2:expression}){
 		${3:# body...}
@@ -79,7 +80,8 @@ snippet arg
   my ($self, ${1}) = @_;
 
 snippet p
-  print(Dumper(${1}));
+	use Data::Printer;
+	p(${1});
 
 snippet new
   sub new {
