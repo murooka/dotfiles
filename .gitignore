@@ -2,5 +2,7 @@
 /.vim/memolist
 /.vim/.netrwhist
 
+*.elc
+
 !/.vim/bundle/neobundle.vim
 !/.vim/bundle/neobundle.vim/**

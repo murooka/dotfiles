@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DOT_FILES=".gemrc .gitconfig .gitignore_global .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf"
+DOT_FILES=".gemrc .gitconfig .gitignore_global .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf .emacs.d"
 
 for file in $DOT_FILES
 do
