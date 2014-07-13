@@ -52,17 +52,26 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 # TODO: homebrewが入ってない環境に対応する
 export HOMEBREW_ROOT=`brew --prefix`
-path=(/usr/local/bin(N-/) $path)
-path=(/Applications/android-sdk/platform-tools(N-/) $path)
-path=($HOME/bin(N-/) $path)
-path=($HOME/.nodebrew/current/bin(N-/) $path)
-path=($HOME/.rbenv/bin(N-/) $path)
-path=($HOME/.cabal/bin(N-/) $path)
-path=($HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/) $path)
+path=(
+  /usr/local/bin(N-/)
+  /Applications/android-sdk/platform-tools(N-/)
+  $HOME/bin(N-/)
+  $HOME/.nodebrew/current/bin(N-/)
+  $HOME/.rbenv/bin(N-/)
+  $HOME/.cabal/bin(N-/)
+  $path
+)
+if exists brew; then
+  path=(
+    $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
+    $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
+    $path
+  )
+fi
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-export GOROOT=/usr/local/Cellar/go/1.1.2/libexec
+export GOROOT=/usr/local/Cellar/go/1.2.1/libexec
 export GOPATH=~/.go
 # }}}
 
@@ -119,7 +128,7 @@ alias tmux="tmux -2"
 
 
 function exists() {
-  which $1 > /dev/null
+  which $1 > /dev/null 2>&1
 }
 
 function match() {

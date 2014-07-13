@@ -68,6 +68,7 @@ cask install vlc                        || true
 cask install gimp                       || true
 cask install bitcasa                    || true
 cask install firefox                    || true
+cask install lightpaper                 || true
 
 
 # Joke
