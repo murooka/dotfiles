@@ -84,8 +84,9 @@ alias mv='mv -i'                                             # Comfirm overwrite
 alias cp='cp -i'                                             # Comfirm overwrite
 alias diff='diff --strip-trailing-cr'
 alias less='less -R'                                         # Color escape sequences will displayed
+alias sushi="ruby -e 'C=\`stty size\`.scan(/\d+/)[1].to_i;S=\"\xf0\x9f\x8d\xa3\";a={};puts \"\033[2J\";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print \"\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H\"};\$stdout.flush;sleep 0.01}'"
 
-alias perldoc='perldoc -M Pod::Text::Color::Delight'
+alias perldoc='perldoc -MPod::Perldoc::Cache -w parser=Pod::Text::Color::Delight'
 alias javac='javac -J-Dfile.encoding=UTF-8'
 alias java='java -Dfile.encoding=UTF-8'
 # }}}

@@ -46,7 +46,7 @@ abbr xwh
 	${1:expression} while ${2:condition};
 
 snippet for
-	for (my $${1:var} = 0; $$1 < ${2:expression}; $$1++) {
+	for my $${1} (${2}) {
 		${3:# body...}
 	}
 
@@ -90,3 +90,7 @@ snippet new
     bless +{
     }, $class;
   }
+
+snippet in
+  chomp(my $${1} = <>);
+  ${2}
