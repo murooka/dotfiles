@@ -72,6 +72,7 @@ NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'vim-scripts/brainfuck-syntax.git'
 " NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'vim-scripts/a.vim'
+NeoBundle 'scrooloose/nerdtree.git'
 
 NeoBundle 'tpope/vim-rails'
 
@@ -423,6 +424,15 @@ if neobundle#tap('a.vim') "{{{
         \   })
 
   nnoremap <Space>a :A<CR>
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('nerdtree') "{{{
+  call neobundle#config({
+        \   })
+
+  nnoremap <Space>nn :NERDTreeToggle<CR>
 
   call neobundle#untap()
 endif "}}}

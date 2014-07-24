@@ -2,6 +2,7 @@
 	b = branch
 	s = status
 	d = diff
+  dc = diff --cached
 	co = checkout
 [user]
 	name = Naoki Yaguchi

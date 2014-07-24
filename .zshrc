@@ -33,6 +33,15 @@ disable r
 # }}}
 
 
+function exists() {
+  which $1 > /dev/null 2>&1
+}
+
+function match() {
+  echo $1 | grep $2 &> /dev/null
+}
+
+
 # History {{{
 
 HISTFILE=~/.zsh_history
@@ -51,7 +60,6 @@ export LANG=ja_JP.UTF-8
 
 # PATH {{{
 # TODO: homebrewが入ってない環境に対応する
-export HOMEBREW_ROOT=`brew --prefix`
 path=(
   /usr/local/bin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
@@ -62,6 +70,7 @@ path=(
   $path
 )
 if exists brew; then
+  export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
     $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
@@ -126,14 +135,6 @@ alias reply="rlwrap reply"
 alias tmux="tmux -2"
 # }}}
 
-
-function exists() {
-  which $1 > /dev/null 2>&1
-}
-
-function match() {
-  echo $1 | grep $2 &> /dev/null
-}
 
 function pb {
   cat $@ | pbcopy
@@ -256,7 +257,7 @@ if exists rbenv; then
   rbenv version
 fi
 
-if [ -e ~/perl5/perlbrew/etc/bashrc ]; then
+if [ -e ~/perl5/perlbrew ]; then
   source ~/perl5/perlbrew/etc/bashrc
   echo "$PERLBREW_PERL"
 fi
@@ -285,6 +286,16 @@ function graphvizall() {
     file=`echo $1 | sed -e 's/\.dot$//g'`
     $cmd -Tpng -o $file.$cmd.png $1
   done
+}
+
+function pprove() {
+  file=`find $1 -name "*.t" | peco`
+  echo "prove $file"
+  prove $file
+}
+
+function uuid() {
+  perl -MUUID::Tiny -e 'print UUID::Tiny::create_uuid_as_string(UUID::Tiny::UUID_V4)'
 }
 
 if [[ -f ~/.zshrc_local ]]; then
