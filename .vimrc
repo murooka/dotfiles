@@ -651,6 +651,7 @@ augroup TabSize
   autocmd FileType javascript setlocal ts=4 sw=4 sts=4
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
+  autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
 augroup END
 

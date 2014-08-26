@@ -63,3 +63,9 @@ snippet     urlencode
     # coding: utf-8
     require 'erb'
     puts ERB::Util.url_encode '${1}'
+
+snippet     in
+    a,b,c = gets.strip.split(' ')
+
+snippet     iin
+    a,b,c = gets.strip.split(' ').map(&:to_i)

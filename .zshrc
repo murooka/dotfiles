@@ -10,6 +10,11 @@ autoload -Uz vcs_info
 # }}}
 
 
+function exists() {
+  which $1 > /dev/null 2>&1
+}
+
+
 fpath=(/usr/local/share/zsh-completions $fpath)
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -80,8 +85,9 @@ fi
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-export GOROOT=/usr/local/Cellar/go/1.2.1/libexec
+export GOROOT=/usr/local/Cellar/go/1.2.2/libexec
 export GOPATH=~/.go
+path=($GOPATH/bin $path)
 # }}}
 
 export EDITOR=vim
@@ -117,6 +123,7 @@ alias -g ......='../../../../../'
 alias -g G='| grep -i'
 alias -g V='| grep -v'
 alias -g L='| less'
+alias -g N='2>/dev/null'
 
 
 alias quit='exit'
@@ -135,6 +142,10 @@ alias reply="rlwrap reply"
 alias tmux="tmux -2"
 # }}}
 
+
+function match() {
+  echo $1 | grep $2 &> /dev/null
+}
 
 function pb {
   cat $@ | pbcopy
@@ -228,6 +239,7 @@ function _vcs_info() {
 }
 
 PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_vcs_info)"$'\n'"%b%{$reset_color%}%(!.#.$) "
+# PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~%{$reset_color%}\$(_vcs_info)"$'\n'"%b%{$reset_color%}%{${fg[green]}%}%(!.#.﷽       )%{$reset_color%} "
 
 () {
   # vimから:shellでzshを開いた時にわかりやすくする
@@ -311,3 +323,17 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[02;32m'
 
+
+# Add environment variable COCOS_CONSOLE_ROOT for cocos2d-x
+export COCOS_CONSOLE_ROOT=/Users/naoki.yaguchi/Work/cocos2d-x/tools/cocos2d-console/bin
+export PATH=$COCOS_CONSOLE_ROOT:$PATH
+
+function arc() {
+  clang++ -std=c++11 -o $1 $1.cc
+  ./$1
+}
+
+function abc() {
+  cat $1.cc | pbcopy
+}
+source /Users/naoki.yaguchi/lib/zaw/zaw.zsh

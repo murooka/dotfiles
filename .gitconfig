@@ -4,6 +4,7 @@
 	d = diff
   dc = diff --cached
 	co = checkout
+	dc = diff --cached
 [user]
 	name = Naoki Yaguchi
 	email = murooka.1129.x50@gmail.com
