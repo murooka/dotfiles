@@ -56,6 +56,7 @@ NeoBundle "osyo-manga/vim-over"
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'mattn/perlvalidate-vim.git'
+NeoBundle 'airblade/vim-gitgutter'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -73,6 +74,7 @@ NeoBundle 'vim-scripts/brainfuck-syntax.git'
 " NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'vim-scripts/a.vim'
 NeoBundle 'scrooloose/nerdtree.git'
+NeoBundle 'elzr/vim-json'
 
 NeoBundle 'tpope/vim-rails'
 
@@ -86,6 +88,7 @@ NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'mattn/habatobi-vim.git'
 NeoBundle 'itchyny/landscape.vim'
+NeoBundle 'slim-template/vim-slim'
 
 filetype on
 filetype plugin indent on
@@ -94,6 +97,8 @@ if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles' . string(neobundle#get_not_installed_bundle_names())
   echomsg 'Execute ":NeoBundleInstall" command.'
 endif
+
+let g:vim_json_syntax_conceal = 0
 
 if neobundle#tap('neobundle.vim') "{{{
   call neobundle#config({
@@ -650,9 +655,11 @@ augroup TabSize
   autocmd FileType java       setlocal ts=4 sw=4 sts=4
   autocmd FileType javascript setlocal ts=4 sw=4 sts=4
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
+  autocmd FileType c          setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
+  autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
 augroup END
 
 

@@ -79,6 +79,7 @@ if exists brew; then
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
     $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
+    ~/.cabal/bin(N-/)
     $path
   )
 fi
@@ -304,6 +305,14 @@ function pprove() {
   file=`find $1 -name "*.t" | peco`
   echo "prove $file"
   prove $file
+}
+
+function be() {
+  export RUBYGEMS_GEMDEPS=-
+}
+
+function bed() {
+  export RUBYGEMS_GEMDEPS=
 }
 
 function uuid() {

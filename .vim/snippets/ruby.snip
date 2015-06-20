@@ -1,71 +1,106 @@
 snippet     ruby
-    #!/usr/bin/env ruby
-    
-    ${1}
+	#!/usr/bin/env ruby
+	
+	${1}
 
 snippet     if
 abbr        if end
-    if ${1:condition}
-        ${2}
-    end
+	if ${1:condition}
+		${2}
+	end
 
 snippet     def
 abbr        def end
-    def ${1:func_name}
-        ${2}
-    end
+	def ${1:func_name}
+		${2}
+	end
 
 snippet     do
 abbr        do end
-    do
-        ${1}
-    end
+	do
+		${1}
+	end
 
 snippet     dovar
 abbr        do |var| end
-    do |${1:var}|
-        ${2}
-    end
+	do |${1:var}|
+		${2}
+	end
 
 snippet     block
 abbr        { |var| }
-    {
-        ${1}
-    }
+	{
+		${1}
+	}
 
 snippet     blockvar
 abbr        { |var| }
-    { |${1:var}|
-        ${2}
-    }
+	{ |${1:var}|
+		${2}
+	}
 
 snippet     edn
 abbr        => end?
-    end
+	end
 
 snippet     header
 alias       hd
-    #!/usr/bin/env ruby
+	#!/usr/bin/env ruby
 
 snippet     cl
 alias       class
-    class ${1}
-    
-    end
+	class ${1}
+	
+	end
+
+snippet module
+	module ${1}
+		${0}
+	end
 
 snippet     wh
 alias       while
-    while ${1}
-        ${2}
-    end
+	while ${1}
+		${2}
+	end
 
 snippet     urlencode
-    # coding: utf-8
-    require 'erb'
-    puts ERB::Util.url_encode '${1}'
+	# coding: utf-8
+	require 'erb'
+	puts ERB::Util.url_encode '${1}'
 
 snippet     in
-    a,b,c = gets.strip.split(' ')
+	a,b,c = gets.strip.split(' ')
 
 snippet     iin
-    a,b,c = gets.strip.split(' ').map(&:to_i)
+	a,b,c = gets.strip.split(' ').map(&:to_i)
+
+snippet describe
+alias   desc
+	describe '${1}', autodoc: true do
+		${0}
+	end
+
+snippet context
+alias   con
+	context '${1}' do
+		${0}
+	end
+
+snippet it
+	it '${1}' do
+		${0}
+	end
+
+
+snippet int
+	gets.strip.to_i
+
+snippet ints
+	gets.strip.split(' ').map(&:to_i)
+
+snippet str
+	gets.strip
+
+snippet strs
+	gets.strip.split(' ')
