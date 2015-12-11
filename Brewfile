@@ -57,7 +57,7 @@ cask install balsamiq-mockups           || true
 cask install fluid                      || true
 cask install freemind                   || true
 cask install gitx                       || true
-cask install keyremap4macbook           || true
+cask install karabiner                  || true
 cask install keyboardcleantool          || true
 cask install kobito                     || true
 cask install mou                        || true

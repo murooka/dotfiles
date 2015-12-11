@@ -19,21 +19,21 @@ snippet f
     function (${1}) {${0:$TM_SELECTED_TEXT}}
 
 snippet if
-    if (${1:true}) {
+    if ( ${1:true} ) {
         ${0}
     }
 
 
 snippet ife
-    if (${1:true}) {${0:$TM_SELECTED_TEXT}} else{}
+    if ( ${1:true} ) {${0:$TM_SELECTED_TEXT}} else{}
 
 snippet for
-	for (${1}=0; $1<${2}; $1++) {
+	for ( ${1}=0; $1<${2}; $1++ ) {
 		${0}
 	}
 
 snippet forin
-	for (var ${2:i} in ${1:Things}) {
+	for ( var ${2:i} in ${1:Things} ) {
 		${0}
 	}
 

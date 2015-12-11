@@ -6,7 +6,6 @@ let $VIM_ROOT=$HOME.'/.vim'
 " plugin settings
 "============================================================
 
-set nocompatible
 filetype off
 filetype plugin indent off
 
@@ -14,11 +13,17 @@ if $GOROOT != ''
   set runtimepath+=$GOROOT/misc/vim/
 endif
 
+if 0 | endif
 
 if has('vim_starting')
+  set nocompatible
   set runtimepath+=$VIM_ROOT/bundle/neobundle.vim/
-  call neobundle#rc(expand($VIM_ROOT.'/bundle'))
 endif
+
+let g:neobundle#types#git#default_protocol = 'https'
+
+call neobundle#begin(expand($VIM_ROOT.'/bundle'))
+
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak'} }
@@ -26,6 +31,7 @@ NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' :
   NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/neocomplete'
   NeoBundle 'Shougo/neosnippet'
+  NeoBundle 'Shougo/neosnippet-snippets'
   NeoBundle 'ujihisa/neco-ghc'
   " NeoBundle 'Rip-Rip/clang_complete'
 NeoBundleLazy 'unite.vim'
@@ -57,6 +63,10 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'mattn/perlvalidate-vim.git'
 NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'elzr/vim-json'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+NeoBundle 'moznion/vim-ltsv'
+NeoBundle 'mattn/vim-nekokak'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -67,9 +77,12 @@ NeoBundle 'cocoa.vim'
 NeoBundle 'jsx/jsx.vim'
 NeoBundle 'vim-scripts/nginx.vim'
 NeoBundle 'vim-scripts/javacomplete'
-NeoBundle 'jiangmiao/simple-javascript-indenter'
+" NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'vim-scripts/jQuery.git'
-NeoBundle 'jelera/vim-javascript-syntax'
+" NeoBundle 'jelera/vim-javascript-syntax'
+" NeoBundle 'pangloss/vim-javascript'
+" NeoBundle 'othree/yajs.vim'
+NeoBundle 'https://github.com/isRuslan/vim-es6.git'
 NeoBundle 'vim-scripts/brainfuck-syntax.git'
 " NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'vim-scripts/a.vim'
@@ -88,6 +101,7 @@ NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'mattn/habatobi-vim.git'
 NeoBundle 'itchyny/landscape.vim'
+NeoBundle "aklt/plantuml-syntax"
 NeoBundle 'slim-template/vim-slim'
 
 filetype on
@@ -368,6 +382,8 @@ if neobundle#tap('syntastic') "{{{
   let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
 
   let g:syntastic_enable_perl_checker = 1
+  let g:syntastic_perl_interpreter = '/Users/naoki.yaguchi/perl5/perlbrew/perls/perl-5.20.2/bin/perl'
+  let g:syntastic_perl_lib_path = ['./lib', '/Users/naoki.yaguchi/npf/fujiyama-development/donguri/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/karasuma/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/matoba/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/app/t/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/perlbrew/lib/site_perl/5.20.2']
   let g:syntastic_perl_checkers = ['perl', 'podchecker']
 
   call neobundle#untap()
@@ -442,6 +458,24 @@ if neobundle#tap('nerdtree') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('ctrlp.vim') "{{{
+  call neobundle#config({
+        \   })
+
+  call neobundle#untap()
+endif "}}}
+
+
+call neobundle#end()
+
+filetype on
+filetype plugin indent on
+
+NeoBundleCheck
+
+
+
+let g:vim_json_syntax_conceal = 0
 
 "============================================================
 " general settings
@@ -658,6 +692,7 @@ augroup TabSize
   autocmd FileType c          setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
+  autocmd FileType json       setlocal ts=4 sw=4 sts=4
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
 augroup END
@@ -669,6 +704,16 @@ endfunction
 
 command! -nargs=1 Tb call SetMyTab(<args>)
 
+function! FormatJSON()
+  exec '%s/{/{/g'
+  exec '%s/\[/[/g'
+  exec '%s/}/}/g'
+  exec '%s/\]/]/g'
+  exec '%s/,/,/g'
+  exec ':normal gg=G'
+endfunction
+
+command! F call FormatJSON()
 
 
 "============================================================
@@ -708,6 +753,6 @@ function! s:unite_source.gather_candidates(args, context)
         \   }"))
 endfunction
 
-call unite#define_source(s:unite_source)
+" call unite#define_source(s:unite_source)
 
 unlet s:unite_source

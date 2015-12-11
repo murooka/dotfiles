@@ -1,0 +1,1 @@
+/Users/naoki.yaguchi/.vimrc

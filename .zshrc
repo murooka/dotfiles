@@ -67,18 +67,19 @@ export LANG=ja_JP.UTF-8
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
-  /Applications/android-sdk/platform-tools(N-/)
   $HOME/bin(N-/)
   $HOME/.nodebrew/current/bin(N-/)
   $HOME/.rbenv/bin(N-/)
   $HOME/.cabal/bin(N-/)
   $path
+  /Applications/android-sdk/tools(N-/)
+  /Applications/android-sdk/platform-tools(N-/)
 )
 if exists brew; then
   export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
-    $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
+    /usr/local/opt/go/libexec/bin(N-/)
     ~/.cabal/bin(N-/)
     $path
   )
@@ -86,7 +87,7 @@ fi
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-export GOROOT=/usr/local/Cellar/go/1.2.2/libexec
+export GOROOT=/usr/local/Cellar/go/1.5.1/libexec
 export GOPATH=~/.go
 path=($GOPATH/bin $path)
 # }}}
@@ -141,6 +142,9 @@ alias res='echo $?'
 alias git-rank="history -E 1 | grep '  git' | awk '{print \$4,\$5,\$6}' | sort | uniq -c | sort -nr | less"
 alias reply="rlwrap reply"
 alias tmux="tmux -2"
+alias pboard='echo "do not use pboard"'
+alias dc='docker-compose'
+alias dm='docker-machine'
 # }}}
 
 
@@ -153,9 +157,6 @@ function pb {
 }
 
 function precmd() {
-  if exists _z; then
-    _z --add "$(pwd -P)"
-  fi
 }
 
 counter=1
@@ -229,13 +230,24 @@ function _git_info() { # {{{
   echo -n " $vcs:$action:($branch):$info"
 } # }}}
 
+export _VCS_BRANCH_ENABLED=1
+function enable_vcs_branch() {
+  export _VCS_BRANCH_ENABLED=1
+}
+
+function disable_vcs_branch() {
+  unset _VCS_BRANCH_ENABLED
+}
+
 function _vcs_info() {
-  LANG=en_US.UTF-8 vcs_info
-  # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_ # debug
-  if [[ $vcs_info_msg_0_ = 'git' ]]; then
-    _git_info
-  elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
-    echo -n ' '$vcs_info_msg_0_':('$vcs_info_msg_1_')'
+  if [ $_VCS_BRANCH_ENABLED ]; then
+    LANG=en_US.UTF-8 vcs_info
+    # echo -n $vcs_info_msg_0_':'$vcs_info_msg_1_':'$vcs_info_msg_2_':'$vcs_info_msg_3_':'$vcs_info_msg_4_ # debug
+    if [[ $vcs_info_msg_0_ = 'git' ]]; then
+      _git_info
+    elif [[ $vcs_info_msg_0_ = 'svn' ]]; then
+      echo -n ' '$vcs_info_msg_0_':('$vcs_info_msg_1_')'
+    fi
   fi
 }
 
@@ -333,6 +345,40 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[02;32m'
 
 
+function _longtime_preexec {
+  # マッチするコマンドの時は無視する
+  [[ $2 == (sc|screen|tmux|ssh|vim|git|tig|perldoc ci)\ * ]] && return
+
+  _longtime_time=`date +%s`
+  _longtime_cmd=$2
+}
+
+function _longtime_precmd {
+  [ ${+_longtime_time} = 1 ] || return
+
+  local time=$((`date +%s` - $_longtime_time))
+
+  if [ $time -gt 10 ]
+  then
+    terminal-notifier -title 'done' -message "$_longtime_cmd"
+
+    local unit=sec
+    if [ $time -gt 120 ]
+    then
+      time=$(( $time / 60 ))
+      unit=min
+    fi
+    echo took $time $unit
+  fi
+
+  unset _longtime_time
+  unset _longtime_cmd
+}
+
+preexec_functions=($preexec_functions _longtime_preexec)
+precmd_functions=($precmd_functions _longtime_precmd)
+
+
 # Add environment variable COCOS_CONSOLE_ROOT for cocos2d-x
 export COCOS_CONSOLE_ROOT=/Users/naoki.yaguchi/Work/cocos2d-x/tools/cocos2d-console/bin
 export PATH=$COCOS_CONSOLE_ROOT:$PATH
@@ -345,4 +391,33 @@ function arc() {
 function abc() {
   cat $1.cc | pbcopy
 }
-source /Users/naoki.yaguchi/lib/zaw/zaw.zsh
+
+function cl() {
+  yes '' | head -n 100
+  clear
+}
+
+function jg(){
+  echo "$@" | json_xs -f eval
+}
+
+function q () {
+  local selected_dir=$(ghq list -p | sed 's/\/Users\/naoki.yaguchi//' | peco --query "$LBUFFER")
+  if [ -n "$selected_dir" ]; then
+    cd ~/${selected_dir}
+  fi
+}
+
+if [[ -f /Users/naoki.yaguchi/lib/zaw/zaw.zsh ]]; then
+  source /Users/naoki.yaguchi/lib/zaw/zaw.zsh
+fi
+
+eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+export PERLBREW_HOME=~/perl5/perlbrew
+source ~/perl5/perlbrew/etc/bashrc
+
+eval $(docker-machine env dev)

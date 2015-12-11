@@ -7,28 +7,32 @@ snippet perl
 
 snippet sub
 	sub ${1} {
-		my (${2}) = @_;
-		${3:# body...}
+		my ($self, ${2:%args}) = @_;
+	
+		${3}
 	}
 
 snippet if
-	if (${1}) {
-		${2:# body...}
+	if ( ${1} ) {
+		${2}
 	}
 
 snippet ife
-	if (${1}) {
+	if ( ${1} ) {
 		${2:# body...}
-	} else {
+	}
+	else {
 		${3:# else...}
 	}
 
 snippet ifee
-	if (${1}) {
+	if ( ${1} ) {
 		${2:# body...}
-	} elsif (${3}) {
+	}
+	elsif (${3}) {
 		${4:# elsif...}
-	} else {
+	}
+	else {
 		${5:# else...}
 	}
 
@@ -37,7 +41,7 @@ snippet xif
 
 snippet while
 abbr wh
-	while (${1}) {
+	while ( ${1} ) {
 		${2:# body...}
 	}
 
@@ -46,12 +50,12 @@ abbr xwh
 	${1:expression} while ${2:condition};
 
 snippet for
-	for my $${1} (${2}) {
+	for my $${1} ( ${2} ) {
 		${3:# body...}
 	}
 
 snippet fore
-	for ${1} (${2:expression}){
+	for ${1} ( ${2:expression} ) {
 		${3:# body...}
 	}
 
@@ -60,7 +64,7 @@ snippet xfor
 
 snippet unless
 abbr un
-	unless (${1}) {
+	unless ( ${1} ) {
 		${2:# body...}
 	}
 
@@ -72,7 +76,7 @@ snippet eval
 	eval {
 		${1:# do something risky...}
 	};
-	if ($@) {
+	if ( my $e = $@ ) {
 		${2:# handle failure...}
 	}
 
@@ -94,3 +98,20 @@ snippet new
 snippet in
   chomp(my $${1} = <>);
   ${2}
+
+snippet subtest
+	subtest '${1}' => sub {
+		${0}
+	};
+
+snippet todo
+	############################
+	#           TODO           #
+	############################
+	#  _____ ___  ____   ___   #
+	# |_   _/ _ \|  _ \ / _ \  #
+	#   | || | | | | | | | | | #
+	#   | || |_| | |_| | |_| | #
+	#   |_| \___/|____/ \___/  #
+	#                          #
+	############################

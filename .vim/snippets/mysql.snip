@@ -1,0 +1,5 @@
+snippet create
+	CREATE TABLE IF NOT EXISTS ${1} (
+		id bigint(20) unsigned not null,
+		${0}
+	) ENGINE=${2:InnoDB} DEFAULT CHARSET=utf8;
