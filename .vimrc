@@ -17,122 +17,49 @@ if 0 | endif
 
 if has('vim_starting')
   set nocompatible
-  set runtimepath+=$VIM_ROOT/bundle/neobundle.vim/
 endif
 
-let g:neobundle#types#git#default_protocol = 'https'
-
-call neobundle#begin(expand($VIM_ROOT.'/bundle'))
 
 
-NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc', {'build' : {'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak'} }
-  NeoBundle 'Shougo/vimshell', {'depends' : 'Shougo/vimproc' }
-  NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/neocomplete'
-  NeoBundle 'Shougo/neosnippet'
-  NeoBundle 'Shougo/neosnippet-snippets'
-  NeoBundle 'ujihisa/neco-ghc'
-  " NeoBundle 'Rip-Rip/clang_complete'
-NeoBundleLazy 'unite.vim'
-  NeoBundle 'h1mesuke/unite-outline'
-  NeoBundle 'ujihisa/unite-colorscheme'
-NeoBundle 'taglist.vim'
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'tyru/operator-camelize.vim'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'tyru/caw.vim'
-NeoBundle 'Shougo/vinarise'
-NeoBundle 'glidenote/memolist.vim'
-" NeoBundle 'tsaleh/vim-matchit'
-NeoBundle 'ruby-matchit'
-NeoBundle 'ujihisa/neco-look.git'
-NeoBundle 'Lokaltog/vim-powerline'
-NeoBundle 'lilydjwg/colorizer.git'
-NeoBundle 'thinca/vim-localrc'
-NeoBundle 'rking/ag.vim'
-NeoBundle 'vim-perl/vim-perl'
-NeoBundle 'motemen/xslate-vim'
-NeoBundle 'c9s/perlomni.vim'
-NeoBundle 'LeafCage/foldCC'                            " foldの見た目を良くする関数
-NeoBundle "osyo-manga/vim-over"
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'thinca/vim-ref'
-NeoBundle 'mattn/perlvalidate-vim.git'
-NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'elzr/vim-json'
-NeoBundle 'ctrlpvim/ctrlp.vim'
-NeoBundle 'moznion/vim-ltsv'
-NeoBundle 'mattn/vim-nekokak'
-NeoBundle 'fatih/vim-go'
-NeoBundle 'udalov/kotlin-vim'
-NeoBundle 'mxw/vim-jsx'
+let s:dein_dir = expand('~/.cache/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+endif
 
-NeoBundle 'VimClojure'
-NeoBundle 'vim-scala'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'indenthaskell.vim'
-NeoBundle 'haskell.vim'
-NeoBundle 'cocoa.vim'
-" NeoBundle 'jsx/jsx.vim'
-NeoBundle 'vim-scripts/nginx.vim'
-NeoBundle 'vim-scripts/javacomplete'
-" NeoBundle 'jiangmiao/simple-javascript-indenter'
-NeoBundle 'vim-scripts/jQuery.git'
-" NeoBundle 'jelera/vim-javascript-syntax'
-" NeoBundle 'pangloss/vim-javascript'
-" NeoBundle 'othree/yajs.vim'
-NeoBundle 'https://github.com/isRuslan/vim-es6.git'
-NeoBundle 'othree/yajs.vim'
-NeoBundle 'othree/html5.vim'
-NeoBundle 'vim-scripts/brainfuck-syntax.git'
-" NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundle 'vim-scripts/a.vim'
-NeoBundle 'scrooloose/nerdtree.git'
-NeoBundle 'elzr/vim-json'
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-NeoBundle 'tpope/vim-rails'
+  let g:rc_dir    = expand('~/.vim/rc')
+  let s:toml      = g:rc_dir . '/dein.toml'
+  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
 
-NeoBundle 'nanotech/jellybeans.vim'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'vim-scripts/twilight'
-NeoBundle 'jonathanfilip/vim-lucius'
-NeoBundle 'jpo/vim-railscasts-theme'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'vim-scripts/Wombat'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'mattn/habatobi-vim.git'
-NeoBundle 'itchyny/landscape.vim'
-NeoBundle "aklt/plantuml-syntax"
-NeoBundle 'slim-template/vim-slim'
+  call dein#load_toml(s:toml,      {'lazy': 0})
+  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+  call dein#end()
+  call dein#save_state()
+endif
+
+if dein#check_install(['vimproc'])
+  call dein#install(['vimproc'])
+endif
+
+if dein#check_install()
+  call dein#install()
+endif
+
+
 
 filetype on
 filetype plugin indent on
 
-if neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles' . string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Execute ":NeoBundleInstall" command.'
-endif
-
 let g:vim_json_syntax_conceal = 0
 
-if neobundle#tap('neobundle.vim') "{{{
-  call neobundle#config({
-        \   })
-
-  nnoremap <silent> <Space>bi :<C-u>NeoBundleInstall<CR>
-  nnoremap <silent> <Space>bc :<C-u>NeoBundleClean<CR>
-  nnoremap <silent> <Space>bs :<C-u>NeoBundleSearch<CR>
-
-  call neobundle#untap()
-endif "}}}
-
-if neobundle#tap('unite.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('unite.vim') "{{{
 
   let g:unite_no_default_keyappings = 1
   let g:unite_enable_start_insert = 1
@@ -156,12 +83,9 @@ if neobundle#tap('unite.vim') "{{{
     imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
   endfunction
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('neocomplete') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('neocomplete') "{{{
 
   let g:acp_enableAtStartup = 0
   let g:neocomplete#enable_at_startup = 1
@@ -237,32 +161,22 @@ if neobundle#tap('neocomplete') "{{{
 
   " }}}
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vimproc') "{{{
-  call neobundle#config({
-        \   })
-
+if dein#tap('vimproc') "{{{
   nnoremap <silent> <Space>vs :<C-u>VimShell<CR>
   nnoremap <silent> <Space>vr :<C-u>VimShellInteractive irb<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('caw.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('caw.vim') "{{{
 
   silent! nmap <unique> <Space>c <Plug>(caw:i:toggle)
   silent! vmap <unique> <Space>c <Plug>(caw:i:toggle)
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('taglist.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('taglist.vim') "{{{
 
   " タグリストを開いた時にフォーカスを移す
   let Tlist_GainFocus_On_ToggleOpen = 1
@@ -283,12 +197,9 @@ if neobundle#tap('taglist.vim') "{{{
 
   nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('emmet-vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('emmet-vim') "{{{
 
   let g:user_emmet_leader_key = '<C-l>'
   let g:user_emmet_settings = {
@@ -313,12 +224,9 @@ if neobundle#tap('emmet-vim') "{{{
         \  },
         \}
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('VimClojure') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('VimClojure') "{{{
 
   let vimclojure#HighlightBuiltins=1
   let vimclojure#HighlightContrib=1
@@ -327,12 +235,9 @@ if neobundle#tap('VimClojure') "{{{
   let vimclojure#WantNailgun = 1
   let vimclojure#NailgunClient = "ng"
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vim-quickrun') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('vim-quickrun') "{{{
 
   let g:quickrun_no_default_key_mappings = 1
   let g:quickrun_config = {}
@@ -356,21 +261,15 @@ if neobundle#tap('vim-quickrun') "{{{
 
   nnoremap <silent> <Space>js :<C-u>QuickRun -exec "jshint %S" >buffer:split=vertical<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('operator-camelize.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('operator-camelize.vim') "{{{
 
   nmap cm <Plug>(operator-camelize-toggle)iw
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('syntastic') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('syntastic') "{{{
 
   let g:syntastic_mode_map = {
         \  'mode': 'passive',
@@ -392,39 +291,27 @@ if neobundle#tap('syntastic') "{{{
   let g:syntastic_perl_checkers = ['perl', 'podchecker']
   let g:syntastic_go_checkers = ['go', 'golint']
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vim-powerline') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('vim-powerline') "{{{
 
   let g:Powerline_symbols = 'fancy'
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('colorizer.git') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('colorizer.git') "{{{
 
   let g:colorizer_nomap = 1
   nnoremap <Space>a :ColorToggle<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('ag.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('ag.vim') "{{{
   nnoremap <Space>f :Ag <cword><CR>
 
-  call neobundle#untap()
 endif "}}}
 
-" if neobundle#tap('vim-multiple-cursors') "{{{
-"   call neobundle#config({
-"         \   })
+" if dein#tap('vim-multiple-cursors') "{{{
 "
 "   " nmap <C-J> <NOP>
 "   let g:multi_cursor_use_default_mapping = 0
@@ -434,50 +321,29 @@ endif "}}}
 "   let g:multi_cursor_quit_key = '<Esc>'
 "   let g:multi_cursor_start_key='<C-J>'
 "
-"   call neobundle#untap()
 " endif "}}}
 
-if neobundle#tap('vim-over') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('vim-over') "{{{
 
   nnoremap <Space>o :OverCommandLine<CR>%s/
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('a.vim') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('a.vim') "{{{
 
   nnoremap <Space>a :A<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('nerdtree') "{{{
-  call neobundle#config({
-        \   })
+if dein#tap('nerdtree') "{{{
 
   nnoremap <Space>nn :NERDTreeToggle<CR>
 
-  call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('ctrlp.vim') "{{{
-  call neobundle#config({
-        \   })
-
-  call neobundle#untap()
-endif "}}}
-
-
-call neobundle#end()
 
 filetype on
 filetype plugin indent on
-
-NeoBundleCheck
 
 
 

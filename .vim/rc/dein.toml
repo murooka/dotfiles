@@ -1,0 +1,226 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'Shougo/vimshell'
+depends = 'Shougo/vimproc'
+
+[[plugins]]
+repo = 'Shougo/vimfiler'
+
+[[plugins]]
+repo = 'Shougo/neocomplete'
+
+[[plugins]]
+repo = 'Shougo/neosnippet'
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'ujihisa/neco-ghc'
+
+[[plugins]]
+repo = 'Rip-Rip/clang_complete'
+
+[[plugins]]
+repo = 'h1mesuke/unite-outline'
+
+[[plugins]]
+repo = 'ujihisa/unite-colorscheme'
+
+[[plugins]]
+repo = 'taglist.vim'
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+[[plugins]]
+repo = 'tyru/operator-camelize.vim'
+
+[[plugins]]
+repo = 'scrooloose/syntastic'
+
+[[plugins]]
+repo = 'tyru/caw.vim'
+
+[[plugins]]
+repo = 'Shougo/vinarise'
+
+[[plugins]]
+repo = 'glidenote/memolist.vim'
+
+[[plugins]]
+repo = 'vim-scripts/matchit.zip'
+
+[[plugins]]
+repo = 'ruby-matchit'
+
+[[plugins]]
+repo = 'ujihisa/neco-look.git'
+
+[[plugins]]
+repo = 'Lokaltog/vim-powerline'
+
+[[plugins]]
+repo = 'lilydjwg/colorizer.git'
+
+[[plugins]]
+repo = 'thinca/vim-localrc'
+
+[[plugins]]
+repo = 'rking/ag.vim'
+
+[[plugins]]
+repo = 'vim-perl/vim-perl'
+
+[[plugins]]
+repo = 'motemen/xslate-vim'
+
+[[plugins]]
+repo = 'c9s/perlomni.vim'
+
+[[plugins]]
+repo = 'LeafCage/foldCC'
+
+[[plugins]]
+repo = "osyo-manga/vim-over"
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'thinca/vim-ref'
+
+[[plugins]]
+repo = 'mattn/perlvalidate-vim.git'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'elzr/vim-json'
+
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'
+
+[[plugins]]
+repo = 'moznion/vim-ltsv'
+
+[[plugins]]
+repo = 'mattn/vim-nekokak'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+
+[[plugins]]
+repo = 'udalov/kotlin-vim'
+
+[[plugins]]
+repo = 'mxw/vim-jsx'
+
+
+[[plugins]]
+repo = 'VimClojure'
+
+[[plugins]]
+repo = 'vim-scala'
+
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+
+[[plugins]]
+repo = 'indenthaskell.vim'
+
+[[plugins]]
+repo = 'haskell.vim'
+
+[[plugins]]
+repo = 'cocoa.vim'
+
+# NeoBundle 'jsx/jsx.vim'
+[[plugins]]
+repo = 'vim-scripts/nginx.vim'
+
+[[plugins]]
+repo = 'vim-scripts/javacomplete'
+
+# NeoBundle 'jiangmiao/simple-javascript-indenter'
+[[plugins]]
+repo = 'vim-scripts/jQuery.git'
+
+# NeoBundle 'jelera/vim-javascript-syntax'
+# NeoBundle 'pangloss/vim-javascript'
+# NeoBundle 'othree/yajs.vim'
+[[plugins]]
+repo = 'https://github.com/isRuslan/vim-es6.git'
+
+[[plugins]]
+repo = 'othree/yajs.vim'
+
+[[plugins]]
+repo = 'othree/html5.vim'
+
+[[plugins]]
+repo = 'vim-scripts/brainfuck-syntax.git'
+
+# [[plugins]]
+repo = 'terryma/vim-multiple-cursors'
+
+[[plugins]]
+repo = 'vim-scripts/a.vim'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree.git'
+
+[[plugins]]
+repo = 'elzr/vim-json'
+
+[[plugins]]
+repo = 'tpope/vim-rails'
+
+[[plugins]]
+repo = 'nanotech/jellybeans.vim'
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+
+[[plugins]]
+repo = 'vim-scripts/twilight'
+
+[[plugins]]
+repo = 'jonathanfilip/vim-lucius'
+
+[[plugins]]
+repo = 'jpo/vim-railscasts-theme'
+
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+
+[[plugins]]
+repo = 'vim-scripts/Wombat'
+
+[[plugins]]
+repo = 'tomasr/molokai'
+
+[[plugins]]
+repo = 'mattn/habatobi-vim.git'
+
+[[plugins]]
+repo = 'itchyny/landscape.vim'
+
+[[plugins]]
+repo = "aklt/plantuml-syntax"
+
+[[plugins]]
+repo = 'slim-template/vim-slim'
+
