@@ -374,9 +374,8 @@ set browsedir=current           " Exploreの初期ディレクトリ
 set scrolloff=10                " スクロール時の余白
 set autoread                    " ファイルが書き換えられたら自動で読み直す
 set vb t_vb=                    " ビープ音を鳴らさない
-set clipboard+=unnamed,autoselect
+set clipboard+=unnamed
 set mouse=a
-set ttymouse=xterm2
 set backupdir=~/.vim_backup
 set path+=/usr/local/include
 set path+=/usr/include/c++/4.2.1
@@ -386,6 +385,10 @@ set foldtext=FoldCCtext()
 set foldcolumn=4
 set fillchars=vert:\|
 set t_Co=256
+
+if !has('nvim')
+  set ttymouse=xterm2
+endif
 
 
 " サーチオプション
