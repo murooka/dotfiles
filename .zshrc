@@ -64,16 +64,21 @@ setopt hist_reduce_blanks
 export LANG=ja_JP.UTF-8
 
 # PATH {{{
+export GOPATH=~/.go
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
   $HOME/bin(N-/)
+  $HOME/.cabal/bin(N-/)
   $HOME/.nodebrew/current/bin(N-/)
   $HOME/.rbenv/bin(N-/)
-  $HOME/.cabal/bin(N-/)
-  $path
-  /Applications/android-sdk/tools(N-/)
+  $GOPATH/bin
+  $HOME/go_appengine(N-/)
+  $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
+  $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
+  /Applications/android-sdk/tools(N-/)
+  $path
 )
 if exists brew; then
   export HOMEBREW_ROOT=`brew --prefix`
@@ -84,12 +89,11 @@ if exists brew; then
     $path
   )
 fi
+export GOROOT=/usr/local/Cellar/go/1.6.2/libexec
+export HOMEBREW_ROOT=`brew --prefix`
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-export GOROOT=/usr/local/Cellar/go/1.5.1/libexec
-export GOPATH=~/.go
-path=($GOPATH/bin $path)
 # }}}
 
 export EDITOR=vim

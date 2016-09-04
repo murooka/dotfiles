@@ -55,7 +55,7 @@ snippet lg
     console.log(${1});${0}
 
 snippet describe
-    describe("${1}", function () {
+    describe('${1}', function () {
         ${2}
 
         beforeEach(function () {
@@ -67,7 +67,7 @@ snippet describe
     });
 
 snippet it
-    it("${1}", function () {
+    it('${1}', function () {
         ${2}
     });
 
@@ -100,3 +100,6 @@ snippet module
         function(deps, factory) { module.exports = factory(); } :
         function(deps, factory) { this['${1}'] = factory(); }
     );
+
+snippet req
+	const ${1} = require('${2}');

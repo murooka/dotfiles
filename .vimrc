@@ -67,6 +67,9 @@ NeoBundle 'elzr/vim-json'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'moznion/vim-ltsv'
 NeoBundle 'mattn/vim-nekokak'
+NeoBundle 'fatih/vim-go'
+NeoBundle 'udalov/kotlin-vim'
+NeoBundle 'mxw/vim-jsx'
 
 NeoBundle 'VimClojure'
 NeoBundle 'vim-scala'
@@ -74,7 +77,7 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'indenthaskell.vim'
 NeoBundle 'haskell.vim'
 NeoBundle 'cocoa.vim'
-NeoBundle 'jsx/jsx.vim'
+" NeoBundle 'jsx/jsx.vim'
 NeoBundle 'vim-scripts/nginx.vim'
 NeoBundle 'vim-scripts/javacomplete'
 " NeoBundle 'jiangmiao/simple-javascript-indenter'
@@ -83,6 +86,8 @@ NeoBundle 'vim-scripts/jQuery.git'
 " NeoBundle 'pangloss/vim-javascript'
 " NeoBundle 'othree/yajs.vim'
 NeoBundle 'https://github.com/isRuslan/vim-es6.git'
+NeoBundle 'othree/yajs.vim'
+NeoBundle 'othree/html5.vim'
 NeoBundle 'vim-scripts/brainfuck-syntax.git'
 " NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'vim-scripts/a.vim'
@@ -369,7 +374,7 @@ if neobundle#tap('syntastic') "{{{
 
   let g:syntastic_mode_map = {
         \  'mode': 'passive',
-        \ 'active_filetypes': ['c', 'cpp', 'ruby', 'javascript', 'coffee', 'perl'],
+        \ 'active_filetypes': ['c', 'cpp', 'ruby', 'javascript', 'coffee', 'perl', 'go'],
         \ 'passive_filetypes': ['html', 'typescript', 'java', 'scala']
         \ }
 
@@ -385,6 +390,7 @@ if neobundle#tap('syntastic') "{{{
   let g:syntastic_perl_interpreter = '/Users/naoki.yaguchi/perl5/perlbrew/perls/perl-5.20.2/bin/perl'
   let g:syntastic_perl_lib_path = ['./lib', '/Users/naoki.yaguchi/npf/fujiyama-development/donguri/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/karasuma/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/matoba/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/app/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/app/t/lib', '/Users/naoki.yaguchi/npf/fujiyama-development/kiyamachi/perlbrew/lib/site_perl/5.20.2']
   let g:syntastic_perl_checkers = ['perl', 'podchecker']
+  let g:syntastic_go_checkers = ['go', 'golint']
 
   call neobundle#untap()
 endif "}}}
@@ -626,7 +632,7 @@ set ambiwidth=double                    " 一部のマルチバイト文字をas
 set display=uhex                        " 印字不可能文字を16進数で表示
 set laststatus=2                        " ステータスラインを常時表示
 
-set listchars=tab:>\-                   " 不可視文字の設定
+set listchars=tab:>\-,eol:↩             " 不可視文字の設定
 set titlestring=(」・ω・)」うー！(／・ω・)／にゃー！
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 
@@ -662,11 +668,11 @@ augroup InsertHook
 augroup END
 
 " カーソルの行と列をハイライト
-augroup cch
-  autocmd! cch
-  autocmd WinLeave * set nocursorcolumn nocursorline
-  autocmd WinEnter,BufRead * set cursorcolumn cursorline
-augroup END
+" augroup cch
+"   autocmd! cch
+"   autocmd WinLeave * set nocursorcolumn nocursorline
+"   autocmd WinEnter,BufRead * set cursorcolumn cursorline
+" augroup END
 
 " java highlight
 let java_highlight_all=1
@@ -691,7 +697,6 @@ augroup TabSize
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
   autocmd FileType c          setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
-  autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
   autocmd FileType json       setlocal ts=4 sw=4 sts=4
   autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
