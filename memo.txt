@@ -1,0 +1,6 @@
+* 英かな
+  * https://ei-kana.appspot.com/
+* FiraCode
+  * https://github.com/tonsky/FiraCode/wiki
+* Myrica
+  * https://myrica.estable.jp/
