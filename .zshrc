@@ -441,7 +441,4 @@ eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-export PERLBREW_HOME=~/perl5/perlbrew
-source ~/perl5/perlbrew/etc/bashrc
-
 eval $(docker-machine env dev)

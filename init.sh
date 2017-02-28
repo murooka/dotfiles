@@ -23,7 +23,6 @@ done
 brew update
 brew tap homebrew/versions
 brew tap homebrew/dupes
-brew tap phinze/homebrew-cask
 
 brew install vim --with-lua --with-perl
 brew install macvim --with-luajit

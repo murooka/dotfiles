@@ -7,5 +7,8 @@ do
     ln -s $HOME/dotfiles/$file $HOME
 done
 
+mkdir -p ~/.vim_backup
+mkdir -p ~/bin
+
 git submodule init
 git submodule update
