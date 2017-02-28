@@ -224,3 +224,5 @@ repo = "aklt/plantuml-syntax"
 [[plugins]]
 repo = 'slim-template/vim-slim'
 
+[[plugins]]
+repo = 'romainl/Apprentice'

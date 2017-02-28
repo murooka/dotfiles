@@ -550,7 +550,7 @@ let java_highlight_all=1
 " indent settings
 "============================================================
 filetype indent on
-colorscheme murooka
+colorscheme apprentice
 
 set cindent             " Cライクな文法に従いインデント
 set expandtab
