@@ -10,7 +10,7 @@ autoload -Uz vcs_info
 # }}}
 
 
-function exists() {
+function executable() {
   which $1 > /dev/null 2>&1
 }
 
@@ -37,10 +37,6 @@ disable r
 
 # }}}
 
-
-function exists() {
-  which $1 > /dev/null 2>&1
-}
 
 function match() {
   echo $1 | grep $2 &> /dev/null
@@ -71,9 +67,8 @@ path=(
   /usr/local/bin(N-/)
   /usr/local/sbin(N-/)
   $HOME/bin(N-/)
+  $HOME/.anyenv/bin(N-/)
   $HOME/.cabal/bin(N-/)
-  $HOME/.nodebrew/current/bin(N-/)
-  $HOME/.rbenv/bin(N-/)
   $GOPATH/bin
   $HOME/go_appengine(N-/)
   $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
@@ -83,7 +78,7 @@ path=(
   /usr/local/appengine-java-sdk/bin(N-/)
   $path
 )
-if exists brew; then
+if executable brew; then
   export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
@@ -161,10 +156,6 @@ alias dm='docker-machine'
 
 function match() {
   echo $1 | grep $2 &> /dev/null
-}
-
-function pb {
-  cat $@ | pbcopy
 }
 
 function precmd() {
@@ -281,25 +272,12 @@ PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~
 
 # Environment managers {{{
 
-if exists nodebrew; then
-  nodebrew use latest > /dev/null 2>&1
-  echo -n 'node '
-  node -v
+if executable anyenv; then
+  eval "$(anyenv init -)"
+  anyenv version
 fi
 
-if exists rbenv; then
-  eval "$(rbenv init -)"
-  echo -n 'ruby '
-  rbenv version
-fi
-
-if [ -e ~/perl5/perlbrew ]; then
-  export PERLBREW_HOME=~/perl5/perlbrew
-  source ~/perl5/perlbrew/etc/bashrc
-  echo "$PERLBREW_PERL"
-fi
-
-if exists brew; then
+if executable brew; then
   zpath=`brew --prefix`/etc/profile.d/z.sh
   if [[ -f $zpath ]]; then
     _Z_CMD=j
@@ -309,14 +287,6 @@ fi
 
 # }}}
 
-
-function g() {
-  grep -r "$1" .
-}
-
-function gg() {
-  grep -rl "$1" .
-}
 
 function graphvizall() {
   for cmd in dot neato fdp sfdp twopi circo; do
@@ -329,14 +299,6 @@ function pprove() {
   file=`find $1 -name "*.t" | peco`
   echo "prove $file"
   prove $file
-}
-
-function be() {
-  export RUBYGEMS_GEMDEPS=-
-}
-
-function bed() {
-  export RUBYGEMS_GEMDEPS=
 }
 
 function uuid() {
@@ -409,10 +371,6 @@ function cl() {
   clear
 }
 
-function jg(){
-  echo "$@" | json_xs -f eval
-}
-
 function q () {
   local selected_dir=$(ghq list -p | sed 's/\/Users\/naoki.yaguchi//' | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
@@ -429,14 +387,12 @@ function q () {
   fi
 }
 
-if [[ -f /Users/naoki.yaguchi/.zaw/zaw.zsh ]]; then
-  source /Users/naoki.yaguchi/.zaw/zaw.zsh
+if [[ -f $HOME/.zaw/zaw.zsh ]]; then
+  source $HOME/.zaw/zaw.zsh
 fi
 
 zstyle ':filter-select:highlight' selected fg=black,bg=white,standout
 zstyle ':filter-select' case-insensitive yes
-
-eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
