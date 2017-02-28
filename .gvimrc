@@ -1,5 +1,5 @@
 if has('mac')
-    set guifont=Ricty\ Regular:h15
+    set guifont=MyricaM\ Monospace:h15
 end
 
 set cmdheight=1

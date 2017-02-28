@@ -55,19 +55,12 @@ snippet lg
     console.log(${1});${0}
 
 snippet describe
-    describe('${1}', function () {
+    describe('${1}', () => {
         ${2}
-
-        beforeEach(function () {
-            ${3}
-        });
-
-        ${4}
-
     });
 
 snippet it
-    it('${1}', function () {
+    it('${1}', () => {
         ${2}
     });
 

@@ -53,6 +53,7 @@ HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 setopt hist_ignore_dups
+setopt hist_ignore_all_dups
 setopt share_history
 setopt hist_reduce_blanks
 
@@ -68,6 +69,7 @@ export GOPATH=~/.go
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
+  /usr/local/sbin(N-/)
   $HOME/bin(N-/)
   $HOME/.cabal/bin(N-/)
   $HOME/.nodebrew/current/bin(N-/)
@@ -78,6 +80,7 @@ path=(
   $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
+  /usr/local/appengine-java-sdk/bin(N-/)
   $path
 )
 if exists brew; then
@@ -85,6 +88,7 @@ if exists brew; then
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
     /usr/local/opt/go/libexec/bin(N-/)
+
     ~/.cabal/bin(N-/)
     $path
   )
@@ -94,6 +98,9 @@ export HOMEBREW_ROOT=`brew --prefix`
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
+export GOROOT=/usr/local/opt/go/libexec
+export GOPATH=~/.go
+path=($GOPATH/bin $path)
 # }}}
 
 export EDITOR=vim
@@ -204,7 +211,7 @@ function _git_info() { # {{{
   vcs=$vcs_info_msg_0_
   branch=$vcs_info_msg_1_
   action=$vcs_info_msg_3_
-  STATUS=`git status --porcelain 2> /dev/null`
+  STATUS=`git status --ignore-submodules --porcelain 2> /dev/null`
 
   info=''
   if match $STATUS '^?? '            ; then info=$info'+' fi
@@ -287,6 +294,7 @@ if exists rbenv; then
 fi
 
 if [ -e ~/perl5/perlbrew ]; then
+  export PERLBREW_HOME=~/perl5/perlbrew
   source ~/perl5/perlbrew/etc/bashrc
   echo "$PERLBREW_PERL"
 fi
@@ -409,12 +417,24 @@ function q () {
   local selected_dir=$(ghq list -p | sed 's/\/Users\/naoki.yaguchi//' | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
     cd ~/${selected_dir}
+
+    session=`echo ${selected_dir} | sed -e 's/\./_/g'`
+
+    if tmux ls | awk -F: '{print $1}' | grep "^${session}$"; then
+      tmux a -t $session
+    else
+      tmux new-session -d -s $session
+      tmux attach -t $session
+    fi
   fi
 }
 
-if [[ -f /Users/naoki.yaguchi/lib/zaw/zaw.zsh ]]; then
-  source /Users/naoki.yaguchi/lib/zaw/zaw.zsh
+if [[ -f /Users/naoki.yaguchi/.zaw/zaw.zsh ]]; then
+  source /Users/naoki.yaguchi/.zaw/zaw.zsh
 fi
+
+zstyle ':filter-select:highlight' selected fg=black,bg=white,standout
+zstyle ':filter-select' case-insensitive yes
 
 eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 

@@ -3,7 +3,9 @@
 .DS_Store
 tags
 *.swp
+*.swo
 .gitconfig
 .vimrc_local
 .mongo
 .local.vimrc
+.envrc

@@ -24,3 +24,9 @@
 	diff = diff-highlight | less
 [ghq]
 	root = ghq
+[diff "json"]
+	textconv = "perl -MJSON -0e \"print JSON->new->canonical->pretty->encode(decode_json(<>))\""
+[diff]
+	compactionHeuristic = true
+[interactive]
+	diffFilter = diff-highlight

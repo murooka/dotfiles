@@ -19,8 +19,6 @@ if has('vim_starting')
   set nocompatible
 endif
 
-
-
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if &runtimepath !~# '/dein.vim'
@@ -346,7 +344,6 @@ filetype on
 filetype plugin indent on
 
 
-
 let g:vim_json_syntax_conceal = 0
 
 "============================================================
@@ -369,7 +366,7 @@ augroup LineBreak
 augroup END
 
 set shellslash                  " スラッシュを区切りにしてファイル名を展開する
-set textwidth=1000              " 右端で折り返さない
+set textwidth=0                 " 右端で折り返さない
 set browsedir=current           " Exploreの初期ディレクトリ
 set scrolloff=10                " スクロール時の余白
 set autoread                    " ファイルが書き換えられたら自動で読み直す
@@ -625,6 +622,16 @@ function! s:unite_source.gather_candidates(args, context)
         \       'kind' : 'command',
         \       'action__command' : v:val
         \   }"))
+endfunction
+
+command! -nargs=? Jq call s:Jq(<f-args>)
+function! s:Jq(...)
+  if 0 == a:0
+    let l:arg = "."
+  else
+    let l:arg = a:1
+  endif
+  execute "%! jq \"" . l:arg . "\""
 endfunction
 
 " call unite#define_source(s:unite_source)
