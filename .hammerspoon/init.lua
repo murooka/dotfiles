@@ -56,10 +56,10 @@ local function handleGlobalAppEvent(name, event, app)
     -- hs.alert.show(name)
     if name ~= "iTerm2" then
       -- enableAllHotkeys()
-      enableHotkeys({'⌃N','⌃P'})
+      enableHotkeys({'⌃N','⌃P','⌃W'})
     else
       -- disableAllHotkeys()
-      disableHotkeys({'⌃N','⌃P'})
+      disableHotkeys({'⌃N','⌃P','⌃W'})
     end
   end
 end

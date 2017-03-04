@@ -8,14 +8,17 @@ depends = 'Shougo/vimproc'
 [[plugins]]
 repo = 'Shougo/vimfiler'
 
-[[plugins]]
-repo = 'Shougo/neocomplete'
+# [[plugins]]
+# repo = 'Shougo/neocomplete'
+# 
+# [[plugins]]
+# repo = 'Shougo/neosnippet'
+# 
+# [[plugins]]
+# repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
-repo = 'Shougo/neosnippet'
-
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+repo = 'cespare/vim-toml'
 
 [[plugins]]
 repo = 'ujihisa/neco-ghc'

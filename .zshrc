@@ -61,7 +61,9 @@ setopt hist_reduce_blanks
 export LANG=ja_JP.UTF-8
 
 # PATH {{{
-export GOPATH=~/.go
+export GOPATH=$HOME
+export GOROOT=/usr/local/opt/go/libexec
+
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
@@ -88,14 +90,11 @@ if executable brew; then
     $path
   )
 fi
-export GOROOT=/usr/local/Cellar/go/1.6.2/libexec
 export HOMEBREW_ROOT=`brew --prefix`
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
-export GOROOT=/usr/local/opt/go/libexec
-export GOPATH=~/.go
-path=($GOPATH/bin $path)
+export XDG_CONFIG_HOME=$HOME/.config
 # }}}
 
 export EDITOR=vim

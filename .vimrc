@@ -365,15 +365,12 @@ augroup LineBreak
   autocmd FileType * setlocal formatoptions-=ro
 augroup END
 
-set shellslash                  " スラッシュを区切りにしてファイル名を展開する
-set textwidth=0                 " 右端で折り返さない
 set browsedir=current           " Exploreの初期ディレクトリ
 set scrolloff=10                " スクロール時の余白
 set autoread                    " ファイルが書き換えられたら自動で読み直す
 set vb t_vb=                    " ビープ音を鳴らさない
 set clipboard+=unnamed
 set mouse=a
-set backupdir=~/.vim_backup
 set path+=/usr/local/include
 set path+=/usr/include/c++/4.2.1
 set backspace=indent,eol,start
@@ -382,6 +379,7 @@ set foldtext=FoldCCtext()
 set foldcolumn=4
 set fillchars=vert:\|
 set t_Co=256
+set termguicolors
 
 if !has('nvim')
   set ttymouse=xterm2
@@ -394,7 +392,6 @@ set hlsearch            " 検索文字をハイライト
 set incsearch           " インクリメンタルサーチ
 set ignorecase          " 大文字小文字を無視
 set smartcase           " 大文字が含まれている場合は大文字小文字を区別
-nnoremap <Esc><Esc> :nohlsearch<CR>
 
 let Grep_Skip_Dirs = '.svn .git'
 let Grep_Skip_Files = '*.bak *~ *.swp'
@@ -540,11 +537,6 @@ augroup END
 "   autocmd WinEnter,BufRead * set cursorcolumn cursorline
 " augroup END
 
-" java highlight
-let java_highlight_all=1
-
-
-
 
 "============================================================
 " indent settings
@@ -564,7 +556,6 @@ augroup TabSize
   autocmd FileType c          setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
   autocmd FileType json       setlocal ts=4 sw=4 sts=4
-  autocmd FileType *.scm      inoremap <silent> ( ()<LEFT>
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
 augroup END
 
@@ -595,45 +586,9 @@ set complete+=k     " 補完に辞書ファイルを追加
 set completeopt+=menuone
 set completeopt-=preview
 
-set autoread
-set updatetime=50
-
-let s:unite_source = {
-      \   "name" : "rails"
-      \}
-
-function! s:unite_source.gather_candidates(args, context)
-  let cmds = {
-        \       "Models"      : "Unite rails/model",
-        \       "Views"       : "Unite rails/view",
-        \       "Controllers" : "Unite rails/controller",
-        \       "Specs"       : "Unite rails/spec",
-        \       "Config"      : "Unite rails/config",
-        \       "Javascript"  : "Unite rails/javascript",
-        \       "StyleSheet"  : "Unite rails/stylesheet",
-        \       "Generate"    : "Unite rails/generate",
-        \       "Library"     : "Unite rails/lib",
-        \       "Rake"        : "Unite rails/rake",
-        \   }
-
-  return values(map(cmds, "{
-        \       'word' : v:key,
-        \       'source' : 'shortcut',
-        \       'kind' : 'command',
-        \       'action__command' : v:val
-        \   }"))
-endfunction
-
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
   if 0 == a:0
-    let l:arg = "."
-  else
-    let l:arg = a:1
-  endif
+    let l:arg = "." else let l:arg = a:1 endif
   execute "%! jq \"" . l:arg . "\""
 endfunction
-
-" call unite#define_source(s:unite_source)
-
-unlet s:unite_source

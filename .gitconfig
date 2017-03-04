@@ -23,7 +23,7 @@
 	show = diff-highlight | less
 	diff = diff-highlight | less
 [ghq]
-	root = ghq
+	root = ~/src
 [diff "json"]
 	textconv = "perl -MJSON -0e \"print JSON->new->canonical->pretty->encode(decode_json(<>))\""
 [diff]
