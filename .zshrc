@@ -73,6 +73,7 @@ path=(
   $HOME/.cabal/bin(N-/)
   $GOPATH/bin
   $HOME/go_appengine(N-/)
+  $HOME/google-cloud-sdk/bin(N-/)
   $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
   $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
@@ -134,6 +135,7 @@ alias -g N='2>/dev/null'
 
 
 alias quit='exit'
+alias vim='nvim'
 alias evim='vim ~/.vimrc'
 alias ezsh='vim ~/.zshrc'
 alias la='ls -alF'
@@ -284,6 +286,10 @@ if executable brew; then
   fi
 fi
 
+if executable direnv; then
+  eval "$(direnv hook zsh)"
+fi
+
 # }}}
 
 
@@ -397,3 +403,13 @@ zstyle ':filter-select' case-insensitive yes
 export PATH="/usr/local/heroku/bin:$PATH"
 
 eval $(docker-machine env dev)
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f /Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc ]; then
+  source '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'
+fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f /Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc ]; then
+  source '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'
+fi

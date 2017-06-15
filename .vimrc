@@ -42,15 +42,13 @@ if dein#load_state(s:dein_dir)
   call dein#save_state()
 endif
 
-if dein#check_install(['vimproc'])
-  call dein#install(['vimproc'])
-endif
+" if dein#check_install(['Shougo/vimproc.vim'])
+"   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+" endif
 
 if dein#check_install()
   call dein#install()
 endif
-
-
 
 filetype on
 filetype plugin indent on
@@ -81,6 +79,21 @@ if dein#tap('unite.vim') "{{{
     imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
   endfunction
 
+endif "}}}
+
+if dein#tap('denite.nvim') "{{{
+  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<C-a>', '<denite:move_caret_to_head>', 'noremap')
+  call denite#custom#map('insert', '<C-k>', '<denite:delete_text_after_caret>', 'noremap')
+  call denite#custom#map('insert', '<C-w>', '<denite:delete_word_before_caret>', 'noremap')
+
+  nnoremap <silent> <Space>uf :<C-u>Denite file_rec<CR>
+  nnoremap <silent> <Space>ub :<C-u>Denite buffer<CR>
+endif "}}}
+
+if dein#tap('deoplete.nvim') "{{{
+  let g:deoplete#enable_at_startup = 1
 endif "}}}
 
 if dein#tap('neocomplete') "{{{
@@ -267,6 +280,13 @@ if dein#tap('operator-camelize.vim') "{{{
 
 endif "}}}
 
+if dein#tap('ale') "{{{
+  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_linters = {
+        \ 'go': ['go build'],
+        \ }
+endif "}}}
+
 if dein#tap('syntastic') "{{{
 
   let g:syntastic_mode_map = {
@@ -385,6 +405,9 @@ if !has('nvim')
   set ttymouse=xterm2
 endif
 
+if !has('gui_running')
+  set timeout timeoutlen=1000 ttimeoutlen=75
+endif
 
 " サーチオプション
 "----------------------------------------
@@ -392,6 +415,7 @@ set hlsearch            " 検索文字をハイライト
 set incsearch           " インクリメンタルサーチ
 set ignorecase          " 大文字小文字を無視
 set smartcase           " 大文字が含まれている場合は大文字小文字を区別
+nnoremap <Space><Space> :nohlsearch<CR>
 
 let Grep_Skip_Dirs = '.svn .git'
 let Grep_Skip_Files = '*.bak *~ *.swp'
@@ -430,7 +454,6 @@ set scrolloff=10
 
 inoremap <C-A> <Home>
 inoremap <C-E> <End>
-nnoremap <silent> <Space><Space> :<C-u>source $HOME/.vimrc<CR>
 nnoremap <silent> <Space>s i<Space><Right><Space><Left><Esc>
 smap <C-H> <BS>i
 inoremap <C-D> <Del>
@@ -440,6 +463,8 @@ nnoremap j g<Down>
 nnoremap k g<Up>
 nnoremap gj <Down>
 nnoremap gk <Up>
+nnoremap " <S-j>
+nnoremap <S-j> <Nop>
 
 " Fold {{{
 
@@ -551,7 +576,7 @@ set ts=2 sw=2 sts=2
 augroup TabSize
   autocmd! TabSize
   autocmd FileType java       setlocal ts=4 sw=4 sts=4
-  autocmd FileType javascript setlocal ts=4 sw=4 sts=4
+  autocmd FileType javascript setlocal ts=2 sw=2 sts=2
   autocmd FileType perl       setlocal ts=4 sw=4 sts=4
   autocmd FileType c          setlocal ts=4 sw=4 sts=4
   autocmd FileType cpp        setlocal noexpandtab
@@ -589,6 +614,9 @@ set completeopt-=preview
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
   if 0 == a:0
-    let l:arg = "." else let l:arg = a:1 endif
+    let l:arg = "."
+  else
+    let l:arg = a:1
+  endif
   execute "%! jq \"" . l:arg . "\""
 endfunction
