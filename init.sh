@@ -87,6 +87,7 @@ casks=(
   sublime-text
   virtualbox
   xquartz
+  java
 )
 
 for cask in ${casks[@]}

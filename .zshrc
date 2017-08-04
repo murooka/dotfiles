@@ -10,8 +10,8 @@ autoload -Uz vcs_info
 # }}}
 
 
-function executable() {
-  which $1 > /dev/null 2>&1
+function exists() {
+  hash $1 > /dev/null 2>&1
 }
 
 
@@ -82,7 +82,7 @@ path=(
   /usr/local/appengine-java-sdk/bin(N-/)
   $path
 )
-if executable brew; then
+if exists brew; then
   export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
@@ -134,7 +134,6 @@ alias -g N='2>/dev/null'
 
 
 alias quit='exit'
-alias vim='nvim'
 alias evim='vim ~/.vimrc'
 alias ezsh='vim ~/.zshrc'
 alias la='ls -alF'
@@ -272,12 +271,12 @@ PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~
 
 # Environment managers {{{
 
-if executable anyenv; then
+if exists anyenv; then
   eval "$(anyenv init -)"
   anyenv version
 fi
 
-if executable brew; then
+if exists brew; then
   zpath=`brew --prefix`/etc/profile.d/z.sh
   if [[ -f $zpath ]]; then
     _Z_CMD=j
@@ -285,7 +284,7 @@ if executable brew; then
   fi
 fi
 
-if executable direnv; then
+if exists direnv; then
   eval "$(direnv hook zsh)"
 fi
 

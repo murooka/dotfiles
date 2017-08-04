@@ -14,7 +14,7 @@ repo = 'Shougo/vimshell'
 repo = 'Shougo/vimfiler'
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
+repo = 'Shougo/neocomplete.vim'
 
 [[plugins]]
 repo = 'vim-scripts/taglist.vim'
