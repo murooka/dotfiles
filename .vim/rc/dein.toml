@@ -20,6 +20,9 @@ repo = 'Shougo/deoplete.nvim'
 repo = 'vim-scripts/taglist.vim'
 
 [[plugins]]
+repo = 'vim-scripts/BlockDiff'
+
+[[plugins]]
 repo = 'mattn/emmet-vim'
 
 [[plugins]]
@@ -121,6 +124,8 @@ repo = 'vim-scripts/brainfuck-syntax.git'
 [[plugins]]
 repo = 'vim-scripts/nginx.vim'
 
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
 
 # ============================================================
 # ColorScheme

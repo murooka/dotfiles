@@ -65,10 +65,10 @@ local function handleGlobalAppEvent(name, event, app)
 end
 
 appsWatcher = hs.application.watcher.new(handleGlobalAppEvent)
-appsWatcher:start() remapKey({'ctrl'}, 'f', keyCode('right'))
+appsWatcher:start()
+remapKey({'ctrl'}, 'f', keyCode('right'))
 remapKey({'ctrl'}, 'b', keyCode('left'))
 remapKey({'ctrl'}, 'n', keyCode('down'))
 remapKey({'ctrl'}, 'p', keyCode('up'))
 remapKey({'ctrl'}, 'w', keyCode('delete', {'option'}))
-remapKey({'ctrl'}, '[', keyCode('ESCAPE'))
 enableAllHotkeys()
