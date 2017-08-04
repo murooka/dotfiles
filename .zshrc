@@ -63,6 +63,7 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 export GOPATH=$HOME
 export GOROOT=/usr/local/opt/go/libexec
+export HOMEBREW_ROOT=`brew --prefix`
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
@@ -74,7 +75,7 @@ path=(
   $GOPATH/bin
   $HOME/go_appengine(N-/)
   $HOME/google-cloud-sdk/bin(N-/)
-  $HOMEBREW_ROOT/go/1.2.1/libexec/bin(N-/)
+  $GOROOT/bin(N-/)
   $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
@@ -85,13 +86,11 @@ if executable brew; then
   export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
-    /usr/local/opt/go/libexec/bin(N-/)
-
+    $GOROOT/bin(N-/)
     ~/.cabal/bin(N-/)
     $path
   )
 fi
-export HOMEBREW_ROOT=`brew --prefix`
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
@@ -377,7 +376,7 @@ function cl() {
 }
 
 function q () {
-  local selected_dir=$(ghq list -p | sed 's/\/Users\/naoki.yaguchi//' | peco --query "$LBUFFER")
+  local selected_dir=$(ghq list -p | sed 's/\/Users\/charlie//' | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
     cd ~/${selected_dir}
 
@@ -412,4 +411,8 @@ fi
 # The next line enables shell command completion for gcloud.
 if [ -f /Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc ]; then
   source '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'
+fi
+
+if exists direnv; then
+  eval "$(direnv hook zsh)"
 fi

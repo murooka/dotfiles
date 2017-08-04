@@ -1,1 +1,1 @@
-/Users/naoki.yaguchi/.vimrc
+/Users/charlie/.vimrc

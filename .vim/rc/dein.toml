@@ -20,7 +20,7 @@ repo = 'Shougo/deoplete.nvim'
 repo = 'vim-scripts/taglist.vim'
 
 [[plugins]]
-repo = 'vim-scripts/BlockDiff'
+repo = 'ryochack/BlockDiff'
 
 [[plugins]]
 repo = 'mattn/emmet-vim'
@@ -142,27 +142,26 @@ repo = 'w0ng/vim-hybrid'
 [[plugins]]
 repo = 'vim-scripts/twilight'
 
-[[plugins]]
-repo = 'jonathanfilip/vim-lucius'
+# [[plugins]]
+# repo = 'Rip-Rip/clang_complete'
 
 [[plugins]]
-repo = 'jpo/vim-railscasts-theme'
+repo = 'cespare/vim-toml'
 
 [[plugins]]
-repo = 'altercation/vim-colors-solarized'
+repo = 'nsf/gocode'
 
 [[plugins]]
-repo = 'vim-scripts/Wombat'
+repo = 'fatih/vim-go'
 
 [[plugins]]
-repo = 'tomasr/molokai'
+repo = 'dgryski/vim-godef'
 
 [[plugins]]
-repo = 'mattn/habatobi-vim.git'
+repo = 'vim-jp/vim-go-extra'
 
 [[plugins]]
-repo = 'itchyny/landscape.vim'
-
+repo = 'rhysd/vim-crystal'
 
 # for vim
 # [[plugins]]

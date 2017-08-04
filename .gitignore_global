@@ -9,3 +9,5 @@ tags
 .mongo
 .local.vimrc
 .envrc
+.idea/
+*.iml

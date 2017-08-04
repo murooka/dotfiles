@@ -1,5 +1,4 @@
 scriptencoding utf-8
-
 let $VIM_ROOT=$HOME.'/.vim'
 
 "============================================================
@@ -120,6 +119,16 @@ if dein#tap('neocomplete') "{{{
   nnoremap <silent> <Space>ns :NeoSnippetEdit<CR>
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
+
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+  endif
+  let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
+
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+  let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 
   " if !exists('g:neocomplete#sources#omni#input_patterns')
   "   let g:neocomplete#sources#omni#input_patterns = {}
@@ -566,6 +575,7 @@ augroup END
 "============================================================
 " indent settings
 "============================================================
+syntax on
 filetype indent on
 colorscheme apprentice
 
@@ -584,6 +594,9 @@ augroup TabSize
   autocmd FileType go         setlocal noexpandtab ts=4 sw=4 sts=4
 augroup END
 
+augroup Go
+  autocmd FileType go autocmd BufWritePre <buffer> Fmt
+augroup END
 
 function! SetMyTab(sz)
   exec 'setlocal sw='.a:sz.' ts='.a:sz.' sts='.a:sz

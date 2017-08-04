@@ -15,8 +15,8 @@ if !has("gui_running") && &t_Co < 256
   finish
 endif
 
-if !exists("g:hybrid_use_Xresources")
-  let g:hybrid_use_Xresources = 0
+if !exists("g:murooka_use_Xresources")
+  let g:murooka_use_Xresources = 0
 endif
 
 set background=dark
@@ -26,7 +26,7 @@ if exists("syntax_on")
   syntax reset
 endif
 
-let colors_name = "hybrid"
+let colors_name = "murooka"
 
 " }}}
 
@@ -61,7 +61,7 @@ else
   let s:addfg      = "193"
   let s:changebg   = "60"
   let s:changefg   = "189"
-  if g:hybrid_use_Xresources == 1
+  if g:murooka_use_Xresources == 1
     let s:foreground = "15"   " White
     let s:selection  = "8"    " DarkGrey
     let s:line       = "0"    " Black
@@ -250,7 +250,7 @@ exe "hi! WarningMsg"    .s:fg_red         .s:bg_none        .s:fmt_none
 "		WildMenu"
 
 " Use Xresources for background colour
-if has('gui_running') || g:hybrid_use_Xresources != 1
+if has('gui_running') || g:murooka_use_Xresources != 1
   exe "hi! Normal"        .s:fg_foreground  .s:bg_background  .s:fmt_none
 else
   exe "hi! Normal"        .s:fg_foreground  .s:bg_none        .s:fmt_none

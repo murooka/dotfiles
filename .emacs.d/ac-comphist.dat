@@ -1,52 +1,52 @@
-((("show-paren-delay" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0])
-  ("setq" .
-   [1 0 0 0])
-  ("font-family-list" .
-   [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0])
-  ("prin1" .
+((("count" .
    [1 0 0 0 0])
-  ("print" .
-   [1 0 0 0 0])
-  (":family" .
-   [0 0 0 0 0 1 0])
-  ("default" .
-   [0 0 0 0 0 1 0])
-  ("set-face-attribute" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0])
-  ("count-lines-and-chars" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
-  (":eval" .
-   [1 0 0 0 0])
-  ("default-mode-line-format" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
-  ("add-to-list" .
-   [0 0 0 0 0 0 0 0 0 1 0])
-  ("defimage" .
-   [0 0 0 0 1 0 0 0])
-  ("defun" .
-   [1 0 0 0 2])
-  ("dabbrev-completion" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
-  ("dabbrev-expand" .
-   [0 0 0 1 0 0 0 0 0 0 0 0 0 0])
-  ("evil-insert" .
-   [1 0 0 0 0 0 0 0 0 0 0])
-  ("kbd" .
-   [1 0 0])
-  ("define-key" .
-   [1 0 0 0 0 0 0 0 0 1])
-  ("nil" .
-   [2 0 0])
-  ("evil-next-line" .
-   [0 0 0 0 0 0 0 0 0 0 1 0 0 0])
-  ("evil" .
-   [1 0 0 0])
-  ("count-lines" .
-   [1 0 0 0 0 0 0 0 0 0 0])
-  ("region-end" .
-   [0 0 0 0 1 0 1 0 0 1])
   ("region-beginning" .
    [0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0])
-  ("count" .
-   [1 0 0 0 0])))
+  ("region-end" .
+   [0 0 0 0 1 0 1 0 0 1])
+  ("count-lines" .
+   [1 0 0 0 0 0 0 0 0 0 0])
+  ("evil" .
+   [1 0 0 0])
+  ("evil-next-line" .
+   [0 0 0 0 0 0 0 0 0 0 1 0 0 0])
+  ("nil" .
+   [2 0 0])
+  ("define-key" .
+   [1 0 0 0 0 0 0 0 0 1])
+  ("kbd" .
+   [1 0 0])
+  ("evil-insert" .
+   [1 0 0 0 0 0 0 0 0 0 0])
+  ("dabbrev-expand" .
+   [0 0 0 1 0 0 0 0 0 0 0 0 0 0])
+  ("dabbrev-completion" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
+  ("defun" .
+   [1 0 0 0 2])
+  ("defimage" .
+   [0 0 0 0 1 0 0 0])
+  ("add-to-list" .
+   [0 0 0 0 0 0 0 0 0 1 0])
+  ("default-mode-line-format" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
+  (":eval" .
+   [1 0 0 0 0])
+  ("count-lines-and-chars" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
+  ("set-face-attribute" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0])
+  ("default" .
+   [0 0 0 0 0 1 0])
+  (":family" .
+   [0 0 0 0 0 1 0])
+  ("print" .
+   [1 0 0 0 0])
+  ("prin1" .
+   [1 0 0 0 0])
+  ("font-family-list" .
+   [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0])
+  ("setq" .
+   [1 0 0 0])
+  ("show-paren-delay" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0])))
