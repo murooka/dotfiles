@@ -375,9 +375,9 @@ function cl() {
 }
 
 function q () {
-  local selected_dir=$(ghq list -p | sed 's/\/Users\/charlie//' | peco --query "$LBUFFER")
+  local selected_dir=$(ghq list -p | sed "s#$HOME/src/##" | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
-    cd ~/${selected_dir}
+    cd "${HOME}/src/${selected_dir}"
 
     session=`echo ${selected_dir} | sed -e 's/\./_/g'`
 
