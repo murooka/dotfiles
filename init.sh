@@ -108,6 +108,7 @@ casks=(
   virtualbox
   xquartz
   java
+  hammerspoon
 )
 
 for cask in ${casks[@]}
