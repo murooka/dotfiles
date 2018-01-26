@@ -408,7 +408,6 @@ set foldtext=FoldCCtext()
 set foldcolumn=4
 set fillchars=vert:\|
 set t_Co=256
-set termguicolors
 
 if !has('nvim')
   set ttymouse=xterm2
@@ -632,4 +631,16 @@ function! s:Jq(...)
     let l:arg = a:1
   endif
   execute "%! jq \"" . l:arg . "\""
+endfunction
+
+augroup vimrc-local
+  autocmd!
+  autocmd BufNewFile,BufReadPost * call s:vimrc_local(expand('<afile>:p:h'))
+  autocmd BufReadPre .vimprojects set ft=vim
+augroup END
+function! s:vimrc_local(loc)
+  let files = findfile('.vimprojects', escape(a:loc, ' ') . ';', -1)
+  for i in reverse(filter(files, 'filereadable(v:val)'))
+    source `=i`
+  endfor
 endfunction

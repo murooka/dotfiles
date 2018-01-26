@@ -8,6 +8,5 @@ tags
 .vimrc_local
 .mongo
 .local.vimrc
-.envrc
 .idea/
 *.iml

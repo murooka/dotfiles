@@ -120,8 +120,6 @@ alias less='less -R'                                         # Color escape sequ
 alias sushi="ruby -e 'C=\`stty size\`.scan(/\d+/)[1].to_i;S=\"\xf0\x9f\x8d\xa3\";a={};puts \"\033[2J\";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print \"\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H\"};\$stdout.flush;sleep 0.01}'"
 
 alias perldoc='perldoc -MPod::Perldoc::Cache -w parser=Pod::Text::Color::Delight'
-alias javac='javac -J-Dfile.encoding=UTF-8'
-alias java='java -Dfile.encoding=UTF-8'
 # }}}
 
 
@@ -151,7 +149,7 @@ alias reply="rlwrap reply"
 alias tmux="tmux -2"
 alias pboard='echo "do not use pboard"'
 alias dc='docker-compose'
-alias dm='docker-machine'
+alias vscode='open -a /Applications/Visual\ Studio\ Code.app'
 # }}}
 
 
@@ -402,18 +400,12 @@ zstyle ':filter-select' case-insensitive yes
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-eval $(docker-machine env dev)
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f /Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc ]; then
-  source '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'
-fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f /Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc ]; then
-  source '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'
-fi
-
 if exists direnv; then
   eval "$(direnv hook zsh)"
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
