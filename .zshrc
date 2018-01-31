@@ -65,7 +65,6 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 export GOPATH=$HOME
 export GOROOT=/usr/local/opt/go/libexec
-export HOMEBREW_ROOT=`brew --prefix`
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
@@ -78,7 +77,6 @@ path=(
   $HOME/go_appengine(N-/)
   $HOME/google-cloud-sdk/bin(N-/)
   $GOROOT/bin(N-/)
-  $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
   /usr/local/appengine-java-sdk/bin(N-/)
