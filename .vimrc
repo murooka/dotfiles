@@ -322,7 +322,7 @@ endif "}}}
 
 if dein#tap('vim-powerline') "{{{
 
-  let g:Powerline_symbols = 'fancy'
+  " let g:Powerline_symbols = 'fancy'
 
 endif "}}}
 
