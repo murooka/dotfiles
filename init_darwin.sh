@@ -15,7 +15,7 @@ if ! brew -v > /dev/null; then
 fi
 
 # ディレクトリ名を英語化する
-dirs=(~/Desktop ~/Documents ~/Downloads ~/Library ~/Library/Favorites ~/Movies ~/Music ~/Pictures ~/Public /Applications)
+dirs=(~/Desktop ~/Documents ~/Downloads ~/Library ~/Library/Favorites ~/Movies ~/Music ~/Pictures ~/Public /Applications ~/Applications)
 for d in ${dirs[@]}
 do
 	pushd $d > /dev/null
