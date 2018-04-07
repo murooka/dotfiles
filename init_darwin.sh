@@ -45,11 +45,9 @@ git submodule update
 
 
 brew update
-brew tap homebrew/versions
-brew tap homebrew/dupes
 
 brew install vim --with-lua --with-perl
-brew install macvim --with-luajit
+# brew install macvim --with-luajit
 brew install sl
 
 apps=(
@@ -103,7 +101,6 @@ casks=(
   google-japanese-ime
   iterm2
   keyboardcleantool
-  menumeters
   sublime-text
   virtualbox
   xquartz
