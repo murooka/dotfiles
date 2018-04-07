@@ -25,7 +25,7 @@ done
 
 
 # 設定ファイル類の準備
-DOT_FILES=(.gemrc .gitconfig .gitignore_global .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf .emacs.d .hammerspoon)
+DOT_FILES=(.gemrc .gitconfig .gitignore_global .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf .emacs.d)
 for file in "${DOT_FILES[@]}"
 do
     [ ! -e "$HOME/$file" ] && ln -s "$HOME/dotfiles/$file" "$HOME"
