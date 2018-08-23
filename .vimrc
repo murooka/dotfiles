@@ -95,6 +95,8 @@ if dein#tap('deoplete.nvim') "{{{
   let g:deoplete#enable_at_startup = 1
 endif "}}}
 
+let g:neocomplete#enable_at_startup = 1
+
 if dein#tap('neocomplete') "{{{
 
   let g:acp_enableAtStartup = 0
@@ -110,6 +112,7 @@ if dein#tap('neocomplete') "{{{
         \ 'java'            : $VIM_ROOT.'/dict/java14.dict',
         \ 'scala'           : $VIM_ROOT.'/dict/scala.dict'
         \ }
+
   let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
 
   imap <C-j> <Plug>(neosnippet_expand_or_jump)
@@ -120,10 +123,10 @@ if dein#tap('neocomplete') "{{{
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
 
-  if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-  endif
-  let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
+  " if !exists('g:neocomplete#force_omni_input_patterns')
+  "   let g:neocomplete#force_omni_input_patterns = {}
+  " endif
+  " let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 
   if !exists('g:neocomplete#sources#omni#input_patterns')
     let g:neocomplete#sources#omni#input_patterns = {}
@@ -366,6 +369,12 @@ if dein#tap('nerdtree') "{{{
 
   nnoremap <Space>nn :NERDTreeToggle<CR>
 
+endif "}}}
+
+if dein#tap('vim-go') "{{{
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
 endif "}}}
 
 

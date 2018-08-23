@@ -7,6 +7,7 @@
 	dc = diff --cached
 	log-tree = log --graph --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'
 	log-tree-old = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+	delete-merged-branches = !git branch --merged | grep -v \\* | xargs git branch -d
 [user]
 	name = Naoki Yaguchi
 	email = murooka.1129.x50@gmail.com
@@ -25,7 +26,7 @@
 [ghq]
 	root = ~/src
 [diff "json"]
-	textconv = "perl -MJSON -0e \"print JSON->new->canonical->pretty->encode(decode_json(<>))\""
+	textconv = "jq ."
 [diff]
 	compactionHeuristic = true
 [interactive]
