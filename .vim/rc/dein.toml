@@ -19,8 +19,11 @@ repo = 'Shougo/vimfiler'
 [[plugins]]
 repo = 'Shougo/neocomplete.vim'
 
+# [[plugins]]
+# repo = 'vim-scripts/taglist.vim'
+
 [[plugins]]
-repo = 'vim-scripts/taglist.vim'
+repo = 'majutsushi/tagbar'
 
 [[plugins]]
 repo = 'ryochack/BlockDiff'

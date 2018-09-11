@@ -218,8 +218,17 @@ if dein#tap('taglist.vim') "{{{
   " タグリストの幅
   let Tlist_WinWidth = 30
 
+  let Tlist_def_go_settings = 'go;g:enum;s:struct;u:union;t:type;' .
+                           \ 'v:variable;f:function'
+
   nnoremap <silent> <Space>t :<C-u>TlistToggle<CR>
 
+endif "}}}
+
+if dein#tap('tagbar') "{{{
+  " let g:tagbar_left = 1
+
+  nnoremap <silent> <Space>t :<C-u>TagbarToggle<CR>
 endif "}}}
 
 if dein#tap('emmet-vim') "{{{
@@ -537,7 +546,7 @@ set ambiwidth=double                    " 一部のマルチバイト文字をas
 set display=uhex                        " 印字不可能文字を16進数で表示
 set laststatus=2                        " ステータスラインを常時表示
 
-set listchars=tab:>-,eol:$              " 不可視文字の設定
+set listchars=tab:>-                    " 不可視文字の設定
 set titlestring=(」・ω・)」うー！(／・ω・)／にゃー！
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 
