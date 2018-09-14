@@ -47,7 +47,8 @@ git submodule update
 brew update
 
 brew install vim --with-lua --with-perl
-# brew install macvim --with-luajit
+brew install macvim --with-luajit
+brew install yarn --without-node
 brew install sl
 
 apps=(
@@ -63,6 +64,7 @@ apps=(
   git
   gnu-sed
   gnutls
+  go
   gperftools
   graphviz
   jo
@@ -103,9 +105,9 @@ casks=(
   keyboardcleantool
   sublime-text
   virtualbox
+  visual-studio-code
   xquartz
   java
-  hammerspoon
 )
 
 for cask in ${casks[@]}
@@ -113,5 +115,4 @@ do
   brew cask install $cask
 done
 
-brew cask alfred link
-
+go get -u github.com/motemen/ghq
