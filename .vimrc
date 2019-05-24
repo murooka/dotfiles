@@ -97,6 +97,16 @@ endif "}}}
 
 let g:neocomplete#enable_at_startup = 1
 
+if dein#tap('neosnippet') "{{{
+  let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
+
+  imap <C-j> <Plug>(neosnippet_expand_or_jump)
+  smap <C-j> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-j> <Plug>(neosnippet_expand_target)
+
+  nnoremap <silent> <Space>ns :NeoSnippetEdit<CR>
+endif "}}}
+
 if dein#tap('neocomplete') "{{{
 
   let g:acp_enableAtStartup = 0
@@ -113,13 +123,8 @@ if dein#tap('neocomplete') "{{{
         \ 'scala'           : $VIM_ROOT.'/dict/scala.dict'
         \ }
 
-  let g:neosnippet#snippets_directory = $VIM_ROOT.'/snippets'
-
-  imap <C-j> <Plug>(neosnippet_expand_or_jump)
-  smap <C-j> <Plug>(neosnippet_expand_or_jump)
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-  nnoremap <silent> <Space>ns :NeoSnippetEdit<CR>
   inoremap <expr><C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-o>\<Down>"
   inoremap <expr><C-k> "\<C-x>\<C-o>"
 
@@ -284,9 +289,9 @@ if dein#tap('vim-quickrun') "{{{
         \ 'command': 'clang++',
         \ 'cmdopt'    : '-std=c++11 '
         \ }
-  let g:quickrun_config.jsx = {
-        \ 'command': 'jsx',
-        \ 'args': '--run'
+
+  let g:quickrun_config.js = {
+        \ 'command': 'node'
         \ }
 
   silent! nmap <unique> <Space>r <Plug>(quickrun)

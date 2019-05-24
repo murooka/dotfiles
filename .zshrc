@@ -65,6 +65,7 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 export GOPATH=$HOME
 export GOROOT=/usr/local/opt/go/libexec
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
@@ -77,6 +78,7 @@ path=(
   $HOME/go_appengine(N-/)
   $HOME/google-cloud-sdk/bin(N-/)
   $GOROOT/bin(N-/)
+  $JAVA_HOME/bin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
   /usr/local/appengine-java-sdk/bin(N-/)
@@ -103,6 +105,7 @@ export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 export LSCOLORS=gxfxcxdxbxegedabagacad                       # BSD ls color
 export SBT_OPTS=-XX:MaxPermSize=4g
 export PERL_RL=EditLine
+export JAVA_TOOL_OPTIONS="-Duser.language=en -Duser.country=US"
 
 # }}}
 
@@ -368,7 +371,7 @@ function abc() {
 }
 
 function cl() {
-  yes '' | head -n 100
+  yes '' | head -n 1000
   clear
 }
 
@@ -401,9 +404,10 @@ export PATH="/usr/local/heroku/bin:$PATH"
 if exists direnv; then
   eval "$(direnv hook zsh)"
 fi
+export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'; fi

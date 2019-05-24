@@ -172,13 +172,13 @@ repo = 'rhysd/vim-crystal'
 # for vim
 # [[plugins]]
 # repo = 'Shougo/neocomplete'
-# 
-# [[plugins]]
-# repo = 'Shougo/neosnippet'
 
+[[plugins]]
+repo = 'Shougo/neosnippet'
 
-# [[plugins]]
-# repo = 'Shougo/neosnippet-snippets' 
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
 # [[plugins]]
 # repo = 'ujihisa/neco-ghc'
 #
