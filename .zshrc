@@ -151,6 +151,7 @@ alias tmux="tmux -2"
 alias pboard='echo "do not use pboard"'
 alias dc='docker-compose'
 alias vscode='open -a /Applications/Visual\ Studio\ Code.app'
+alias jshell='JAVA_HOME=$(/usr/libexec/java_home 11) jshell'
 # }}}
 
 
