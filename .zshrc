@@ -376,17 +376,26 @@ function cl() {
   clear
 }
 
-function q () {
+function q() {
   local selected_dir=$(ghq list -p | sed "s#$HOME/src/##" | peco --query "$LBUFFER")
-  if [ -n "$selected_dir" ]; then
-    cd "${HOME}/src/${selected_dir}"
+  if [ -z "$selected_dir" ]; then
+    return
+  fi
 
-    session=`echo ${selected_dir} | sed -e 's/\./_/g'`
+  session=`echo ${selected_dir} | sed -e 's/\./_/g'`
 
-    if tmux ls | awk -F: '{print $1}' | grep "^${session}$"; then
-      tmux a -t $session
+  if tmux ls | awk -F: '{print $1}' | grep "^${session}$"; then
+    if [ -n "$TMUX" ]; then
+      tmux switch -t $session
     else
-      tmux new-session -d -s $session
+      tmux attach -t $session
+    fi
+  else
+    cd "${HOME}/src/${selected_dir}"
+    tmux new-session -d -s $session
+    if [ -n "$TMUX" ]; then
+      tmux switch -t $session
+    else
       tmux attach -t $session
     fi
   fi

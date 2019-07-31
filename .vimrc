@@ -391,6 +391,22 @@ if dein#tap('vim-go') "{{{
   let g:go_highlight_structs = 1
 endif "}}}
 
+if dein#tap('vim-lsp') "{{{
+  if executable('gopls')
+    let g:lsp_async_completion = 1
+
+    augroup LspGo
+      au!
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'go-lang',
+            \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+            \ 'whitelist': ['go'],
+            \ })
+      autocmd FileType go setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+endif "}}}
+
 
 filetype on
 filetype plugin indent on

@@ -226,4 +226,19 @@ repo = 'Shougo/neosnippet-snippets'
 #
 # [[plugins]]
 # repo = 'ctrlpvim/ctrlp.vim'
-#
+
+[[plugins]]
+repo = 'prabirshrestha/async.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+
+[[plugins]]
+repo = 'natebosch/vim-lsc'
+
