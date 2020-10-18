@@ -10,3 +10,5 @@ tags
 .local.vimrc
 .idea/
 *.iml
+.localhistory
+.localhistoryrc

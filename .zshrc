@@ -76,18 +76,18 @@ path=(
   $HOME/.cabal/bin(N-/)
   $GOPATH/bin
   $HOME/go_appengine(N-/)
-  $HOME/google-cloud-sdk/bin(N-/)
+  $HOME/flutter/bin(N-/)
   $GOROOT/bin(N-/)
   $JAVA_HOME/bin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
-  /usr/local/appengine-java-sdk/bin(N-/)
   $path
 )
 if exists brew; then
   export HOMEBREW_ROOT=`brew --prefix`
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
+    $HOMEBREW_ROOT/opt/openssl@1.1/bin(N-/)
     $GOROOT/bin(N-/)
     ~/.cabal/bin(N-/)
     $path
@@ -106,6 +106,7 @@ export LSCOLORS=gxfxcxdxbxegedabagacad                       # BSD ls color
 export SBT_OPTS=-XX:MaxPermSize=4g
 export PERL_RL=EditLine
 export JAVA_TOOL_OPTIONS="-Duser.language=en -Duser.country=US"
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # }}}
 
@@ -140,7 +141,7 @@ alias ezsh='vim ~/.zshrc'
 alias la='ls -alF'
 alias ll='ls -l'
 
-alias server='python -m SimpleHTTPServer'
+alias server='python3 -m http.server'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
 alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
@@ -354,8 +355,29 @@ function _longtime_precmd {
   unset _longtime_cmd
 }
 
-preexec_functions=($preexec_functions _longtime_preexec)
-precmd_functions=($precmd_functions _longtime_precmd)
+add-zsh-hook preexec _longtime_preexec
+add-zsh-hook precmd _longtime_precmd
+
+findconfig() {
+  if [ -f "$1" ]; then
+    printf '%s\n' "${PWD%/}/$1"
+  elif [ "$PWD" = / ]; then
+    false
+  else
+    (cd .. && findconfig "$1")
+  fi
+}
+
+function _echo_preexec {
+  local CONFIG=$(findconfig '.localhistoryrc')
+  if [ -n "$CONFIG" ]; then
+    local HISTORY="${CONFIG/.localhistoryrc/.localhistory}"
+    touch "$HISTORY"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') $1" >> "$HISTORY"
+  fi
+}
+
+add-zsh-hook preexec _echo_preexec
 
 
 # Add environment variable COCOS_CONSOLE_ROOT for cocos2d-x
@@ -417,7 +439,11 @@ fi
 export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/n-yaguchi/.sdkman"
+[[ -s "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh"

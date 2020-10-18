@@ -52,6 +52,7 @@ endif
 filetype on
 filetype plugin indent on
 
+let g:mapleader = "\<Space>"
 let g:vim_json_syntax_conceal = 0
 
 if dein#tap('unite.vim') "{{{
@@ -177,7 +178,7 @@ if dein#tap('neocomplete') "{{{
     autocmd FileType java :setlocal completefunc=javacomplete#CompleteParamsInfo
   augroup END
 
-  " let g:neocomplete#force_omni_input_patterns.java = 
+  " let g:neocomplete#force_omni_input_patterns.java =
   "       \ '[^. *\t]\.\h\w*\'
 
   " }}}
@@ -406,6 +407,15 @@ if dein#tap('vim-lsp') "{{{
     augroup END
   endif
 endif "}}}
+
+if dein#tap('sonictemplate-vim') "{{{
+  let g:sonictemplate_vim_template_dir = [
+        \ '$HOME/.vim/template'
+        \]
+
+  nnoremap <silent> <Leader>a :<C-u>Template procon<CR>
+endif "}}}
+
 
 
 filetype on

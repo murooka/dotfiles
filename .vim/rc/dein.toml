@@ -242,3 +242,5 @@ repo = 'prabirshrestha/asyncomplete-lsp.vim'
 [[plugins]]
 repo = 'natebosch/vim-lsc'
 
+[[plugins]]
+repo = 'mattn/sonictemplate-vim'
