@@ -11,6 +11,7 @@ while read LINE; do
 done
 
 if ! brew -v > /dev/null; then
+  echo 'install homebrew'
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
@@ -46,35 +47,32 @@ git submodule update
 
 brew update
 
-brew install vim --with-lua --with-perl
-brew install macvim --with-luajit
-brew install yarn --without-node
-brew install sl
+brew install vim
+brew install yarn --ignore-dependencies
 
 apps=(
-  python3
+  bat
   clang-format
   colordiff
-  cowsay
   ctags
   direnv
-  docker-compose
-  gauche
+  direnv
+  exa
   ghq
   git
   gnu-sed
   gnutls
   go
-  gperftools
   graphviz
-  jo
   jq
-  neovim/neovim/neovim
+  mkcert
   nkf
   nmap
   peco
+  python3
   reattach-to-user-namespace
   rlwrap
+  shellcheck
   sl
   terminal-notifier
   the_silver_searcher
@@ -97,17 +95,11 @@ done
 casks=(
   alfred
   appcleaner
-  atom
-  gimp
-  google-chrome
   google-japanese-ime
   iterm2
   keyboardcleantool
-  sublime-text
   virtualbox
   visual-studio-code
-  xquartz
-  java
 )
 
 for cask in ${casks[@]}

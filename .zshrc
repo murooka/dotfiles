@@ -65,16 +65,16 @@ export LANG=ja_JP.UTF-8
 # PATH {{{
 export GOPATH=$HOME
 export GOROOT=/usr/local/opt/go/libexec
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
   /usr/local/sbin(N-/)
   $HOME/bin(N-/)
+  $HOME/.yarn/bin(N-/)
+  $HOME/.config/yarn/global/node_modules/.bin(N-/)
   $HOME/.anyenv/bin(N-/)
   $HOME/.cabal/bin(N-/)
-  $GOPATH/bin
   $HOME/go_appengine(N-/)
   $HOME/flutter/bin(N-/)
   $GOROOT/bin(N-/)
@@ -105,8 +105,6 @@ export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 export LSCOLORS=gxfxcxdxbxegedabagacad                       # BSD ls color
 export SBT_OPTS=-XX:MaxPermSize=4g
 export PERL_RL=EditLine
-export JAVA_TOOL_OPTIONS="-Duser.language=en -Duser.country=US"
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
 # }}}
 
@@ -144,7 +142,6 @@ alias ll='ls -l'
 alias server='python3 -m http.server'
 alias jsx-debug='jsx --executable web --warn all --enable-type-check --enable-source-map'
 alias jsx-release='jsx --executable web --release --optimize lto,unclassify,fold-const,return-if,inline,dce,unbox,fold-const,dce,lcse,array-length,unclassify'
-alias lavit='java -Dawt.useSystemAAFontSettings=lcd -jar LaViT.jar'
 alias res='echo $?'
 alias git-rank="history -E 1 | grep '  git' | awk '{print \$4,\$5,\$6}' | sort | uniq -c | sort -nr | less"
 alias reply="rlwrap reply"
@@ -152,7 +149,6 @@ alias tmux="tmux -2"
 alias pboard='echo "do not use pboard"'
 alias dc='docker-compose'
 alias vscode='open -a /Applications/Visual\ Studio\ Code.app'
-alias jshell='JAVA_HOME=$(/usr/libexec/java_home 11) jshell'
 # }}}
 
 
@@ -399,7 +395,7 @@ function cl() {
 }
 
 function q() {
-  local selected_dir=$(ghq list -p | sed "s#$HOME/src/##" | peco --query "$LBUFFER")
+  local selected_dir=$(ghq list -p | sort | sed "s#$HOME/src/##" | peco --query "$LBUFFER")
   if [ -z "$selected_dir" ]; then
     return
   fi
