@@ -11,8 +11,7 @@
 	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
 [user]
 	name = Naoki Yaguchi
-[core]
-	excludesfile = ~/.gitignore_global
+# [core]
 #	pager = diff-so-fancy | less --tabs=4 -RFX
 [pull]
 	rebase = true

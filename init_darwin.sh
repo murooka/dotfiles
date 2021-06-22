@@ -24,17 +24,19 @@ do
   popd > /dev/null
 done
 
+mkdir -p ~/.vim_backup
+mkdir -p ~/bin
+mkdir -p ~/.config
+mkdir -p "$XDG_CONFIG_HOME/git"
 
 # 設定ファイル類の準備
-DOT_FILES=(.gemrc .gitconfig .gitignore_global .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf .emacs.d)
+DOT_FILES=(.gemrc .gitconfig .gvimrc .irbrc .tmux.conf .vim .vimrc .vrapperrc .zshrc .my.cnf .emacs.d)
 for file in "${DOT_FILES[@]}"
 do
     [ ! -e "$HOME/$file" ] && ln -s "$HOME/dotfiles/$file" "$HOME"
 done
 
-mkdir -p ~/.vim_backup
-mkdir -p ~/bin
-mkdir -p ~/.config
+[ ! -e "$XDG_CONFIG_HOME/git/ignore" ] && ln -s "$HOME/dotfiles/ignore" "$XDG_CONFIG_HOME/git/ignore"
 
 [ ! -e "$HOME/.config/nvim" ] && ln -s "$HOME/dotfiles/.vim" "$HOME/.config/nvim"
 
