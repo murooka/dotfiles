@@ -74,9 +74,6 @@ repo = 'tpope/vim-fugitive'
 repo = 'airblade/vim-gitgutter'
 
 [[plugins]]
-repo = 'scrooloose/nerdtree.git'
-
-[[plugins]]
 repo = 'Shougo/vinarise'
 
 # ============================================================
@@ -152,13 +149,7 @@ repo = 'vim-scripts/twilight'
 # repo = 'Rip-Rip/clang_complete'
 
 [[plugins]]
-repo = 'cespare/vim-toml'
-
-[[plugins]]
 repo = 'nsf/gocode'
-
-[[plugins]]
-repo = 'fatih/vim-go'
 
 [[plugins]]
 repo = 'dgryski/vim-godef'

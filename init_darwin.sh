@@ -51,11 +51,11 @@ brew install vim
 brew install yarn --ignore-dependencies
 
 apps=(
+  asdf
   bat
   clang-format
   colordiff
   ctags
-  direnv
   direnv
   exa
   ghq

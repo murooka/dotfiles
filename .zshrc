@@ -64,16 +64,13 @@ export LANG=ja_JP.UTF-8
 
 # PATH {{{
 export GOPATH=$HOME
-export GOROOT=/usr/local/opt/go/libexec
+export GOROOT=/usr/local/go
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
   /usr/local/sbin(N-/)
   $HOME/bin(N-/)
-  $HOME/.yarn/bin(N-/)
-  $HOME/.config/yarn/global/node_modules/.bin(N-/)
-  $HOME/.anyenv/bin(N-/)
   $HOME/.cabal/bin(N-/)
   $HOME/go_appengine(N-/)
   $HOME/flutter/bin(N-/)
@@ -270,11 +267,6 @@ PROMPT="%{$reset_color%}%B%{${fg[blue]}%}%n@%{${fg[blue]}%}%m:%{${fg[green]}%}%~
 
 # Environment managers {{{
 
-if exists anyenv; then
-  eval "$(anyenv init -)"
-  anyenv version
-fi
-
 if exists brew; then
   zpath=`brew --prefix`/etc/profile.d/z.sh
   if [[ -f $zpath ]]; then
@@ -301,10 +293,6 @@ function pprove() {
   file=`find $1 -name "*.t" | peco`
   echo "prove $file"
   prove $file
-}
-
-function uuid() {
-  perl -MUUID::Tiny -e 'print UUID::Tiny::create_uuid_as_string(UUID::Tiny::UUID_V4)'
 }
 
 if [[ -f ~/.zshrc_local ]]; then
@@ -443,3 +431,5 @@ if [ -f '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/n-yaguchi/.sdkman"
 [[ -s "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh"
+
+. /usr/local/opt/asdf/asdf.sh
