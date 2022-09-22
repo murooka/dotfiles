@@ -87,6 +87,7 @@ apps=(
   zsh
   zsh-completions
   zsh-syntax-highlighting
+  anyenv
 )
 
 for app in ${apps[@]}
@@ -94,11 +95,14 @@ do
   brew install $app
 done
 
+# google-chrome
+# virtualbox
 casks=(
   alfred
   appcleaner
   google-japanese-ime
   iterm2
+  karabiner-elements
   keyboardcleantool
   virtualbox
   visual-studio-code

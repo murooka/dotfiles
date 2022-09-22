@@ -1,5 +1,13 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Autoloads {{{
 
+# FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 autoload -Uz compinit
 autoload -Uz add-zsh-hook
 compinit
@@ -19,7 +27,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 if [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
   source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
-
 
 # Options {{{
 
@@ -64,7 +71,7 @@ export LANG=ja_JP.UTF-8
 
 # PATH {{{
 export GOPATH=$HOME
-export GOROOT=/usr/local/go
+export GOROOT=/usr/local/opt/go/libexec
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
@@ -74,7 +81,6 @@ path=(
   $HOME/.cabal/bin(N-/)
   $HOME/go_appengine(N-/)
   $HOME/flutter/bin(N-/)
-  $GOROOT/bin(N-/)
   $JAVA_HOME/bin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
@@ -85,7 +91,6 @@ if exists brew; then
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
     $HOMEBREW_ROOT/opt/openssl@1.1/bin(N-/)
-    $GOROOT/bin(N-/)
     ~/.cabal/bin(N-/)
     $path
   )
@@ -420,16 +425,25 @@ export PATH="/usr/local/heroku/bin:$PATH"
 if exists direnv; then
   eval "$(direnv hook zsh)"
 fi
+
 export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
+. /usr/local/opt/asdf/asdf.sh
+
+if [ -f ~/.asdf/plugins/java/set-java-home.zsh ]; then
+  . ~/.asdf/plugins/java/set-java-home.zsh
+fi
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/naoki.yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/n-yaguchi/.sdkman"
-[[ -s "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh"
-
-. /usr/local/opt/asdf/asdf.sh
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+export PERL_CPANM_OPT="--mirror https://cpan-mirror-proxy.fujiyama-dev-tools.backend.global/" 
+export PERL_CARTON_MIRROR="https://cpan-mirror-proxy.fujiyama-dev-tools.backend.global/" 
