@@ -13,3 +13,6 @@ tags
 .localhistory
 .localhistoryrc
 .vstags
+.envrc
+.env.local
+.vscode

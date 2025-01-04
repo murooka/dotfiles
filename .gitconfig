@@ -7,8 +7,10 @@
 	co = checkout
 	log-tree = log --graph --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'
 	log-tree-old = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
-	delete-merged-branches = !git branch --merged | grep -v \\* | grep -v master | xargs git branch -d
-	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
+	delete-merged-branches = !git branch --merged | grep -v \\* | grep -v main | xargs git branch -d
+	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...main | grep 'Merge pull request #' | head -n 1; }; f"
+	sb = !git diff -w | bento -branch -model "gpt-4o"
+	sc = !git diff -w --staged | bento -commit -model "gpt-4o"
 [user]
 	name = Naoki Yaguchi
 # [core]
@@ -19,10 +21,10 @@
 	ui = auto
 [merge]
 	ff = false
-# [pager]
-# 	log = diff-highlight | less
-# 	show = diff-highlight | less
-# 	diff = diff-highlight | less
+[pager]
+	log = diff-highlight | less
+	show = diff-highlight | less
+	diff = diff-highlight | less
 [ghq]
 	root = ~/src
 [diff "json"]
@@ -38,3 +40,5 @@
 	required = true
 [init]
 	defaultBranch = main
+[rebase]
+	autosquash = true

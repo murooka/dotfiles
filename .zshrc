@@ -62,19 +62,17 @@ setopt hist_reduce_blanks
 
 export LANG=ja_JP.UTF-8
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # PATH {{{
-export GOPATH=$HOME
-export GOROOT=/usr/local/go
 
 # TODO: homebrewが入ってない環境に対応する
 path=(
   /usr/local/bin(N-/)
   /usr/local/sbin(N-/)
   $HOME/bin(N-/)
-  $HOME/.cabal/bin(N-/)
-  $HOME/go_appengine(N-/)
   $HOME/flutter/bin(N-/)
-  $GOROOT/bin(N-/)
+  $HOME/.deno/bin(N-/)
   $JAVA_HOME/bin(N-/)
   /Applications/android-sdk/platform-tools(N-/)
   /Applications/android-sdk/tools(N-/)
@@ -85,7 +83,8 @@ if exists brew; then
   path=(
     $HOMEBREW_ROOT/opt/gnu-sed/libexec/gnubin(N-/)
     $HOMEBREW_ROOT/opt/openssl@1.1/bin(N-/)
-    $GOROOT/bin(N-/)
+    $HOMEBREW_ROOT/opt/mysql-client/bin(N-/)
+    $HOMEBREW_ROOT/opt/libpq/bin(N-/)
     ~/.cabal/bin(N-/)
     $path
   )
@@ -275,8 +274,9 @@ if exists brew; then
   fi
 fi
 
-if exists direnv; then
-  eval "$(direnv hook zsh)"
+if exists asdf; then
+  . ~/.asdf/plugins/java/set-java-home.zsh
+  . ~/.asdf/plugins/golang/set-env.zsh
 fi
 
 # }}}
@@ -383,7 +383,7 @@ function cl() {
 }
 
 function q() {
-  local selected_dir=$(ghq list -p | sort | sed "s#$HOME/src/##" | peco --query "$LBUFFER")
+  local selected_dir=$(ghq list -p | sort | sed "s#$HOME/src/##" | grep -v '/old/' | peco --query "$LBUFFER")
   if [ -z "$selected_dir" ]; then
     return
   fi
@@ -417,10 +417,17 @@ zstyle ':filter-select' case-insensitive yes
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
+export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 if exists direnv; then
   eval "$(direnv hook zsh)"
 fi
-export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc'; fi
@@ -428,8 +435,3 @@ if [ -f '/Users/n-yaguchi/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/n-yag
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/n-yaguchi/google-cloud-sdk/completion.zsh.inc'; fi
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/n-yaguchi/.sdkman"
-[[ -s "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/n-yaguchi/.sdkman/bin/sdkman-init.sh"
-
-. /usr/local/opt/asdf/asdf.sh
