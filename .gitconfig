@@ -1,44 +1,60 @@
 [alias]
-	b = branch
-	s = status
-	d = diff
-	dc = diff --cached
-	dd = diff --color-words='.'
-	co = checkout
-	log-tree = log --graph --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'
-	log-tree-old = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
-	delete-merged-branches = !git branch --merged | grep -v \\* | grep -v main | xargs git branch -d
-	showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...main | grep 'Merge pull request #' | head -n 1; }; f"
-	sb = !git diff -w | bento -branch -model "gpt-4o"
-	sc = !git diff -w --staged | bento -commit -model "gpt-4o"
+    b = branch
+    s = status
+    d = diff
+    dc = diff --cached
+    dd = diff --color-words='.'
+    co = checkout
+    log-tree = log --graph --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'
+    log-tree-old = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    delete-merged-branches = !git branch --merged | grep -v \\* | grep -v main | xargs git branch -d
+    showpr = !"f() { git log --merges --oneline --reverse --ancestry-path $1...main | grep 'Merge pull request #' | head -n 1; }; f"
+    sb = !git diff -w | bento -branch -model "gpt-4o"
+    sc = !git diff -w --staged | bento -commit -model "gpt-4o"
 [user]
 	name = Naoki Yaguchi
 # [core]
-#	pager = diff-so-fancy | less --tabs=4 -RFX
-[pull]
-	rebase = true
-[color]
-	ui = auto
-[merge]
-	ff = false
-[pager]
-	log = diff-highlight | less
-	show = diff-highlight | less
-	diff = diff-highlight | less
-[ghq]
-	root = ~/src
-[diff "json"]
-	textconv = "jq ."
-[diff]
-	compactionHeuristic = true
+    pager = delta
 [interactive]
-	diffFilter = diff-highlight
+    diffFilter = delta --color-only
+[push]
+    default = simple
+    autoSetupRemote = true
+    followTags = true
+[pull]
+    rebase = true
+[color]
+    ui = auto
+[merge]
+    ff = false
+    conflictstyle = zdiff3
+[ghq]
+    root = ~/src
+[diff "json"]
+    textconv = "jq ."
+[diff]
+    algorithm = histogram
+    colorMoved = plain
+    compactionHeuristic = true
+    mnemonicPrefix = true
+    renames = true
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [rebase]
-	autosquash = true
+    autosquash = true
+[branch]
+    sort = -committerdate
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+[delta]
+    features = Coldark-Dark
+    navigate = true
+[merge]
+    conflictStyle = zdiff3

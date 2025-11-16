@@ -1,6 +1,13 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 # if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 #   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
@@ -71,6 +78,7 @@ path=(
   /usr/local/bin(N-/)
   /usr/local/sbin(N-/)
   $HOME/bin(N-/)
+  $HOME/go/bin(N-/)
   $path
 )
 if exists brew; then
@@ -80,13 +88,11 @@ if exists brew; then
     $HOMEBREW_ROOT/opt/openssl@1.1/bin(N-/)
     $HOMEBREW_ROOT/opt/mysql-client/bin(N-/)
     $HOMEBREW_ROOT/opt/libpq/bin(N-/)
-    ~/.cabal/bin(N-/)
     $path
   )
 fi
 export MANPATH=$HOMEBREW_ROOT/opt/gnu-sed/libexec/gnuman:$MANPATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-export RSENSE_HOME=/usr/local/Cellar/rsense/0.3/libexec
 export XDG_CONFIG_HOME=$HOME/.config
 
 
@@ -101,9 +107,6 @@ alias cp='cp -i'                                             # Comfirm overwrite
 alias diff='diff --strip-trailing-cr'
 alias less='less -R'                                         # Color escape sequences will displayed
 
-# Useful aliases
-alias sushi="ruby -e 'C=\`stty size\`.scan(/\d+/)[1].to_i;S=\"\xf0\x9f\x8d\xa3\";a={};puts \"\033[2J\";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print \"\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H\"};\$stdout.flush;sleep 0.01}'"
-alias perldoc='perldoc -MPod::Perldoc::Cache -w parser=Pod::Text::Color::Delight'
 
 
 alias -g ...='../../'
@@ -154,11 +157,6 @@ if exists brew; then
   fi
 fi
 
-if exists asdf; then
-  . ~/.asdf/plugins/java/set-java-home.zsh
-  . ~/.asdf/plugins/golang/set-env.zsh
-fi
-
 
 function cl() {
   yes '' | head -n 1000
@@ -166,7 +164,7 @@ function cl() {
 }
 
 function q() {
-  local selected_dir=$(ghq list -p | sort | sed "s#$HOME/src/##" | grep -v '/old/' | peco --query "$LBUFFER")
+  local selected_dir=$(ghq list -p | sort | sed "s#$HOME/src/##" | grep -v '/old/' | fzf)
   if [ -z "$selected_dir" ]; then
     return
   fi
@@ -190,15 +188,6 @@ function q() {
   fi
 }
 
-### Heroku
-export PATH="/usr/local/heroku/bin:$PATH"
-
-### ImageMagick
-export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
-
-### asdf
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
 ### p10k
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
@@ -213,12 +202,7 @@ fi
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
-### rye
-source "$HOME/.rye/env"
+source <(fzf --zsh)
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 
-### pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+eval "$($HOME/.local/bin/mise activate zsh)"

@@ -16,3 +16,5 @@ tags
 .envrc
 .env.local
 .vscode
+
+**/.claude/settings.local.json
